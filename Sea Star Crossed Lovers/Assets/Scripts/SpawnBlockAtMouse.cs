@@ -53,6 +53,13 @@ public class SpawnBlockAtMouse : MonoBehaviour
                 blockCollision.isActive = false;
             }
 
+            // detect rotation
+            if (Input.GetButtonDown("RotateCounterclockwise")) {
+                activeRB.transform.Rotate(new Vector3(0, 0, 90));
+            } else if (Input.GetButtonDown("RotateClockwise")) {
+                activeRB.transform.Rotate(new Vector3(0, 0, -90));
+            }
+
             // if an active block collides or is dropped, give it normal gravity
             if (!blockCollision.isActive) {
                 activeRB.gravityScale = blockGravity;
