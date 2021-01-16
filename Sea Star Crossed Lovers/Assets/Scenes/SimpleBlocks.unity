@@ -482,8 +482,6 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: 
   m_EditorClassIdentifier: 
-  Block: {fileID: 2569940699476993790, guid: 64a06655506ff4ff7b51b62660725a52, type: 3}
-  Camera: {fileID: 0}
 --- !u!4 &348458701
 Transform:
   m_ObjectHideFlags: 0
@@ -511,6 +509,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Block: {fileID: 2569940699476993790, guid: 64a06655506ff4ff7b51b62660725a52, type: 3}
+  horizontalSpeed: 10
+  dropSpeed: 1
+  startingDownwardForce: 150
 --- !u!1 &872482305
 GameObject:
   m_ObjectHideFlags: 0

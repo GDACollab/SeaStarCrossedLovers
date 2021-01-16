@@ -41,18 +41,22 @@ public class SpawnBlockAtMouse : MonoBehaviour
             Debug.Log("Block spawnPosition: " + spawnPosition);
         }
 
+        // control an active block
         if (activeBlock != null) {
+
+            // apply horizontal and vertical change
             float xOffset = Input.GetAxisRaw("Horizontal")*Time.deltaTime*horizontalSpeed;
             activeBlock.transform.position += new Vector3(xOffset, -dropSpeed*Time.deltaTime, 0);
         
-            // detect if player is done with block
+            // detect if player has dropped block
             if (Input.GetButtonDown("Drop")) {
                 blockCollision.isActive = false;
             }
 
-            // if an active block is no longer active, give it normal gravity
+            // if an active block collides or is dropped, give it normal gravity
             if (!blockCollision.isActive) {
                 activeRB.gravityScale = blockGravity;
+                // apply a starting force to make drop feel more natural (momentum)
                 activeRB.AddForce(new Vector3(0, -startingDownwardForce, 0));
                 activeBlock = null;
             }
