@@ -5,13 +5,17 @@ using UnityEngine;
 public class SpawnBlockAtMouse : MonoBehaviour
 {
     public GameObject Block;
+
     public float horizontalSpeed = 10;
     public float dropSpeed = 1;
-    public int startingDownwardForce = 200;
+    public int startingDownwardForce = 150;
     
     private float blockGravity;
     private Camera Camera;
+
     private GameObject activeBlock;
+    private Rigidbody2D activeRB;
+    private BlockCollision blockCollision;
 
     private void Start()
     {
@@ -28,8 +32,11 @@ public class SpawnBlockAtMouse : MonoBehaviour
             spawnPosition.z = 0;
 
             activeBlock = Instantiate(Block, spawnPosition, Quaternion.identity);
-            blockGravity = activeBlock.GetComponent<Rigidbody2D>().gravityScale;
-            activeBlock.GetComponent<Rigidbody2D>().gravityScale = 0f;
+            activeRB = activeBlock.GetComponent<Rigidbody2D>();
+            blockCollision = activeBlock.GetComponent<BlockCollision>();
+
+            blockGravity = activeRB.gravityScale;
+            activeRB.gravityScale = 0f;
 
             Debug.Log("Block spawnPosition: " + spawnPosition);
         }
@@ -40,13 +47,13 @@ public class SpawnBlockAtMouse : MonoBehaviour
         
             // detect if player is done with block
             if (Input.GetButtonDown("Drop")) {
-                activeBlock.GetComponent<BlockCollision>().isActive = false;
+                blockCollision.isActive = false;
             }
 
             // if an active block is no longer active, give it normal gravity
-            if (!activeBlock.GetComponent<BlockCollision>().isActive) {
-                activeBlock.GetComponent<Rigidbody2D>().gravityScale = blockGravity;
-                activeBlock.GetComponent<Rigidbody2D>().AddForce(new Vector3(0, -startingDownwardForce, 0));
+            if (!blockCollision.isActive) {
+                activeRB.gravityScale = blockGravity;
+                activeRB.AddForce(new Vector3(0, -startingDownwardForce, 0));
                 activeBlock = null;
             }
         }
