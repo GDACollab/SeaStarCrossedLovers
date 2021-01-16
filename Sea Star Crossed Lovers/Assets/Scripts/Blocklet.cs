@@ -17,4 +17,10 @@ public class Blocklet : MonoBehaviour
     {
         
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        //this is temporary. will update with proper behaviour later
+        if (other.gameObject.tag == "wave") Destroy(gameObject);
+    }
 }
