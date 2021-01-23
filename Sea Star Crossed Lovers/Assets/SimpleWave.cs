@@ -5,6 +5,6 @@ using UnityEngine;
 public class SimpleWave : MonoBehaviour
 {
     public void MakeWave() {
-        GetComponent<Waves>().GenerateWave();
+        GetComponent<Waves>().GenerateWave(new DisruptiveWave());
     }
 }

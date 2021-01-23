@@ -1,5 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
+public class DisruptiveWave : Object {
+	public float direction;
+	public float width;
+	public float height;
+	public float speed;
+	public Vector3 pos;
+	// Use custom settings
+	public DisruptiveWave(float waveDirection = 1, float waveWidth = 5.0f, float waveHeight = 2.5f, float waveSpeed = 0.01f) {
+		this.direction = waveDirection;
+		this.width = waveWidth;
+		this.height = waveHeight;
+		this.speed = waveSpeed;
+	}
+}
 
 /// <summary>
 /// Uses the particle system. If the collision detection remains unwritten, you can just use this object's ParticleSystem component and get collisions from that.
@@ -20,6 +36,8 @@ public class Waves : MonoBehaviour {
 
 	private float perlinNoiseAnimX = 0.01f;
 
+	List<DisruptiveWave> activeWaveList = new List<DisruptiveWave>();
+
 	void Start() {
 		particlesArray = new ParticleSystem.Particle[seaResolution];
 		particles = GetComponent<ParticleSystem>();
@@ -29,40 +47,15 @@ public class Waves : MonoBehaviour {
 		particles.GetParticles(particlesArray);
 	}
 
-	/// <summary>
-	/// How much to influence other particles by
-	/// </summary>
-	float waveInfluence;
-	/// <summary>
-	/// How tall the wave is.
-	/// </summary>
-	float waveHeight;
-	Vector3 wavePos;
-	/// <summary>
-	/// -1 for left, 1 for right.
-	/// </summary>
-	float waveDirection;
-	float waveSpeed = 0.05f;
-	bool isWaving = false;
-
-	/// <summary>
-	/// Create a wave
-	/// </summary>
-	/// <param name="direction">-1 for left, 1 for right.</param>
-	/// <param name="width">How wide the wave is.</param>
-	/// <param name="height">How tall the wave is</param>
-	public void GenerateWave(float direction = 1.0f, float width = 10.0f, float height = 0.5f) {
-		waveDirection = direction;
-		waveInfluence = width;
-		waveHeight = height;
-		if (direction == 1)
+	public void GenerateWave(DisruptiveWave wave) {
+		if (wave.direction == 1)
 		{
-			wavePos = particlesArray[0].position;
+			wave.pos = particlesArray[0].position - new Vector3(wave.width, 0, 0);
 		}
 		else {
-			wavePos = particlesArray[particlesArray.Length - 1].position;
+			wave.pos = particlesArray[particlesArray.Length - 1].position + new Vector3(wave.width, 0, 0);
 		}
-		isWaving = true;
+		activeWaveList.Add(wave);
 	}
 
 	void Update() {
@@ -70,15 +63,21 @@ public class Waves : MonoBehaviour {
 			float zPos = Mathf.PerlinNoise(i * noiseScale + perlinNoiseAnimX, noiseScale);
 			particlesArray[i].startColor = colorGradient.Evaluate(zPos);
 			particlesArray[i].position = new Vector3(i * spacing, zPos  * heightScale, spacing);
-			if (isWaving) {
+			foreach (DisruptiveWave wave in activeWaveList) {
+				if (Mathf.Abs(particlesArray[i].position.x - wave.pos.x) <= wave.width) { //This equation comes from messing around with Desmos. If you have a better idea, I'm all for it.
+					particlesArray[i].position += new Vector3(0, (-0.1f * Mathf.Pow((particlesArray[i].position.x - wave.pos.x), 2) + wave.height), 0);
+				}
 			}
 		}
 
-		perlinNoiseAnimX += 0.01f;
+		perlinNoiseAnimX += 0.001f;
 
 		particles.SetParticles(particlesArray, particlesArray.Length);
-		if (isWaving) {
-			wavePos += new Vector3(waveSpeed * waveDirection, 0, 0);
+		foreach (DisruptiveWave wave in activeWaveList) {
+			wave.pos += new Vector3(wave.speed * wave.direction, 0, 0);
+			if (wave.pos.x > particlesArray[particlesArray.Length - 1].position.x + wave.width) { //Is this wave done? 
+				activeWaveList.Remove(wave);
+			}
 		}
 	}
 
