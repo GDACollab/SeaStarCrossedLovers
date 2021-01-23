@@ -1,4 +1,3 @@
 - Get waves looking good
  - Make particles invisible, draw lines between them and a texture underneath them.
-- Get waves to use a trig function instead of whatever weirdness is going on
 - Add documentation

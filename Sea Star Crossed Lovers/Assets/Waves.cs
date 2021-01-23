@@ -19,10 +19,10 @@ public class DisruptiveWave : Object {
 
 /// <summary>
 /// Uses the particle system. If the collision detection remains unwritten, you can just use this object's ParticleSystem component and get collisions from that.
+/// Modified from https://rafalwilinski.medium.com/tutorial-particle-sea-in-unity3d-70ff1350fa9e
 /// </summary>
 public class Waves : MonoBehaviour {
 
-	// Modified from https://rafalwilinski.medium.com/tutorial-particle-sea-in-unity3d-70ff1350fa9e
 
 	public ParticleSystem particles;
 	private ParticleSystem.Particle[] particlesArray;
@@ -65,7 +65,7 @@ public class Waves : MonoBehaviour {
 			particlesArray[i].position = new Vector3(i * spacing, zPos  * heightScale, spacing);
 			foreach (DisruptiveWave wave in activeWaveList) {
 				if (Mathf.Abs(particlesArray[i].position.x - wave.pos.x) <= wave.width)
-				{ //This equation on Desmos: https://www.desmos.com/calculator/qwpdbe7q9g
+				{ //This equation on Desmos: https://www.desmos.com/calculator/oip67y68cz
 					particlesArray[i].position += new Vector3(0, Mathf.Cos((particlesArray[i].position.x - wave.pos.x) * Mathf.PI/2 * 1/wave.width) * wave.height, 0);
 				}
 			}
