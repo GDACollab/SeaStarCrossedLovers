@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// A wave that is added to the current wave simulation, called in GenerateWave.
+/// </summary>
 public class DisruptiveWave : Object {
 	public float direction;
 	public float width;
@@ -47,8 +50,6 @@ public class Waves : MonoBehaviour {
 
 	List<DisruptiveWave> activeWaveList = new List<DisruptiveWave>();
 
-	LineRenderer oceanLine;
-
 	// Stuff for Ocean Texture.
 	MeshRenderer meshRenderer;
 	MeshFilter meshFilter;
@@ -64,18 +65,17 @@ public class Waves : MonoBehaviour {
 		main.maxParticles = seaResolution;
 		particles.Emit(seaResolution);
 		particles.GetParticles(particlesArray);
-		oceanLine = GetComponent<LineRenderer>();
-		oceanLine.positionCount = seaResolution;
-		oceanLine.useWorldSpace = true;
 
 		meshFilter = GetComponent<MeshFilter>();
 		oceanMesh = new Mesh();
-		oceanMeshVertices = new Vector3[2 * seaResolution];
-		oceanMeshTris = new int[(seaResolution - 1) * 3];
-		oceanMeshNormals = new Vector3[2 * seaResolution];
-		for (var i = 0; i < 2 * seaResolution; i++) { //Somewhat buggy? Need to fix the way the mesh displays with some textures
+		oceanMeshVertices = new Vector3[3 * seaResolution];
+		oceanMeshTris = new int[(seaResolution - 1) * 6];
+		oceanMeshNormals = new Vector3[3 * seaResolution];
+		for (var i = 0; i < 3 * seaResolution; i++) { //Nothing I do except for scaling the Z by -1 flips these normals, so we're doing the hacky solution.
 			oceanMeshNormals[i] = -Vector3.forward;
 		}
+		oceanMesh.RecalculateNormals();
+		meshFilter.mesh = oceanMesh;
 	}
 
 	public void GenerateWave(DisruptiveWave wave) {
@@ -99,22 +99,24 @@ public class Waves : MonoBehaviour {
 					particlesArray[i].position += new Vector3(0, Mathf.Cos((particlesArray[i].position.x - wave.pos.x) * Mathf.PI/2 * 1/wave.width) * wave.height * wave.sizeOverTime, 0);
 				}
 			}
-			oceanLine.SetPosition(i, particlesArray[i].position + transform.position);
-			if (i + 1 != seaResolution)
-			{ //Draw Trapezoids.
-				oceanMeshVertices[(i * 2)] = particlesArray[i].position;
-				oceanMeshTris[(i * 3)] = i * 2;
-				oceanMeshVertices[(i * 2) + 1] = new Vector3(particlesArray[i].position.x + spacing, -10, particlesArray[i].position.z);
-				oceanMeshTris[(i * 3) + 1] = (i * 2) + 1;
-				oceanMeshVertices[(i * 2) + 2] = particlesArray[i + 1].position;
-				oceanMeshTris[(i * 3) + 2] = (i * 2) + 2;
+			if (i + 1 < seaResolution) //Look, this is a mess, and I barely understand it myself. It just works, okay?
+			{ //Draw first triangle.
+				oceanMeshVertices[(i * 3)] = particlesArray[i].position;
+				oceanMeshTris[(i * 6)] = i * 3;
+				oceanMeshVertices[(i * 3) + 1] = new Vector3(particlesArray[i].position.x + spacing, -10, particlesArray[i].position.z);
+				oceanMeshTris[(i * 6) + 1] = (i * 3) + 1;
+				oceanMeshVertices[(i * 3) + 3] = particlesArray[i + 1].position;
+				oceanMeshTris[(i * 6) + 2] = (i * 3) + 3;
+				//Second Triangle.
+				oceanMeshVertices[(i * 3) + 2] = new Vector3(particlesArray[i].position.x, -10, particlesArray[i].position.z);
+				oceanMeshTris[(i * 6) + 3] = (i * 3);
+				oceanMeshTris[(i * 6) + 4] = (i * 3) + 2;
+				oceanMeshTris[(i * 6) + 5] = (i * 3) + 3;
 			}
 		}
 
 		oceanMesh.vertices = oceanMeshVertices;
 		oceanMesh.triangles = oceanMeshTris;
-		oceanMesh.normals = oceanMeshNormals;
-		meshFilter.mesh = oceanMesh;
 
 		perlinNoiseAnimX += 0.001f;
 
