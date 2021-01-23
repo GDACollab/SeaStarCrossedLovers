@@ -4833,6 +4833,7 @@ MonoBehaviour:
   spacing: 0.2
   noiseScale: 0.01
   heightScale: 1.1
+  oceanDepth: 5
 --- !u!114 &2672804603493449844
 MonoBehaviour:
   m_ObjectHideFlags: 0
