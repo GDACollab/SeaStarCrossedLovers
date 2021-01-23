@@ -64,7 +64,7 @@ public class Waves : MonoBehaviour {
 			particlesArray[i].startColor = colorGradient.Evaluate(zPos);
 			particlesArray[i].position = new Vector3(i * spacing, zPos  * heightScale, spacing);
 			foreach (DisruptiveWave wave in activeWaveList) {
-				if (Mathf.Abs(particlesArray[i].position.x - wave.pos.x) <= wave.width) { //This equation comes from messing around with Desmos. If you have a better idea, I'm all for it.
+				if (Mathf.Abs(particlesArray[i].position.x - wave.pos.x) <= wave.width) { //This equation comes from messing around with Desmos. Ideally, we'd use a Cos function, but I don't wanna deal with that rn
 					particlesArray[i].position += new Vector3(0, (-0.1f * Mathf.Pow((particlesArray[i].position.x - wave.pos.x), 2) + wave.height), 0);
 				}
 			}
