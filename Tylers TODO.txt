@@ -1,0 +1,3 @@
+- Get Wave Generation working
+- Allow Wave Generation to make multiple waves (use objects!)
+- Get waves looking good

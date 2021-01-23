@@ -32,35 +32,54 @@ public class Waves : MonoBehaviour {
 	/// <summary>
 	/// How much to influence other particles by
 	/// </summary>
-	float waveInfluence = 10f;
-	Vector3 wavePos = Vector3.zero;
+	float waveInfluence;
 	/// <summary>
-	/// False for going to the left, True for going to the right.
+	/// How tall the wave is.
 	/// </summary>
-	bool waveDirection = false;
-
+	float waveHeight;
+	Vector3 wavePos;
+	/// <summary>
+	/// -1 for left, 1 for right.
+	/// </summary>
+	float waveDirection;
+	float waveSpeed = 0.05f;
+	bool isWaving = false;
 
 	/// <summary>
 	/// Create a wave
 	/// </summary>
-	/// <param name="isLeft">Do we start on the left? If we start on the left, wave goes to the right. If we start on the right, wave goes to the left.</param>
-	public void GenerateWave(bool isLeft) {
-		waveDirection = isLeft;
-		if (isLeft) {
-			wavePos;
+	/// <param name="direction">-1 for left, 1 for right.</param>
+	/// <param name="width">How wide the wave is.</param>
+	/// <param name="height">How tall the wave is</param>
+	public void GenerateWave(float direction = 1.0f, float width = 10.0f, float height = 0.5f) {
+		waveDirection = direction;
+		waveInfluence = width;
+		waveHeight = height;
+		if (direction == 1)
+		{
+			wavePos = particlesArray[0].position;
 		}
+		else {
+			wavePos = particlesArray[particlesArray.Length - 1].position;
+		}
+		isWaving = true;
 	}
 
 	void Update() {
 		for(int i = 0; i < seaResolution; i++) {
-				float zPos = Mathf.PerlinNoise(i * noiseScale + perlinNoiseAnimX, noiseScale);
-				particlesArray[i].startColor = colorGradient.Evaluate(zPos);
-				particlesArray[i].position = new Vector3(i * spacing, zPos  * heightScale, spacing);
+			float zPos = Mathf.PerlinNoise(i * noiseScale + perlinNoiseAnimX, noiseScale);
+			particlesArray[i].startColor = colorGradient.Evaluate(zPos);
+			particlesArray[i].position = new Vector3(i * spacing, zPos  * heightScale, spacing);
+			if (isWaving) {
+			}
 		}
 
 		perlinNoiseAnimX += 0.01f;
 
 		particles.SetParticles(particlesArray, particlesArray.Length);
+		if (isWaving) {
+			wavePos += new Vector3(waveSpeed * waveDirection, 0, 0);
+		}
 	}
 
 }
