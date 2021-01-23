@@ -65,7 +65,7 @@ public class Waves : MonoBehaviour {
 			particlesArray[i].position = new Vector3(i * spacing, zPos  * heightScale, spacing);
 			foreach (DisruptiveWave wave in activeWaveList) {
 				if (Mathf.Abs(particlesArray[i].position.x - wave.pos.x) <= wave.width)
-				{ //This equation on Desmos: https://www.desmos.com/calculator/oip67y68cz
+				{ //This equation on Desmos: https://www.desmos.com/calculator/jgudrypofv
 					particlesArray[i].position += new Vector3(0, Mathf.Cos((particlesArray[i].position.x - wave.pos.x) * Mathf.PI/2 * 1/wave.width) * wave.height, 0);
 				}
 			}
