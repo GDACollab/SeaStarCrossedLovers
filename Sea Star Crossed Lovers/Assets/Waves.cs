@@ -99,19 +99,20 @@ public class Waves : MonoBehaviour {
 					particlesArray[i].position += new Vector3(0, Mathf.Cos((particlesArray[i].position.x - wave.pos.x) * Mathf.PI/2 * 1/wave.width) * wave.height * wave.sizeOverTime, 0);
 				}
 			}
-			if (i + 1 < seaResolution) //Look, this is a mess, and I barely understand it myself. It just works, okay?
-			{ //Draw first triangle.
-				oceanMeshVertices[(i * 3)] = particlesArray[i].position;
-				oceanMeshTris[(i * 6)] = i * 3;
-				oceanMeshVertices[(i * 3) + 1] = new Vector3(particlesArray[i].position.x + spacing, -10, particlesArray[i].position.z);
-				oceanMeshTris[(i * 6) + 1] = (i * 3) + 1;
-				oceanMeshVertices[(i * 3) + 3] = particlesArray[i + 1].position;
-				oceanMeshTris[(i * 6) + 2] = (i * 3) + 3;
+			if (i + 1 < seaResolution) //Touch this if you dare.
+			{ //Define points for our triangles to use.
+				oceanMeshVertices[(i * 3)] = particlesArray[i].position; //The position of our current particle
+				oceanMeshVertices[(i * 3) + 1] = new Vector3(particlesArray[i].position.x, -5, particlesArray[i].position.z); //The position below this particle.
+				oceanMeshVertices[(i * 3) + 2] = new Vector3(particlesArray[i].position.x + spacing, -5, particlesArray[i].position.z); //The position below the next particle.
+				oceanMeshVertices[(i * 3) + 3] = particlesArray[i + 1].position; //The position of the next particle.
+				//First triangle:
+				oceanMeshTris[(i * 6)] = i * 3; //First point is this particle.
+				oceanMeshTris[(i * 6) + 1] = (i * 3) + 1; //Then below this particle.
+				oceanMeshTris[(i * 6) + 2] = (i * 3) + 3; //Then the next particle.
 				//Second Triangle.
-				oceanMeshVertices[(i * 3) + 2] = new Vector3(particlesArray[i].position.x, -10, particlesArray[i].position.z);
-				oceanMeshTris[(i * 6) + 3] = (i * 3);
-				oceanMeshTris[(i * 6) + 4] = (i * 3) + 2;
-				oceanMeshTris[(i * 6) + 5] = (i * 3) + 3;
+				oceanMeshTris[(i * 6) + 5] = (i * 3) + 1; //Below this particle.
+				oceanMeshTris[(i * 6) + 3] = (i * 3) + 2; //Below the next particle.
+				oceanMeshTris[(i * 6) + 4] = (i * 3) + 3; //The next particle.
 			}
 		}
 
