@@ -46,6 +46,5 @@ public class Blocklet : MonoBehaviour
     {
         //row condition is temporary, will need to find way to make threshold increase over time
         if (other.gameObject.tag == "Wave" && row <= 1) canFade = true;
-        
     }
 }
