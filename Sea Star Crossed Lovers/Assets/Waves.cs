@@ -129,6 +129,8 @@ public class Waves : MonoBehaviour {
 		for (var i = 0; i < 3 * seaResolution; i++) { //Except nothing I do but scaling the Z by -1 flips the triangles. So we're scaling the Z by -1 in the Inspector. Sorry.
 			oceanMeshNormals[i] = -Vector3.forward;
 		}
+		oceanMesh.vertices = oceanMeshVertices;
+		oceanMesh.triangles = oceanMeshTris;
 		oceanMesh.normals = oceanMeshNormals;
 		meshFilter.mesh = oceanMesh; //The meshFilter renders our created mesh.
 	}
