@@ -462,7 +462,7 @@ GameObject:
   m_Component:
   - component: {fileID: 348458701}
   - component: {fileID: 348458700}
-  - component: {fileID: 348458702}
+  - component: {fileID: 348458703}
   m_Layer: 0
   m_Name: SpawnBlock
   m_TagString: Untagged
@@ -490,13 +490,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 348458699}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &348458702
+--- !u!114 &348458703
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -505,13 +505,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 348458699}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b82f76e44add48fd991e904fb5cc789, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a04cccda15b341c499cca2282fade6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Block: {fileID: 2569940699476993790, guid: 64a06655506ff4ff7b51b62660725a52, type: 3}
+  BlockList:
+  - {fileID: 2569940699476993790, guid: 64a06655506ff4ff7b51b62660725a52, type: 3}
+  - {fileID: 2569940699476993790, guid: 8d9fef8d7d47640ee8546415932bf1b7, type: 3}
+  - {fileID: 2569940699476993790, guid: 2604fc872870244388dc9dacd4042b25, type: 3}
   horizontalSpeed: 10
-  dropSpeed: 1
+  fallSpeed: 6
+  dropForce: 300
   startingDownwardForce: 150
+  spawnDelay: 1
 --- !u!1 &872482305
 GameObject:
   m_ObjectHideFlags: 0
