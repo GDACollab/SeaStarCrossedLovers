@@ -183,12 +183,16 @@ public class Waves : MonoBehaviour {
 		perlinNoiseAnimX += waveSpeed;
 
 		particles.SetParticles(particlesArray, particlesArray.Length);
+		List<DisruptiveWave> toRemoveWave = new List<DisruptiveWave>();
 		foreach (DisruptiveWave wave in activeWaveList) { //Update the DisruptiveWaves by moving them around and removing them if need be.
 			wave.pos += new Vector3(wave.speed * wave.direction, 0, 0);
 			wave.sizeOverTime *= wave.sizeModifier;
 			if (wave.pos.x > particlesArray[particlesArray.Length - 1].position.x + wave.width) { //Is this wave done? 
-				activeWaveList.Remove(wave);
+				toRemoveWave.Add(wave);
 			}
+		}
+		foreach (DisruptiveWave toRemove in toRemoveWave) {
+			activeWaveList.Remove(toRemove);
 		}
 	}
 
