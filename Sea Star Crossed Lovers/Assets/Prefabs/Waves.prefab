@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 2672804603493449801}
   - component: {fileID: 2672804603493449800}
   - component: {fileID: 2672804603493449803}
-  - component: {fileID: 2672804603493449844}
   - component: {fileID: 2672804603493449846}
   - component: {fileID: 2672804603493449847}
+  - component: {fileID: 4692510215658932520}
   m_Layer: 0
   m_Name: Waves
   m_TagString: Untagged
@@ -4835,24 +4835,6 @@ MonoBehaviour:
   waveSpeed: 0.001
   heightScale: 1.1
   oceanDepth: 5
---- !u!114 &2672804603493449844
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2672804603493449807}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa95f04451607bb499cef6f1d0bb8ac4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  difficulty: 0
-  maxDifficulty: 3
-  waveCooldown: 10
-  waveHeight: 3
-  timeBetweenDifficulties: 30
-  waveIsOver: 0
 --- !u!23 &2672804603493449846
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4902,3 +4884,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2672804603493449807}
   m_Mesh: {fileID: 0}
+--- !u!114 &4692510215658932520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2672804603493449807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe195c4bdfcb3bd4caf8f513ddc4e160, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  difficulty: 0
+  maxDifficulty: 3
+  waveCooldown: 10
+  waveHeight: 3
+  timeBetweenDifficulties: 30
+  waveIsOver: 0

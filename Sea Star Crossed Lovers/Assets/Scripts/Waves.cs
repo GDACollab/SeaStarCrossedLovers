@@ -5,7 +5,8 @@ using System.Collections.Generic;
 /// <summary>
 /// A wave that is added to the current wave simulation, called in GenerateWave.
 /// </summary>
-public class DisruptiveWave : Object {
+public class DisruptiveWave : Object
+{
 	/// <summary>
 	/// -1 for wave going left, 1 for wave going right.
 	/// </summary>
@@ -42,7 +43,8 @@ public class DisruptiveWave : Object {
 	/// <param name="waveHeight">How high the wave should be.</param>
 	/// <param name="waveSpeed">How fast the wave should be.</param>
 	/// <param name="waveSizeOverTime">% of how much the wave should grow over time.</param>
-	public DisruptiveWave(float waveDirection = 1, float waveWidth = 5f, float waveHeight = 1.1f, float waveSpeed = 0.01f, float waveSizeOverTime = 0.9996f) {
+	public DisruptiveWave(float waveDirection = 1, float waveWidth = 5f, float waveHeight = 1.1f, float waveSpeed = 0.01f, float waveSizeOverTime = 0.9996f)
+	{
 		this.direction = waveDirection;
 		this.width = waveWidth;
 		this.height = waveHeight;
@@ -56,7 +58,8 @@ public class DisruptiveWave : Object {
 /// Uses the particle system. If the collision detection remains unwritten, you can just use this object's ParticleSystem component and get collisions from that.
 /// Modified from https://rafalwilinski.medium.com/tutorial-particle-sea-in-unity3d-70ff1350fa9e
 /// </summary>
-public class Waves : MonoBehaviour {
+public class Waves : MonoBehaviour
+{
 
 	//Stuff for modifying the particle system.
 	public ParticleSystem particles;
@@ -110,7 +113,8 @@ public class Waves : MonoBehaviour {
 	[Tooltip("How deep or shallow the ocean is.")]
 	public float oceanDepth = 5;
 
-	void Start() {
+	void Start()
+	{
 		//Set up the ocean particles.
 		particlesArray = new ParticleSystem.Particle[seaResolution];
 		particles = GetComponent<ParticleSystem>();
@@ -126,7 +130,8 @@ public class Waves : MonoBehaviour {
 		oceanMeshTris = new int[(seaResolution - 1) * 6];
 		oceanMeshNormals = new Vector3[3 * seaResolution];
 		//This tries to set the ocean normals to be facing in some kind of direction.
-		for (var i = 0; i < 3 * seaResolution; i++) { //Except nothing I do but scaling the Z by -1 flips the triangles. So we're scaling the Z by -1 in the Inspector. Sorry.
+		for (var i = 0; i < 3 * seaResolution; i++)
+		{ //Except nothing I do but scaling the Z by -1 flips the triangles. So we're scaling the Z by -1 in the Inspector. Sorry.
 			oceanMeshNormals[i] = -Vector3.forward;
 		}
 		oceanMesh.vertices = oceanMeshVertices;
@@ -139,25 +144,30 @@ public class Waves : MonoBehaviour {
 	/// Create a wave across the current ocean.
 	/// </summary>
 	/// <param name="wave">Supply a Disruptive Wave. Just use new DisruptiveWave() if you're not sure what to put.</param>
-	public void GenerateWave(DisruptiveWave wave) {
+	public void GenerateWave(DisruptiveWave wave)
+	{
 		if (wave.direction == 1) //Set the wave's position based on its direction.
 		{
 			wave.pos = particlesArray[0].position - new Vector3(wave.width, 0, 0);
 		}
-		else {
+		else
+		{
 			wave.pos = particlesArray[particlesArray.Length - 1].position + new Vector3(wave.width, 0, 0);
 		}
 		activeWaveList.Add(wave);
 	}
 
-	void Update() {
-		for(int i = 0; i < seaResolution; i++) { //Go through all the particles.
+	void Update()
+	{
+		for (int i = 0; i < seaResolution; i++)
+		{ //Go through all the particles.
 			float zPos = Mathf.PerlinNoise(i * noiseScale + perlinNoiseAnimX, noiseScale); //This is what creates the bobbing.
-			particlesArray[i].position = new Vector3(i * spacing, zPos  * heightScale, spacing); //Now actually move the particles.
-			foreach (DisruptiveWave wave in activeWaveList) { //This is for adding waves on top of the current ocean. Use GenerateWave() to add DisruptiveWaves to the activeWaveList.
+			particlesArray[i].position = new Vector3(i * spacing, zPos * heightScale, spacing); //Now actually move the particles.
+			foreach (DisruptiveWave wave in activeWaveList)
+			{ //This is for adding waves on top of the current ocean. Use GenerateWave() to add DisruptiveWaves to the activeWaveList.
 				if (Mathf.Abs(particlesArray[i].position.x - wave.pos.x) <= wave.width) //Is this point within the wave's influence?
 				{ //This equation on Desmos: https://www.desmos.com/calculator/jgudrypofv. Remove * zPos for removing wave randomness.
-					particlesArray[i].position += new Vector3(0, Mathf.Cos((particlesArray[i].position.x - wave.pos.x) * Mathf.PI/2 * 1/wave.width) * wave.height * wave.sizeOverTime, 0);
+					particlesArray[i].position += new Vector3(0, Mathf.Cos((particlesArray[i].position.x - wave.pos.x) * Mathf.PI / 2 * 1 / wave.width) * wave.height * wave.sizeOverTime, 0);
 				}
 			}
 			if (i + 1 < seaResolution) //Touch this if you dare.
@@ -166,11 +176,11 @@ public class Waves : MonoBehaviour {
 				oceanMeshVertices[(i * 3) + 1] = new Vector3(particlesArray[i].position.x, -oceanDepth, particlesArray[i].position.z); //The position below this particle.
 				oceanMeshVertices[(i * 3) + 2] = new Vector3(particlesArray[i].position.x + spacing, -oceanDepth, particlesArray[i].position.z); //The position below the next particle.
 				oceanMeshVertices[(i * 3) + 3] = particlesArray[i + 1].position; //The position of the next particle.
-				//First triangle:
+																				 //First triangle:
 				oceanMeshTris[(i * 6)] = i * 3; //First point is this particle.
 				oceanMeshTris[(i * 6) + 1] = (i * 3) + 1; //Then below this particle.
 				oceanMeshTris[(i * 6) + 2] = (i * 3) + 3; //Then the next particle.
-				//Second Triangle.
+														  //Second Triangle.
 				oceanMeshTris[(i * 6) + 5] = (i * 3) + 1; //Below this particle.
 				oceanMeshTris[(i * 6) + 3] = (i * 3) + 2; //Below the next particle.
 				oceanMeshTris[(i * 6) + 4] = (i * 3) + 3; //The next particle.
@@ -183,12 +193,19 @@ public class Waves : MonoBehaviour {
 		perlinNoiseAnimX += waveSpeed;
 
 		particles.SetParticles(particlesArray, particlesArray.Length);
-		foreach (DisruptiveWave wave in activeWaveList) { //Update the DisruptiveWaves by moving them around and removing them if need be.
+		List<DisruptiveWave> toRemoveWave = new List<DisruptiveWave>();
+		foreach (DisruptiveWave wave in activeWaveList)
+		{ //Update the DisruptiveWaves by moving them around and removing them if need be.
 			wave.pos += new Vector3(wave.speed * wave.direction, 0, 0);
 			wave.sizeOverTime *= wave.sizeModifier;
-			if (wave.pos.x > particlesArray[particlesArray.Length - 1].position.x + wave.width) { //Is this wave done? 
-				activeWaveList.Remove(wave);
+			if (wave.pos.x > particlesArray[particlesArray.Length - 1].position.x + wave.width)
+			{ //Is this wave done? 
+				toRemoveWave.Add(wave);
 			}
+		}
+		foreach (DisruptiveWave toRemove in toRemoveWave)
+		{
+			activeWaveList.Remove(toRemove);
 		}
 	}
 

@@ -42,10 +42,11 @@ public class SimpleWave : MonoBehaviour
 
     void OnParticleCollision(GameObject other)
     {
-        if (other.tag == "Blocklet")
-        {
-            //    Blocklet b = other.GetComponent<Blocklet>();
-            //    b.Delete(difficulty);
+        
+        if (other.tag == "Tetronimo")
+        {         
+            BlockManager b = other.GetComponent<BlockManager>();
+            b.Delete(difficulty);
         }
         else if (other.name == "Endpoint")
             waveIsOver = true;
@@ -56,9 +57,10 @@ public class SimpleWave : MonoBehaviour
         MakeWave(1);
     }
 
-    public void MakeWave(int height) {
+    public void MakeWave(int height)
+    {
         waveIsOver = false;
-        for(int i = 0; i < height; i++)
+        for (int i = 0; i < height; i++)
             GetComponent<Waves>().GenerateWave(new DisruptiveWave());
     }
 }
