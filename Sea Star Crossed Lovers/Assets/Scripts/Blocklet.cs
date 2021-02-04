@@ -19,6 +19,8 @@ public class Blocklet : MonoBehaviour
     public GameObject platform;
     public GameObject waves;
 
+    public TextMesh rowDebugText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +37,9 @@ public class Blocklet : MonoBehaviour
         relativePos = platform.transform.InverseTransformPoint(this.transform.position);
         //calculate row #
         row = (int)(relativePos.y / size.y);
+
+        // Update rowDebugText
+        rowDebugText.text = row.ToString();
 
         if (markForDeletion)
         {

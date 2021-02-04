@@ -250,7 +250,6 @@ GameObject:
   - component: {fileID: 177574287}
   - component: {fileID: 177574286}
   - component: {fileID: 177574290}
-  - component: {fileID: 177574291}
   m_Layer: 5
   m_Name: PlayUICanvas
   m_TagString: Untagged
@@ -347,20 +346,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 177574285}
   m_CullTransparentMesh: 0
---- !u!114 &177574291
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 177574285}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1924a24e12da8494baed336e94c0b113, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnBlock: {fileID: 348458699}
-  waves: {fileID: 0}
 --- !u!1001 &178347133
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1380,36 +1365,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe195c4bdfcb3bd4caf8f513ddc4e160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1178125780
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1178125781}
-  m_Layer: 0
-  m_Name: SceneManagerObj
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1178125781
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1178125780}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1421.7997, y: 486.33182, z: -2044.0967}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1269157895
 GameObject:
   m_ObjectHideFlags: 0
