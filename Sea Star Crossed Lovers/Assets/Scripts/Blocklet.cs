@@ -19,7 +19,9 @@ public class Blocklet : MonoBehaviour
     public GameObject platform;
     public GameObject waves;
 
-    public TextMesh rowDebugText;
+    public GameObject rowDebugObj;
+    private TextMesh rowDebugText;
+    private GameObject BlockParent;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +30,9 @@ public class Blocklet : MonoBehaviour
         size = this.GetComponent<BoxCollider2D>().size;
         platform = GameObject.FindWithTag("Platform");
         waves = GameObject.FindWithTag("Wave");
+
+        rowDebugText = rowDebugObj.GetComponent<TextMesh>();
+        BlockParent = gameObject.transform.parent.gameObject;
     }
 
     // Update is called once per frame
@@ -36,9 +41,12 @@ public class Blocklet : MonoBehaviour
         //get position of blocklet relative to position of platform
         relativePos = platform.transform.InverseTransformPoint(this.transform.position);
         //calculate row #
-        row = (int)(relativePos.y / size.y);
+        //row = (int)(relativePos.y / size.y);
+        row = (int)(relativePos.y);
 
-        // Update rowDebugText
+        // Update rowDebugObj rotation
+        rowDebugObj.transform.rotation = Quaternion.identity;
+        // Update rowDebugObj text
         rowDebugText.text = row.ToString();
 
         if (markForDeletion)
