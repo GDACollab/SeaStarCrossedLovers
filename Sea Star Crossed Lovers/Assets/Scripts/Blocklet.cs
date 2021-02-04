@@ -5,6 +5,7 @@ using UnityEngine;
 public class Blocklet : MonoBehaviour
 {
     private bool canFade;
+    private float fadeFinal = 0.5f;
     private bool markForDeletion;
     [Range(0, 10)]
     public float fadeSpeed;
@@ -38,18 +39,18 @@ public class Blocklet : MonoBehaviour
         if (markForDeletion)
         {
             Color blockColor = this.GetComponent<Renderer>().material.color;
-            Debug.Log("before fading");
-            if (blockColor.a > 0f)
+            //Debug.Log("before fading");
+            if (blockColor.a > fadeFinal)
             {
-                Debug.Log("inside fading");
+                //Debug.Log("inside fading");
                 float fadeAmount = blockColor.a - (fadeSpeed * Time.deltaTime);
 
                 this.GetComponent<Renderer>().material.color = new Color(blockColor.r, blockColor.b, blockColor.g, fadeAmount);
             }
-            else if (blockColor.a <= 0 && waves.GetComponent<SimpleWave>().waveIsOver)
+            else if (blockColor.a <= fadeFinal && waves.GetComponent<SimpleWave>().waveIsOver)
             {
                 Destroy(gameObject);
-                Debug.Log("destroy");
+                //Debug.Log("destroy");
             }
         }
     }
@@ -59,7 +60,7 @@ public class Blocklet : MonoBehaviour
         if (row <= rowsToDelete)
         {
             markForDeletion = true;
-            Debug.Log("markForDeletion");
+            //Debug.Log("markForDeletion");
         }
     }
 }

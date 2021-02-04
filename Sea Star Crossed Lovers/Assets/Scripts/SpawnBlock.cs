@@ -13,16 +13,17 @@ public class SpawnBlock : MonoBehaviour
     public int spawnDelay = 1;
 
     private float blockGravity;
-
-    private bool waitingForBlock;
+    private bool waitingForBlock = false;
+    private bool canSpawnBlock = false; 
 
     private GameObject activeBlock;
     private Rigidbody2D activeRB;
-    private BlockCollision blockCollision;
+    private BlockManager blockManager;
+
 
     private void Start()
     {
-        spawnNewBlock();
+        
     }
 
     private void Update()
@@ -41,7 +42,7 @@ public class SpawnBlock : MonoBehaviour
                 // give block normal gravity
                 activeRB.AddForce(new Vector3(0, -dropForce, 0));
                 activeRB.gravityScale = blockGravity;
-                blockCollision.isActive = false;
+                blockManager.isActive = false;
             }
 
             // detect rotation
@@ -53,9 +54,10 @@ public class SpawnBlock : MonoBehaviour
             
         }
 
-        // if an active block collides, give it normal gravity
-        // and prepare to spawn new block
-        if (!blockCollision.isActive && !waitingForBlock)
+        // if an active block collides or is being deleted,
+        // give it normal gravity and prepare to spawn new block
+        if (canSpawnBlock && !waitingForBlock &&
+            (!blockManager.isActive || blockManager.beingDeleted))
         {
             waitingForBlock = true;
             activeRB.gravityScale = blockGravity;
@@ -81,9 +83,22 @@ public class SpawnBlock : MonoBehaviour
         var selectedBlock = BlockList[Random.Range(0, BlockList.Count)];
         activeBlock = Instantiate(selectedBlock, spawnPosition, Quaternion.identity);
         activeRB = activeBlock.GetComponent<Rigidbody2D>();
-        blockCollision = activeBlock.GetComponent<BlockCollision>();
+        blockManager = activeBlock.GetComponent<BlockManager>();
 
         blockGravity = activeRB.gravityScale;
         activeRB.gravityScale = 0f;
     }
+
+    public void toggleBlockSpawn()
+    {
+        if (canSpawnBlock)
+        {
+            canSpawnBlock = false;
+        } else
+        {
+            spawnNewBlock();
+            canSpawnBlock = true;
+        }
+    }
+
 }

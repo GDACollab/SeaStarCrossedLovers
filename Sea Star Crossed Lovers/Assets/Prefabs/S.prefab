@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5205294246169897052}
   - component: {fileID: 6038987423854972206}
   - component: {fileID: 388871558543863491}
-  - component: {fileID: 390734897437063031}
   m_Layer: 0
   m_Name: S
   m_TagString: Tetronimo
@@ -104,22 +103,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b7eee6cd316afe48942b3c58a4f327c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActive: 1
-  grounded: 0
---- !u!114 &390734897437063031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7854107186023947348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b7eee6cd316afe48942b3c58a4f327c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isActive: 1
-  grounded: 0
 --- !u!1001 &1147882326616565788
 PrefabInstance:
   m_ObjectHideFlags: 0
