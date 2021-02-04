@@ -1,0 +1,3 @@
+Yeah, so the waves system won't load the mesh (the particles work just fine)
+if the top left corner of the waves isn't visible to the observer. So... just make sure that your
+camera can see the top left corner.
