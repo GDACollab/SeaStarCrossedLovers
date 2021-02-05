@@ -59,7 +59,9 @@ public class SpawnBlock : MonoBehaviour
         if (canSpawnBlock && !waitingForBlock &&
             (!blockManager.isActive || blockManager.beingDeleted))
         {
+            // Set true to ensure no additional block is spawned during the spawn delay
             waitingForBlock = true;
+            // Reset activeBlock to original gravity and null activeBlock
             activeRB.gravityScale = blockGravity;
             activeBlock = null;
 
@@ -77,15 +79,21 @@ public class SpawnBlock : MonoBehaviour
     // Spawn random block from blockList at parent gameObject position
     private void spawnNewBlock()
     {
+        // Spawn on parent object position
         Vector3 spawnPosition = gameObject.transform.position;
         spawnPosition.z = 0;
 
+        // Random select block from BlockList
         var selectedBlock = BlockList[Random.Range(0, BlockList.Count)];
+
+        // Spawn block and track components
         activeBlock = Instantiate(selectedBlock, spawnPosition, Quaternion.identity);
         activeRB = activeBlock.GetComponent<Rigidbody2D>();
         blockManager = activeBlock.GetComponent<BlockManager>();
 
+        // Store original gravity
         blockGravity = activeRB.gravityScale;
+        // Disable active block gravity
         activeRB.gravityScale = 0f;
     }
 
@@ -94,7 +102,6 @@ public class SpawnBlock : MonoBehaviour
         if (activeRB) {
             activeRB.gravityScale = blockGravity;
             activeBlock = null;
-            Debug.Log("Hi");
         }
         
         if (canSpawnBlock)

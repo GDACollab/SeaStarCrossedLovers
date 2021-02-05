@@ -48,6 +48,7 @@ public class SimpleWave : MonoBehaviour
         // Update wave timer text
         waveTimerText.GetComponent<UnityEngine.UI.Text>().text =
             "Wave Timer: " + wTimer.ToString("0") + " / " + waveCooldown.ToString("0");
+        // Update difficulty text
         difficultyText.GetComponent<UnityEngine.UI.Text>().text =
             "Difficulty: " + difficulty.ToString() + " / " + maxDifficulty.ToString();
     }
