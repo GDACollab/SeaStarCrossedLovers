@@ -91,6 +91,12 @@ public class SpawnBlock : MonoBehaviour
 
     public void toggleBlockSpawn()
     {
+        if (activeRB) {
+            activeRB.gravityScale = blockGravity;
+            activeBlock = null;
+            Debug.Log("Hi");
+        }
+        
         if (canSpawnBlock)
         {
             canSpawnBlock = false;
