@@ -2198,7 +2198,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4692510215658932520, guid: e6df304c6bb96b94d95ac0434fb8d0c1, type: 3}
       propertyPath: waveCooldown
-      value: 45
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 4692510215658932520, guid: e6df304c6bb96b94d95ac0434fb8d0c1, type: 3}
       propertyPath: difficulty
@@ -2206,7 +2206,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4692510215658932520, guid: e6df304c6bb96b94d95ac0434fb8d0c1, type: 3}
       propertyPath: timeBetweenDifficulties
-      value: 90
+      value: 120
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6df304c6bb96b94d95ac0434fb8d0c1, type: 3}
