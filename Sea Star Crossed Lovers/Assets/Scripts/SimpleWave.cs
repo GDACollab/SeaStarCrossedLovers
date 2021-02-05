@@ -13,6 +13,9 @@ public class SimpleWave : MonoBehaviour
     private float dTimer; //difficulty timer
     public bool waveIsOver; //true if wave has passed, false if wave is currently passing through
 
+    private GameObject waveTimerText;
+    private GameObject difficultyText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +23,9 @@ public class SimpleWave : MonoBehaviour
         wTimer = 0f;
         dTimer = 0f;
         waveIsOver = true;
+
+        waveTimerText = GameObject.Find("WaveTimer");
+        difficultyText = GameObject.Find("DifficultyLevel");
     }
 
     // Update is called once per frame
@@ -38,6 +44,12 @@ public class SimpleWave : MonoBehaviour
             difficulty++;
             dTimer = 0f;
         }
+
+        // Update wave timer text
+        waveTimerText.GetComponent<UnityEngine.UI.Text>().text =
+            "Wave Timer: " + wTimer.ToString("0") + " / " + waveCooldown.ToString("0");
+        difficultyText.GetComponent<UnityEngine.UI.Text>().text =
+            "Wave Timer: " + difficulty.ToString() + " / " + maxDifficulty.ToString();
     }
 
     void OnParticleCollision(GameObject other)

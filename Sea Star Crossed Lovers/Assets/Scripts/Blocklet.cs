@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class Blocklet : MonoBehaviour
 {
-    private bool canFade;
-    private float fadeFinal = 0.5f;
-    private bool markForDeletion;
+    [Range(0, 1)]
+    public float fadeFinal;
     [Range(0, 10)]
     public float fadeSpeed;
 
@@ -15,6 +14,8 @@ public class Blocklet : MonoBehaviour
     private Vector3 relativePos;
     //size of blocklet
     private Vector2 size;
+    private bool canFade;
+    private bool markForDeletion;
 
     public GameObject platform;
     public GameObject waves;
