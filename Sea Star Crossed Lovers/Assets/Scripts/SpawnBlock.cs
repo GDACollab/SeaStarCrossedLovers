@@ -23,7 +23,7 @@ public class SpawnBlock : MonoBehaviour
 
     private void Start()
     {
-        
+
     }
 
     private void Update()
@@ -94,7 +94,8 @@ public class SpawnBlock : MonoBehaviour
         if (canSpawnBlock)
         {
             canSpawnBlock = false;
-        } else
+        }
+        else
         {
             spawnNewBlock();
             canSpawnBlock = true;

@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ResetScene : MonoBehaviour
+public class SceneControl : MonoBehaviour
 {
-    public void reset()
+    public void resetScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void quitGame()
+    {
+        Application.Quit();
     }
 }
