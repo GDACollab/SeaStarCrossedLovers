@@ -29,6 +29,9 @@ public class VN_Manager : MonoBehaviour
 	private Canvas TextCanvas = null;
 	[SerializeField]
 	private Canvas ButtonCanvas = null;
+	[SerializeField]
+	private Canvas NameCanvas = null;
+	private Text NameText;
 
 	// UI Prefabs
 	[SerializeField]
@@ -38,19 +41,27 @@ public class VN_Manager : MonoBehaviour
 	[Tooltip("Used for VN buttons")]
 	private Button buttonPrefab = null;
 
+	[SerializeField]
+	private VN_Character PlayerCharacter;
 	// List of characters in VN to pull from
 	[SerializeField]
-	private List<VN_Character> Characters;
+	private List<VN_Character> AllCharacters;
+	// List of characters in scene now
+	private List<VN_Character> ActiveCharacters;
+
 
 	// Internal
 	// What is left to be displayed by slow text
 	private string RemainingContent = "";
 	// The full line of text to be displayed
 	private string CurrentLine = "";
-	private string CurrentSpeaker = "";
+	private string CurrentSpeakerName = "";
+	private VN_Character CurrentSpeaker = null;
 
-	void Awake()
+	void Start()
 	{
+		ActiveCharacters = new List<VN_Character>();
+
 		// Remove the default message
 		ClearContent();
         StartStory();
@@ -79,41 +90,107 @@ public class VN_Manager : MonoBehaviour
     {
 		// Gets all text until choices
 		CurrentLine = story.Continue();
-		
-		RemainingContent = CurrentLine;
 
 		// If blank line, skip trying to show
-		if (CurrentLine == "")
+		if (CurrentLine.Trim() == "")
 		{
 			DisplaySlow();
 			return;
 		}
 
+		// If line is in format "[character name]: [text to be spoken]"
+		// lineSplit holds [character name] in index 0 and [text to be spoken] in index 1
 		string[] lineSplit = CurrentLine.Split(':');
-		// Trim removes any white space from the beginning or end.
-		CurrentSpeaker = lineSplit[0].Trim();
-		CurrentLine = lineSplit[1].Trim();
+		if (lineSplit.Length == 2)
+        {
+			// Trim removes any white space from the beginning or end.
+			CurrentSpeakerName = lineSplit[0].Trim();
+			CurrentLine = lineSplit[1].Trim();
+		}
+		// If there is no colon, assume player is speaking
+		else
+        {
+			CurrentLine = CurrentLine.Trim('"');
+			CurrentSpeakerName = PlayerCharacter.name;
+		}
+		// Keep track of reaming content to be displayed through slow text
+		RemainingContent = CurrentLine;
 
 		// Instantiate text box
 		Text storyText = Instantiate(textPrefab);
+		// Clear default text
+		storyText.text = "";
 		// Set parent in TextCanvas
 		storyText.transform.SetParent(TextCanvas.transform, false);
 
-		// Clear default text
-		storyText.text = "";
+		// Instantiate character name text
+		NameText = Instantiate(textPrefab);
+		NameText.transform.SetParent(NameCanvas.transform, false);
+		// Update NameText
+		if (CurrentSpeakerName == "Narrator")
+        {
+			NameText.text = "";
+			storyText.fontStyle = FontStyle.Italic;
+		}
+		else
+        {
+			NameText.text = CurrentSpeakerName;
+		}
+
+		// Update character sprites
+		// Get CurrentSpeaker by finding CurrentSpeakerName in AllCharacters
+		VN_Character CurrentSpeaker = AllCharacters.Find(x => x.name == CurrentSpeakerName);
+
+		// If found...
+		if (CurrentSpeaker)
+		{
+			// Add to ActiveCharacters if not already in
+			if (!ActiveCharacters.Contains(CurrentSpeaker))
+            {
+				ActiveCharacters.Add(CurrentSpeaker);
+				// Transition into screen if added
+				CurrentSpeaker.enter(CurrentSpeaker.transition);
+			}
+			// Change CurrentSpeaker to talking sprite
+			CurrentSpeaker.changeSprite("talking");
+
+			// Change all other ActiveCharacters to default sprite
+			foreach (VN_Character notTalking in ActiveCharacters)
+            {
+				if(notTalking != CurrentSpeaker)
+                {
+					notTalking.changeSprite("default");
+				}
+			}
+		}
+		// Catch CurrentSpeaker being null
+		// Ignore special Narrator case
+		else if (CurrentSpeakerName != "Narrator")
+        {
+			Debug.LogError("CurrentSpeaker of name " + CurrentSpeakerName + " could not be found");
+		}
+
+		// Start displaying text content
 		StartCoroutine(SlowText(storyText));
 	}
+
 	IEnumerator SlowText(Text storyText)
     {
 		// Remove each character from RemainingContent and put into storyText
 		// unitl there is no more RemainingContent
 		while (RemainingContent != "")
 		{
+			// Append first character of RemainingContent to text display
 			storyText.text += RemainingContent[0];
+			// Remove first character in RemainingContent
 			RemainingContent = RemainingContent.Remove(0, 1);
+			// Delay appending more characters
+			// 1/TextSpeed because WaitForSeconds(TextSpeed) is 1 char per x seconds
+			// Convert to x char per second by inverting
 			yield return new WaitForSeconds(1/TextSpeed);
 		}
 
+		// Once done with displaying all text content...
 		// Display all the choices, if there are any!
 		if (story.currentChoices.Count > 0)
 		{
@@ -127,7 +204,6 @@ public class VN_Manager : MonoBehaviour
 					OnClickChoiceButton(choice);
 				});
 			}
-		
 		}
 		// If there are no choices on this line of text, refresh for next line
 		// And add a button to continue
@@ -192,6 +268,11 @@ public class VN_Manager : MonoBehaviour
 		}
 
 		foreach (Transform child in ButtonCanvas.transform)
+		{
+			Destroy(child.gameObject);
+		}
+
+		foreach (Transform child in NameCanvas.transform)
 		{
 			Destroy(child.gameObject);
 		}
