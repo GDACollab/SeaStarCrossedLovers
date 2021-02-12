@@ -109,6 +109,13 @@ public class VN_Manager : MonoBehaviour
 		CurrentLine = CurrentLine.Trim();
 		RemainingContent = CurrentLine;
 
+		// If blank line, skip trying to show
+		if (CurrentLine == "")
+		{
+			DisplaySlow();
+			return;
+		}
+
 		// Instantiate text box
 		Text storyText = Instantiate(textPrefab);
 		// Set parent in TextCanvas
@@ -137,21 +144,28 @@ public class VN_Manager : MonoBehaviour
 				Choice choice = story.currentChoices[i];
 				Button button = CreateChoiceView(choice.text.Trim());
 				// Tell the button what to do when we press it
-				button.onClick.AddListener(delegate {
+				button.onClick.AddListener(delegate
+				{
 					OnClickChoiceButton(choice);
 				});
 			}
+		
+		}
 		// If there are no choices on this line of text, refresh for next line
 		// And add a button to continue
-		} else if (story.canContinue) {
+		else if (story.canContinue)
+		{
 			Button button = CreateChoiceView("Continue");
 			button.onClick.AddListener(delegate {
 				RefreshView();
-			});
+		});
 		// If there is no more content, prompt to restart
-		} else {
+		}
+		else
+		{
 			Button choice = CreateChoiceView("End of story.\nRestart?");
-			choice.onClick.AddListener(delegate {
+			choice.onClick.AddListener(delegate
+			{
 				StartStory();
 			});
 		}
