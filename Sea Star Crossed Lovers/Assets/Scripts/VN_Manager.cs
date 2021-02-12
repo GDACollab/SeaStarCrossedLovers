@@ -2,13 +2,17 @@
 using UnityEngine.UI;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Ink.Runtime;
 
-// Put this script as a component of the VN canvas
+/// <summary>
+/// Creates and manages VN components and flow
+/// Based off of BasicInkExample.cs in Plugins/Ink/Example/Scripts
+/// </summary>
 public class VN_Manager : MonoBehaviour
 {
 	// Settings
-	// TextSpeed in characters per second
+	[Tooltip("Speed of slow text in characters per second")]
 	public float TextSpeed = 10;
 
 	// Keep track of story creation event
@@ -16,6 +20,7 @@ public class VN_Manager : MonoBehaviour
 
 	// Needed to create story from JSON
 	[SerializeField]
+	[Tooltip("Intermediate file for Unity to work with Ink; Created when a .ink file is saved in Unity")]
 	private TextAsset inkJSONAsset = null;
 	public Story story;
 
@@ -27,17 +32,22 @@ public class VN_Manager : MonoBehaviour
 
 	// UI Prefabs
 	[SerializeField]
+	[Tooltip("Used for VN text context")]
 	private Text textPrefab = null;
 	[SerializeField]
+	[Tooltip("Used for VN buttons")]
 	private Button buttonPrefab = null;
 
+	// List of characters in VN to pull from
+	[SerializeField]
+	private List<VN_Character> Characters;
 
 	// Internal
-	// Used in slow text
 	// What is left to be displayed by slow text
 	private string RemainingContent = "";
 	// The full line of text to be displayed
 	private string CurrentLine = "";
+	private string CurrentSpeaker = "";
 
 	void Awake()
 	{
@@ -59,54 +69,17 @@ public class VN_Manager : MonoBehaviour
 	// Continues over all the lines of text, then displays all the choices. If there are no choices, the story is finished!
 	void RefreshView()
 	{
-		// Remove all the UI on screen
+		// Remove all VN text & buttons
 		ClearContent();
 
 		DisplaySlow();
-	}
-
-	void DisplayAll()
-    {
-		// Read all the content until we can't continue any more
-		while (story.canContinue)
-		{
-			// Continue gets the next line of the story
-			string text = story.Continue();
-			// This removes any white space from the text.
-			text = text.Trim();
-			// Display the text on screen!
-			CreateContentView(text);
-		}
-
-		// Display all the choices, if there are any!
-		if (story.currentChoices.Count > 0)
-		{
-			for (int i = 0; i < story.currentChoices.Count; i++)
-			{
-				Choice choice = story.currentChoices[i];
-				Button button = CreateChoiceView(choice.text.Trim());
-				// Tell the button what to do when we press it
-				button.onClick.AddListener(delegate {
-					OnClickChoiceButton(choice);
-				});
-			}
-		}
-		// If we've read all the content and there's no choices, the story is finished!
-		else
-		{
-			Button choice = CreateChoiceView("End of story.\nRestart?");
-			choice.onClick.AddListener(delegate {
-				StartStory();
-			});
-		}
 	}
 
 	void DisplaySlow()
     {
 		// Gets all text until choices
 		CurrentLine = story.Continue();
-		// This removes any white space from the text.
-		CurrentLine = CurrentLine.Trim();
+		
 		RemainingContent = CurrentLine;
 
 		// If blank line, skip trying to show
@@ -115,6 +88,11 @@ public class VN_Manager : MonoBehaviour
 			DisplaySlow();
 			return;
 		}
+
+		string[] lineSplit = CurrentLine.Split(':');
+		// Trim removes any white space from the beginning or end.
+		CurrentSpeaker = lineSplit[0].Trim();
+		CurrentLine = lineSplit[1].Trim();
 
 		// Instantiate text box
 		Text storyText = Instantiate(textPrefab);
