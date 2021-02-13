@@ -11,14 +11,23 @@ using Ink.Runtime;
 /// </summary>
 public class VN_Manager : MonoBehaviour
 {
-	// Settings
+	[Header("Settings")]
 	[Tooltip("Speed of slow text in characters per second")]
 	public float TextSpeed = 10;
 	public int OffScreenDistance = 500;
 
-	// Keep track of story creation event
-	public static event Action<Story> OnCreateStory;
+	[Header("VN_Character Related")]
+	[SerializeField]
+	private VN_Character PlayerCharacter;
+	// List of characters in VN to pull from
+	[SerializeField]
+	private List<VN_Character> AllCharacters;
+	// List of characters in scene now
+	private List<VN_Character> ActiveCharacters;
 
+	
+
+	[Header("Required Object References")]
 	// Needed to create story from JSON
 	[SerializeField]
 	[Tooltip("Intermediate file for Unity to work with Ink; Created when a .ink file is saved in Unity")]
@@ -42,22 +51,16 @@ public class VN_Manager : MonoBehaviour
 	[Tooltip("Used for VN buttons")]
 	private Button buttonPrefab = null;
 
-	[SerializeField]
-	private VN_Character PlayerCharacter;
-	// List of characters in VN to pull from
-	[SerializeField]
-	private List<VN_Character> AllCharacters;
-	// List of characters in scene now
-	private List<VN_Character> ActiveCharacters;
-
-
 	// Internal
 	// What is left to be displayed by slow text
 	private string RemainingContent = "";
 	// The full line of text to be displayed
 	private string CurrentLine = "";
-	private string CurrentSpeakerName = "";
+	private string SpeakerName = "";
 	private VN_Character CurrentSpeaker = null;
+	private List<string> currentTags;
+	// Keep track of story creation event
+	public static event Action<Story> OnCreateStory;
 
 	void Start()
 	{
@@ -92,29 +95,19 @@ public class VN_Manager : MonoBehaviour
 		// Gets all text until choices
 		CurrentLine = story.Continue();
 
-		// If blank line, skip trying to show
+		// Get tags
+		currentTags = story.currentTags;
+
+		parseLine();
+		FindCurrentSpeaker();
+		// If content is blank, skip the line
 		if (CurrentLine.Trim() == "")
 		{
 			DisplaySlow();
 			return;
+			//CurrentLine = story.Continue();
+			//parseLine();
 		}
-
-		// If line is in format "[character name]: [text to be spoken]"
-		// lineSplit holds [character name] in index 0 and [text to be spoken] in index 1
-		string[] lineSplit = CurrentLine.Split(':');
-		if (lineSplit.Length == 2)
-        {
-			// Trim removes any white space from the beginning or end.
-			CurrentSpeakerName = lineSplit[0].Trim();
-			CurrentLine = lineSplit[1].Trim();
-		}
-		// If there is no colon, assume player is speaking
-		else
-        {
-			CurrentLine = CurrentLine.Trim('"');
-			CurrentSpeakerName = PlayerCharacter.name;
-		}
-		// Keep track of reaming content to be displayed through slow text
 		RemainingContent = CurrentLine;
 
 		// Instantiate text box
@@ -128,51 +121,98 @@ public class VN_Manager : MonoBehaviour
 		NameText = Instantiate(textPrefab);
 		NameText.transform.SetParent(NameCanvas.transform, false);
 		// Update NameText
-		if (CurrentSpeakerName == "Narrator")
+		if (SpeakerName == "Narrator")
         {
 			NameText.text = "";
 			storyText.fontStyle = FontStyle.Italic;
 		}
 		else
         {
-			NameText.text = CurrentSpeakerName;
+			NameText.text = SpeakerName;
 		}
 
-		// Update character sprites
-		// Get CurrentSpeaker by finding CurrentSpeakerName in AllCharacters
-		VN_Character CurrentSpeaker = AllCharacters.Find(x => x.name == CurrentSpeakerName);
+		FindCurrentSpeaker();
+
+
+		// Start displaying text content
+		StartCoroutine(SlowText(storyText));
+	}
+
+	VN_Character FindCurrentSpeaker()
+    {
+		// Get CurrentSpeaker by finding SpeakerName in AllCharacters
+		CurrentSpeaker = AllCharacters.Find(x => x.name == SpeakerName);
 
 		// If found...
 		if (CurrentSpeaker)
 		{
 			// Add to ActiveCharacters if not already in
 			if (!ActiveCharacters.Contains(CurrentSpeaker))
-            {
+			{
 				ActiveCharacters.Add(CurrentSpeaker);
 				// Enter transition character
 				CurrentSpeaker.Transition(CurrentSpeaker.transition, VN_Character.TransitionDirection.enter);
 			}
-			// Change CurrentSpeaker to talking sprite
-			CurrentSpeaker.changeSprite("talking");
 
-			// Change all other ActiveCharacters to default sprite
-			foreach (VN_Character notTalking in ActiveCharacters)
-            {
-				if(notTalking != CurrentSpeaker)
-                {
-					notTalking.changeSprite("default");
+			// Check that there are any tags
+			if (currentTags.Count > 0)
+			{
+				// Try to find emotion image of CurrentSpeaker matching first tag in currentTags
+				string emotionTag = currentTags[0];
+				Sprite changeToEmotion = CurrentSpeaker.Sprites.Find(x => x.name == emotionTag).image;
+
+				if (changeToEmotion)
+				{
+					CurrentSpeaker.changeSprite(emotionTag);
+				}
+				else
+				{
+					Debug.LogError("CharacterSprite of " + SpeakerName + " called " + currentTags[0] + " couldn't be found");
 				}
 			}
+
+			// Default change in expression: "talking" when currently talking, else "dafault"
+			//// Change CurrentSpeaker to talking sprite
+			//CurrentSpeaker.changeSprite("talking");
+
+			//// Change all other ActiveCharacters to default sprite
+			//foreach (VN_Character notTalking in ActiveCharacters)
+			//         {
+			//	if(notTalking != CurrentSpeaker)
+			//             {
+			//		notTalking.changeSprite("default");
+			//	}
+			//}
 		}
 		// Catch CurrentSpeaker being null
 		// Ignore special Narrator case
-		else if (CurrentSpeakerName != "Narrator")
-        {
-			Debug.LogError("CurrentSpeaker of name " + CurrentSpeakerName + " could not be found");
+		else if (SpeakerName != "Narrator")
+		{
+			Debug.LogError("CurrentSpeaker of name " + SpeakerName + " could not be found");
 		}
 
-		// Start displaying text content
-		StartCoroutine(SlowText(storyText));
+		return CurrentSpeaker;
+	}
+
+	void parseLine()
+    {
+		// If line is in format "[character name]: [text to be spoken]"
+		// lineSplit holds [character name] in index 0 and [text to be spoken] in index 1
+		string[] lineSplit = CurrentLine.Split(':');
+		if (lineSplit.Length == 2)
+		{
+			// Trim removes any white space from the beginning or end.
+			SpeakerName = lineSplit[0].Trim();
+			CurrentLine = lineSplit[1].Trim();
+		}
+		// If there is no colon, assume player is speaking
+		else
+		{
+			// Remove trailing and leading quotations, spaces, new line characters
+			char[] toTrim = { (char)34, ' ', '\n' };
+			CurrentLine = CurrentLine.Trim(toTrim);
+			SpeakerName = PlayerCharacter.name;
+		}
 	}
 
 	IEnumerator SlowText(Text storyText)

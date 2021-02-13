@@ -159,8 +159,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 1898038543}
   - {fileID: 597882830}
+  - {fileID: 1898038543}
   - {fileID: 144447478}
   m_Father: {fileID: 1009224490}
   m_RootOrder: 0
@@ -1029,16 +1029,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TextSpeed: 120
   OffScreenDistance: 500
+  PlayerCharacter: {fileID: 835293699}
+  AllCharacters:
+  - {fileID: 835293699}
+  - {fileID: 1171135609}
   inkJSONAsset: {fileID: 4900000, guid: 84049e3f9603b4ce3b0b32529a570aa3, type: 3}
   TextCanvas: {fileID: 1541846376}
   ButtonCanvas: {fileID: 560584065}
   NameCanvas: {fileID: 1326481040}
   textPrefab: {fileID: 11456674, guid: 1aab6ef84d87c416f8f0b3e1ef3d77d2, type: 3}
   buttonPrefab: {fileID: 11455116, guid: 37c108a6c38964f79a6621eccb33ddc1, type: 3}
-  PlayerCharacter: {fileID: 835293699}
-  AllCharacters:
-  - {fileID: 835293699}
-  - {fileID: 1171135609}
 --- !u!114 &1171135609 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 215021642760188442, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
@@ -1271,7 +1271,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22491254, guid: 37c108a6c38964f79a6621eccb33ddc1, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1032.33
+      value: 1026.1063
       objectReference: {fileID: 0}
     - target: {fileID: 22491254, guid: 37c108a6c38964f79a6621eccb33ddc1, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1634,7 +1634,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22491254, guid: 37c108a6c38964f79a6621eccb33ddc1, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1367.6702
+      value: 1373.8937
       objectReference: {fileID: 0}
     - target: {fileID: 22491254, guid: 37c108a6c38964f79a6621eccb33ddc1, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1723,7 +1723,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7013672390896578203, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7013672390896578203, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1953,7 +1953,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7013672390896578203, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7013672390896578203, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

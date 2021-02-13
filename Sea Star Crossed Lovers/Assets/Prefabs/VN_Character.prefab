@@ -172,9 +172,11 @@ MonoBehaviour:
   TransitionDuration: 0
   Sprites:
   - name: default
-    image: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  - name: talking
+    image: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  - name: happy
     image: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  - name: surprised
+    image: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   Side: 0
   transition: 0
   rectTransform: {fileID: 0}

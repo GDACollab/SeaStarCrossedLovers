@@ -5,22 +5,25 @@ using UnityEngine.UI;
 
 public class VN_Character : MonoBehaviour
 {
-    // Settings
+    [Header("Settings")]
     [Tooltip("Distance in pixels away from the edge of the screen")]
     public int ScreenEdgeDistance;
     [Tooltip("Duration in seconds of Character enter/exit transition")]
     public float TransitionDuration;
 
+    
     [System.Serializable]
     public struct CharacterSprites
     {
         public string name;
         public Sprite image;
     }
+    [Header("Character's Art Assets")]
     [Tooltip("List of character's sprites and their names")]
     public List<CharacterSprites> Sprites;
 
     public enum ScreenSide { left, right };
+    [Header("Properties")]
     [Tooltip("Position of character on the screen")]
     public ScreenSide Side;
 
@@ -29,13 +32,14 @@ public class VN_Character : MonoBehaviour
     public MoveTransition transition;
 
     public enum TransitionDirection { enter, exit };
-    [Tooltip("Style of sprite movement when entering/exiting the screen")]
 
     // Internal
     private Image currentImage;
+    [HideInInspector]
     public RectTransform rectTransform;
 
     // Debug
+    [HideInInspector]
     public Text nameText;
 
     // Start is called before the first frame update
