@@ -14,6 +14,7 @@ public class VN_Manager : MonoBehaviour
 	// Settings
 	[Tooltip("Speed of slow text in characters per second")]
 	public float TextSpeed = 10;
+	public int OffScreenDistance = 500;
 
 	// Keep track of story creation event
 	public static event Action<Story> OnCreateStory;
@@ -148,8 +149,8 @@ public class VN_Manager : MonoBehaviour
 			if (!ActiveCharacters.Contains(CurrentSpeaker))
             {
 				ActiveCharacters.Add(CurrentSpeaker);
-				// Transition into screen if added
-				CurrentSpeaker.enter(CurrentSpeaker.transition);
+				// Enter transition character
+				CurrentSpeaker.Transition(CurrentSpeaker.transition, VN_Character.TransitionDirection.enter);
 			}
 			// Change CurrentSpeaker to talking sprite
 			CurrentSpeaker.changeSprite("talking");
@@ -223,6 +224,7 @@ public class VN_Manager : MonoBehaviour
 				StartStory();
 			});
 		}
+		yield return true;
 	}
 
 	void skipSlowText()
@@ -277,4 +279,23 @@ public class VN_Manager : MonoBehaviour
 			Destroy(child.gameObject);
 		}
 	}
+
+  //  private void Reset()
+  //  {
+  //      foreach (VN_Character character in AllCharacters)
+  //      {
+		//	RectTransform characterTransform = character.rectTransform;
+		//	switch (character.Side)
+		//	{
+		//		case VN_Character.ScreenSide.left:
+		//			characterTransform.anchoredPosition = new Vector2(, 0);
+		//			break;
+		//		case VN_Character.ScreenSide.right:
+		//			characterTransform.anchoredPosition = new Vector2(Screen.width / 2 - ScreenEdgeDistance, 0);
+		//			break;
+		//	}
+		//	//OffScreenDistance
+
+		//}
+  //  }
 }
