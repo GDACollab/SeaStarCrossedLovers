@@ -168,16 +168,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47e8b6b0849444508a331351c7df2f16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScreenEdgeDistance: 100
-  TransitionDuration: 0
-  Sprites:
-  - name: default
-    image: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  - name: happy
-    image: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  - name: surprised
-    image: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  Side: 0
-  transition: 0
+  data: {fileID: 11400000, guid: afbc7ae5e26e1405b8928e3c571c6050, type: 2}
   rectTransform: {fileID: 0}
   nameText: {fileID: 4729494255157976441}

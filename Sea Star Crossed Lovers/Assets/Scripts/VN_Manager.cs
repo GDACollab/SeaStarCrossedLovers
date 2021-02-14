@@ -13,7 +13,8 @@ public class VN_Manager : MonoBehaviour
 {
 	[Header("Settings")]
 	[Tooltip("Speed of slow text in characters per second")]
-	public float TextSpeed = 10;
+	public float TextSpeed = 60;
+	[Tooltip("Distance in pixels off screen away the edge")]
 	public int OffScreenDistance = 500;
 
 	[Header("VN_Character Related")]
@@ -22,9 +23,6 @@ public class VN_Manager : MonoBehaviour
 	// List of characters in VN to pull from
 	[SerializeField]
 	private List<VN_Character> AllCharacters;
-	// List of characters in scene now
-	private List<VN_Character> ActiveCharacters;
-
 	
 
 	[Header("Required Object References")]
@@ -34,14 +32,18 @@ public class VN_Manager : MonoBehaviour
 	private TextAsset inkJSONAsset = null;
 	public Story story;
 
-	// Textbox objects
+	// Textbox canvas objects
 	[SerializeField]
 	private Canvas TextCanvas = null;
 	[SerializeField]
 	private Canvas ButtonCanvas = null;
 	[SerializeField]
 	private Canvas NameCanvas = null;
-	private Text NameText;
+	// Textbox text objects
+	// Text object that displays text content
+	private Text contentTextObj = null;
+	// Text object that displays speaker name
+	private Text nameTextObj = null;
 
 	// UI Prefabs
 	[SerializeField]
@@ -52,16 +54,15 @@ public class VN_Manager : MonoBehaviour
 	private Button buttonPrefab = null;
 
 	// Internal
-	// What is left to be displayed by slow text
-	private string RemainingContent = "";
-	// The full line of text to be displayed
-	private string CurrentLine = "";
-	private string SpeakerName = "";
-	private VN_Character CurrentSpeaker = null;
-	private List<string> currentTags;
 	// Keep track of story creation event
 	public static event Action<Story> OnCreateStory;
-
+	// The content to be displayed
+	private string currentLine = "";
+	private VN_Character currentSpeaker = null;
+	private List<VN_Character> ActiveCharacters;
+	private List<string> currentTags;
+	private bool currentTextDone = false;
+	
 	void Start()
 	{
 		ActiveCharacters = new List<VN_Character>();
@@ -71,17 +72,20 @@ public class VN_Manager : MonoBehaviour
         StartStory();
     }
 
-	// Creates a new Story object with the compiled story which we can then play!
-	void StartStory()
+    void Update()
+    {
+		if (Input.GetKeyDown(KeyCode.Space)) SkipSlowText();
+	}
+
+    // Creates a new Story object with the compiled story which we can then play!
+    void StartStory()
 	{
 		story = new Story(inkJSONAsset.text);
 		if (OnCreateStory != null) OnCreateStory(story);
 		RefreshView();
 	}
 
-	// This is the main function called every time the story changes. It does a few things:
-	// Destroys all the old content and choices.
-	// Continues over all the lines of text, then displays all the choices. If there are no choices, the story is finished!
+	// The main function called every time the story changes
 	void RefreshView()
 	{
 		// Remove all VN text & buttons
@@ -92,185 +96,146 @@ public class VN_Manager : MonoBehaviour
 
 	void DisplaySlow()
     {
-		// Gets all text until choices
-		CurrentLine = story.Continue();
+		currentTextDone = false;
+		// Get the next line of text
+		string nextLine = story.Continue();
 
 		// Get tags
 		currentTags = story.currentTags;
 
-		parseLine();
-		FindCurrentSpeaker();
-		// If content is blank, skip the line
-		if (CurrentLine.Trim() == "")
+		// Parses the line for speakerName and sets currentLine to content
+		var (speaker, content) = ParseLine(nextLine);
+
+		// Special case: Narrator is not a VN_Character and not in AllCharacters
+		if (speaker != "Narrator")
+        {
+			currentSpeaker = FindCharacter(speaker);
+			// If valid speaker found, try changing emotion by tag
+			if (currentSpeaker) tagChangeEmotion();
+		}
+		// Set currentLine to content
+		currentLine = content;
+
+		// If content is blank, skip making content
+		if (currentLine == "")
 		{
 			DisplaySlow();
 			return;
-			//CurrentLine = story.Continue();
-			//parseLine();
 		}
-		RemainingContent = CurrentLine;
 
-		// Instantiate text box
-		Text storyText = Instantiate(textPrefab);
-		// Clear default text
-		storyText.text = "";
-		// Set parent in TextCanvas
-		storyText.transform.SetParent(TextCanvas.transform, false);
+		// Temp add to ActiveCharacters
+		// TODO change adding to swap CharacterData on existing
+		// 2 generic GameObjects with VN_Character component
+		AddCharacter(currentSpeaker);
 
+		// Instantiate story content
+		contentTextObj = CreateContentView("");
 		// Instantiate character name text
-		NameText = Instantiate(textPrefab);
-		NameText.transform.SetParent(NameCanvas.transform, false);
-		// Update NameText
-		if (SpeakerName == "Narrator")
-        {
-			NameText.text = "";
-			storyText.fontStyle = FontStyle.Italic;
-		}
-		else
-        {
-			NameText.text = SpeakerName;
-		}
-
-		FindCurrentSpeaker();
-
+		nameTextObj = CreateNameTextView(speaker);
 
 		// Start displaying text content
-		StartCoroutine(SlowText(storyText));
+		StartCoroutine(SlowText(contentTextObj));
 	}
 
-	VN_Character FindCurrentSpeaker()
+	IEnumerator SlowText(Text storyText)
+	{
+		foreach (char letter in currentLine.ToCharArray())
+		{
+			storyText.text += letter;
+			// Delay appending more characters
+			// 1/TextSpeed because WaitForSeconds(TextSpeed) is 1 char per x seconds
+			// Convert to x char per second by inverting
+			yield return new WaitForSeconds(1 / TextSpeed);
+		}
+
+		// Once done with showing text content, show all choice buttons
+		CreateAllChoiceButtons();
+
+		currentTextDone = true;
+		yield return true;
+	}
+
+	void AddCharacter(VN_Character character)
     {
-		// Get CurrentSpeaker by finding SpeakerName in AllCharacters
-		CurrentSpeaker = AllCharacters.Find(x => x.name == SpeakerName);
-
-		// If found...
-		if (CurrentSpeaker)
+		// Add to ActiveCharacters if not already in
+		if (!ActiveCharacters.Contains(character))
 		{
-			// Add to ActiveCharacters if not already in
-			if (!ActiveCharacters.Contains(CurrentSpeaker))
-			{
-				ActiveCharacters.Add(CurrentSpeaker);
-				// Enter transition character
-				CurrentSpeaker.Transition(CurrentSpeaker.transition, VN_Character.TransitionDirection.enter);
-			}
-
-			// Check that there are any tags
-			if (currentTags.Count > 0)
-			{
-				// Try to find emotion image of CurrentSpeaker matching first tag in currentTags
-				string emotionTag = currentTags[0];
-				Sprite changeToEmotion = CurrentSpeaker.Sprites.Find(x => x.name == emotionTag).image;
-
-				if (changeToEmotion)
-				{
-					CurrentSpeaker.changeSprite(emotionTag);
-				}
-				else
-				{
-					Debug.LogError("CharacterSprite of " + SpeakerName + " called " + currentTags[0] + " couldn't be found");
-				}
-			}
-
-			// Default change in expression: "talking" when currently talking, else "dafault"
-			//// Change CurrentSpeaker to talking sprite
-			//CurrentSpeaker.changeSprite("talking");
-
-			//// Change all other ActiveCharacters to default sprite
-			//foreach (VN_Character notTalking in ActiveCharacters)
-			//         {
-			//	if(notTalking != CurrentSpeaker)
-			//             {
-			//		notTalking.changeSprite("default");
-			//	}
-			//}
+			ActiveCharacters.Add(character);
+			// Enter transition character
+			character.Transition(character.data.transition, CharacterData.TransitionDirection.enter);
 		}
-		// Catch CurrentSpeaker being null
-		// Ignore special Narrator case
-		else if (SpeakerName != "Narrator")
-		{
-			Debug.LogError("CurrentSpeaker of name " + SpeakerName + " could not be found");
-		}
-
-		return CurrentSpeaker;
 	}
 
-	void parseLine()
+	VN_Character FindCharacter(string characterName)
+    {
+		// Get currentSpeaker by finding speakerName in AllCharacters
+		VN_Character character = AllCharacters.Find(x => x.name == characterName);
+
+		// Catch character being null
+		if (!character)
+		{
+			character = null;
+			Debug.LogError("Character of name " + characterName + " could not be found");
+		}
+		return character;
+	}
+
+	void tagChangeEmotion()
+    {
+		// Check that there are any tags
+		if (currentTags.Count > 0)
+		{
+			// Get first tag in currentTags
+			string emotionTag = currentTags[0];
+			currentSpeaker.changeSprite(emotionTag);
+		}
+	}
+
+	void speakerChangeSprite()
+    {
+		// "happy" when currently talking, else "dafault"
+		currentSpeaker.changeSprite("happy");
+
+		// Change all other ActiveCharacters to default sprite
+		foreach (VN_Character notTalking in ActiveCharacters)
+		{
+			if (notTalking != currentSpeaker)
+			{
+				notTalking.changeSprite("default");
+			}
+		}
+	}
+
+	// Tuple of 2 elements with element 0 being speakerName and 1 being line content
+	(string, string) ParseLine(string line)
     {
 		// If line is in format "[character name]: [text to be spoken]"
 		// lineSplit holds [character name] in index 0 and [text to be spoken] in index 1
-		string[] lineSplit = CurrentLine.Split(':');
+		string[] lineSplit = line.Split(':');
 		if (lineSplit.Length == 2)
 		{
 			// Trim removes any white space from the beginning or end.
-			SpeakerName = lineSplit[0].Trim();
-			CurrentLine = lineSplit[1].Trim();
+			return (lineSplit[0].Trim(), lineSplit[1].Trim());
 		}
 		// If there is no colon, assume player is speaking
 		else
 		{
 			// Remove trailing and leading quotations, spaces, new line characters
 			char[] toTrim = { (char)34, ' ', '\n' };
-			CurrentLine = CurrentLine.Trim(toTrim);
-			SpeakerName = PlayerCharacter.name;
+			return (PlayerCharacter.name, line.Trim(toTrim));
 		}
 	}
 
-	IEnumerator SlowText(Text storyText)
+	void SkipSlowText()
     {
-		// Remove each character from RemainingContent and put into storyText
-		// unitl there is no more RemainingContent
-		while (RemainingContent != "")
-		{
-			// Append first character of RemainingContent to text display
-			storyText.text += RemainingContent[0];
-			// Remove first character in RemainingContent
-			RemainingContent = RemainingContent.Remove(0, 1);
-			// Delay appending more characters
-			// 1/TextSpeed because WaitForSeconds(TextSpeed) is 1 char per x seconds
-			// Convert to x char per second by inverting
-			yield return new WaitForSeconds(1/TextSpeed);
+		if (!currentTextDone)
+        {
+			currentTextDone = true;
+			StopAllCoroutines();
+			contentTextObj.text = currentLine;
+			CreateAllChoiceButtons();
 		}
-
-		// Once done with displaying all text content...
-		// Display all the choices, if there are any!
-		if (story.currentChoices.Count > 0)
-		{
-			for (int i = 0; i < story.currentChoices.Count; i++)
-			{
-				Choice choice = story.currentChoices[i];
-				Button button = CreateChoiceView(choice.text.Trim());
-				// Tell the button what to do when we press it
-				button.onClick.AddListener(delegate
-				{
-					OnClickChoiceButton(choice);
-				});
-			}
-		}
-		// If there are no choices on this line of text, refresh for next line
-		// And add a button to continue
-		else if (story.canContinue)
-		{
-			Button button = CreateChoiceView("Continue");
-			button.onClick.AddListener(delegate {
-				RefreshView();
-		});
-		// If there is no more content, prompt to restart
-		}
-		else
-		{
-			Button choice = CreateChoiceView("End of story.\nRestart?");
-			choice.onClick.AddListener(delegate
-			{
-				StartStory();
-			});
-		}
-		yield return true;
 	}
-
-	void skipSlowText()
-    {
-
-    }
 
 	// When we click the choice button, tell the story to choose that choice!
 	void OnClickChoiceButton(Choice choice)
@@ -280,11 +245,30 @@ public class VN_Manager : MonoBehaviour
 	}
 
 	// Creates a textbox showing the the line of text
-	void CreateContentView(string text)
+	Text CreateContentView(string text)
 	{
-		Text storyText = Instantiate(textPrefab) as Text;
-		storyText.text = text;
-		storyText.transform.SetParent(TextCanvas.transform, false);
+		Text contentText = Instantiate(textPrefab);
+		contentText.text = text;
+		contentText.transform.SetParent(TextCanvas.transform, false);
+		return contentText;
+	}
+
+	Text CreateNameTextView(string name)
+    {
+		Text nameText = Instantiate(textPrefab);
+		nameText.transform.SetParent(NameCanvas.transform, false);
+		// Update NameText
+		if (name == "Narrator")
+		{
+			nameText.text = "";
+			contentTextObj.fontStyle = FontStyle.Italic;
+		}
+		else
+		{
+			nameText.text = name;
+		}
+
+		return nameText;
 	}
 
 	// Creates a button showing the choice text
@@ -301,9 +285,53 @@ public class VN_Manager : MonoBehaviour
         return choice;
 	}
 
-	// Destroys all the children of text and button canvases
+	void CreateAllChoiceButtons()
+    {
+		// Display all the choices, if there are any!
+		if (story.currentChoices.Count > 0)
+		{
+			for (int i = 0; i < story.currentChoices.Count; i++)
+			{
+				Choice choice = story.currentChoices[i];
+				Button button = CreateChoiceView(choice.text.Trim());
+				// Tell the button what to do when we press it
+				button.onClick.AddListener(delegate
+				{
+					OnClickChoiceButton(choice);
+				});
+			}
+		}
+		// If there are no choices on this line of text
+		// And add a button to continue
+		else if (story.canContinue)
+		{
+			Button button = CreateChoiceView("Continue");
+			button.onClick.AddListener(delegate {
+				RefreshView();
+			});
+			// If there is no more content, prompt to restart
+		}
+		// If there is no more story content, reset and star story again
+		else
+		{
+			Button choice = CreateChoiceView("End of story.\nRestart?");
+			choice.onClick.AddListener(delegate
+			{
+				ResetAllCharacters();
+				StartStory();
+			});
+		}
+	}
+
 	void ClearContent()
 	{
+		// Reset all internal references
+		contentTextObj = null;
+		currentLine = null;
+		currentSpeaker = null;
+		currentTags = null;
+
+		// Destroys all the children of all Canvases
 		foreach (Transform child in TextCanvas.transform)
 		{
 			Destroy(child.gameObject);
@@ -320,22 +348,15 @@ public class VN_Manager : MonoBehaviour
 		}
 	}
 
-  //  private void Reset()
-  //  {
-  //      foreach (VN_Character character in AllCharacters)
-  //      {
-		//	RectTransform characterTransform = character.rectTransform;
-		//	switch (character.Side)
-		//	{
-		//		case VN_Character.ScreenSide.left:
-		//			characterTransform.anchoredPosition = new Vector2(, 0);
-		//			break;
-		//		case VN_Character.ScreenSide.right:
-		//			characterTransform.anchoredPosition = new Vector2(Screen.width / 2 - ScreenEdgeDistance, 0);
-		//			break;
-		//	}
-		//	//OffScreenDistance
-
-		//}
-  //  }
+	void ResetAllCharacters()
+    {
+		ActiveCharacters.Clear();
+		foreach (VN_Character character in AllCharacters)
+        {
+			// Change to default sprite
+			character.changeSprite("default");
+			// Teleport transition exit
+			character.Transition(CharacterData.MoveTransition.teleport, CharacterData.TransitionDirection.exit);
+		}
+    }
 }
