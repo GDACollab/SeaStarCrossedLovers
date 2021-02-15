@@ -1027,12 +1027,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93a2ca35720ed4546bed500b785e8186, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextSpeed: 200
+  TextSpeed: 120
   OffScreenDistance: 100
-  PlayerCharacter: {fileID: 835293699}
-  AllCharacters:
+  PlayerCharacterData: {fileID: 11400000, guid: 2e86dbdae85564950aa3c7bca5bdc143, type: 2}
+  CharacterObjects:
   - {fileID: 835293699}
   - {fileID: 1171135609}
+  AllCharacterData:
+  - {fileID: 11400000, guid: 2e86dbdae85564950aa3c7bca5bdc143, type: 2}
+  - {fileID: 11400000, guid: 7450937ce795d42a68a2c022cc1a30ab, type: 2}
   inkJSONAsset: {fileID: 4900000, guid: 84049e3f9603b4ce3b0b32529a570aa3, type: 3}
   TextCanvas: {fileID: 1541846376}
   ButtonCanvas: {fileID: 560584065}
@@ -1696,7 +1699,7 @@ PrefabInstance:
     - target: {fileID: 215021642760188442, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
       propertyPath: data
       value: 
-      objectReference: {fileID: 11400000, guid: 7450937ce795d42a68a2c022cc1a30ab, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 7013672390896578203, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1783,7 +1786,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7013672391806426691, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
       propertyPath: m_Name
-      value: CharacterB
+      value: VN_CharacterB
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
@@ -1930,7 +1933,7 @@ PrefabInstance:
     - target: {fileID: 215021642760188442, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
       propertyPath: data
       value: 
-      objectReference: {fileID: 11400000, guid: 2e86dbdae85564950aa3c7bca5bdc143, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 7013672390896578203, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2017,7 +2020,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7013672391806426691, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
       propertyPath: m_Name
-      value: CharacterA
+      value: VN_CharacterA
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}

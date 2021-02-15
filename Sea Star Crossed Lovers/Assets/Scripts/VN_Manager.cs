@@ -17,15 +17,14 @@ public class VN_Manager : MonoBehaviour
 	[Tooltip("Distance in pixels off screen away the edge")]
 	public int OffScreenDistance = 500;
 
-	[Header("VN_Character Related")]
-	[SerializeField]
-	private VN_Character PlayerCharacter;
-	// List of characters in VN to pull from
-	[SerializeField]
-	private List<VN_Character> AllCharacters;
-	
+	[Header("Characters")]
+	[SerializeField] private CharacterData PlayerCharacterData;
+	[Tooltip("Generic VN_Character GameObjects; There should be only 2 in a scene")]
+	[SerializeField] private List<VN_Character> CharacterObjects;
+	[Tooltip("List of needed character data to pull from")]
+	public List<CharacterData> AllCharacterData;
 
-	[Header("Required Object References")]
+	[Header("Required Objects")]
 	// Needed to create story from JSON
 	[SerializeField]
 	[Tooltip("Intermediate file for Unity to work with Ink; Created when a .ink file is saved in Unity")]
@@ -53,20 +52,31 @@ public class VN_Manager : MonoBehaviour
 	[Tooltip("Used for VN buttons")]
 	private Button buttonPrefab = null;
 
-	// Internal
+	// Internal References
 	// Keep track of story creation event
 	public static event Action<Story> OnCreateStory;
 	// The content to be displayed
 	private string currentLine = "";
 	private VN_Character currentSpeaker = null;
-	private List<VN_Character> ActiveCharacters;
 	private List<string> currentTags;
 	private bool currentTextDone = false;
-	
+
+	// Inky custom function calling
+	const string FunctionCallString = ">>>";
+	const char ArgumentDelimiter = '.';
+	// Store/call funcitons in a dictionary https://stackoverflow.com/questions/4233536/c-sharp-store-functions-in-a-dictionary
+	Dictionary<string, Delegate> AllCommands =
+		new Dictionary<string, Delegate>();
+
+	#region Unity gameloop
+	void Awake()
+    {
+		AllCommands.Add("add", new Func<string, bool>(AddCharacter));
+		AllCommands.Add("subtract", new Func<string, bool>(SubtractCharacter));
+	}
+
 	void Start()
 	{
-		ActiveCharacters = new List<VN_Character>();
-
 		// Remove the default message
 		ClearContent();
         StartStory();
@@ -76,27 +86,30 @@ public class VN_Manager : MonoBehaviour
     {
 		if (Input.GetKeyDown(KeyCode.Space)) SkipSlowText();
 	}
+	#endregion
 
-    // Creates a new Story object with the compiled story which we can then play!
-    void StartStory()
+	#region Main Functions
+	void StartStory()
 	{
 		story = new Story(inkJSONAsset.text);
 		if (OnCreateStory != null) OnCreateStory(story);
 		RefreshView();
 	}
 
-	// The main function called every time the story changes
 	void RefreshView()
 	{
 		// Remove all VN text & buttons
 		ClearContent();
 
-		DisplaySlow();
+		DisplaySlowText();
 	}
+    #endregion
 
-	void DisplaySlow()
+    #region Slow Text Functions
+    void DisplaySlowText()
     {
 		currentTextDone = false;
+
 		// Get the next line of text
 		string nextLine = story.Continue();
 
@@ -106,10 +119,10 @@ public class VN_Manager : MonoBehaviour
 		// Parses the line for speakerName and sets currentLine to content
 		var (speaker, content) = ParseLine(nextLine);
 
-		// Special case: Narrator is not a VN_Character and not in AllCharacters
+		// Special case: Narrator is not a VN_Character and not in CharacterObjects
 		if (speaker != "Narrator")
         {
-			currentSpeaker = FindCharacter(speaker);
+			currentSpeaker = FindCharacterObj(FindCharacterData(speaker));
 			// If valid speaker found, try changing emotion by tag
 			if (currentSpeaker) tagChangeEmotion();
 		}
@@ -119,14 +132,16 @@ public class VN_Manager : MonoBehaviour
 		// If content is blank, skip making content
 		if (currentLine == "")
 		{
-			DisplaySlow();
+			if (story.canContinue)
+            {
+				DisplaySlowText();
+			}
+            else
+            {
+				CreateRestartStoryButton();
+            }
 			return;
 		}
-
-		// Temp add to ActiveCharacters
-		// TODO change adding to swap CharacterData on existing
-		// 2 generic GameObjects with VN_Character component
-		AddCharacter(currentSpeaker);
 
 		// Instantiate story content
 		contentTextObj = CreateContentView("");
@@ -134,10 +149,10 @@ public class VN_Manager : MonoBehaviour
 		nameTextObj = CreateNameTextView(speaker);
 
 		// Start displaying text content
-		StartCoroutine(SlowText(contentTextObj));
+		StartCoroutine(SlowTextCorountine(contentTextObj));
 	}
 
-	IEnumerator SlowText(Text storyText)
+	IEnumerator SlowTextCorountine(Text storyText)
 	{
 		foreach (char letter in currentLine.ToCharArray())
 		{
@@ -152,24 +167,67 @@ public class VN_Manager : MonoBehaviour
 		CreateAllChoiceButtons();
 
 		currentTextDone = true;
-		yield return true;
+		yield break;
 	}
 
-	void AddCharacter(VN_Character character)
-    {
-		// Add to ActiveCharacters if not already in
-		if (!ActiveCharacters.Contains(character))
+	void SkipSlowText()
+	{
+		if (!currentTextDone)
 		{
-			ActiveCharacters.Add(character);
-			// Enter transition character
-			character.Transition(character.data.transition, CharacterData.TransitionDirection.enter);
+			currentTextDone = true;
+			StopAllCoroutines();
+			contentTextObj.text = currentLine;
+			CreateAllChoiceButtons();
 		}
 	}
+	#endregion
 
-	VN_Character FindCharacter(string characterName)
+	#region Function Calls
+	bool AddCharacter(string characterName)
     {
-		// Get currentSpeaker by finding speakerName in AllCharacters
-		VN_Character character = AllCharacters.Find(x => x.name == characterName);
+		CharacterData characterData = FindCharacterData(characterName);
+
+		// Search for VN_Character with no data
+		// Assuming any with no data is offscreen
+		foreach (VN_Character charObj in CharacterObjects)
+        {
+			Debug.Log(charObj.Data);
+			if(charObj.Data == null)
+            {
+				// If found, enter screen
+				charObj.EnterScreen(characterData.transition, characterData);
+				return true;
+			}
+        }
+
+		Debug.LogError("There is no empty VN_Character to give " + characterName + " in CharacterObjects");
+		return false;
+    }
+
+	bool SubtractCharacter(string characterName)
+	{
+		CharacterData characterData = FindCharacterData(characterName);
+		// Search for VN_Character with matching data
+		foreach (VN_Character charObj in CharacterObjects)
+		{
+			if (charObj.Data == characterData)
+			{
+				// If found, transition out of screen, set default sprite, clear data
+				charObj.ExitScreen(characterData.transition);
+				return true;
+			}
+		}
+		
+		Debug.LogError("No CharacterObjects with data of " + characterName);
+		return false;
+	}
+	#endregion
+
+	#region Finders
+	CharacterData FindCharacterData(string characterName)
+    {
+		// Get currentSpeaker by finding speakerName in CharacterObjects
+		CharacterData character = AllCharacterData.Find(x => x.name == characterName);
 
 		// Catch character being null
 		if (!character)
@@ -180,35 +238,42 @@ public class VN_Manager : MonoBehaviour
 		return character;
 	}
 
-	void tagChangeEmotion()
+	VN_Character FindCharacterObj(CharacterData data)
+    {
+		CharacterData characterData = AllCharacterData.Find(x => x == data);
+
+		if (!characterData)
+        {
+			Debug.LogError("Cannot find " + data.name + " in AllCharacterData");
+			return null;
+        }
+
+		foreach(VN_Character charObj in CharacterObjects)
+        {
+			if (charObj.Data == characterData) return charObj;
+		}
+
+		Debug.LogError("Cannot find " + data.name + " in CharacterObjects");
+		return null;
+	}
+    #endregion
+
+    #region Line Reading
+    void tagChangeEmotion()
     {
 		// Check that there are any tags
 		if (currentTags.Count > 0)
 		{
 			// Get first tag in currentTags
 			string emotionTag = currentTags[0];
-			currentSpeaker.changeSprite(emotionTag);
+			currentSpeaker.ChangeSprite(emotionTag);
 		}
 	}
 
-	void speakerChangeSprite()
-    {
-		// "happy" when currently talking, else "dafault"
-		currentSpeaker.changeSprite("happy");
-
-		// Change all other ActiveCharacters to default sprite
-		foreach (VN_Character notTalking in ActiveCharacters)
-		{
-			if (notTalking != currentSpeaker)
-			{
-				notTalking.changeSprite("default");
-			}
-		}
-	}
-
-	// Tuple of 2 elements with element 0 being speakerName and 1 being line content
+	// Return tuple of 2 elements with element 0 being speakerName and 1 being line content
 	(string, string) ParseLine(string line)
     {
+		char[] toTrim = { (char)34, ' ', '\n' };
 		// If line is in format "[character name]: [text to be spoken]"
 		// lineSplit holds [character name] in index 0 and [text to be spoken] in index 1
 		string[] lineSplit = line.Split(':');
@@ -217,35 +282,44 @@ public class VN_Manager : MonoBehaviour
 			// Trim removes any white space from the beginning or end.
 			return (lineSplit[0].Trim(), lineSplit[1].Trim());
 		}
-		// If there is no colon, assume player is speaking
-		else
+		// Check if line is a function call
+		else if (line.Length > 3 && line.Substring(0, 3) == FunctionCallString)
 		{
 			// Remove trailing and leading quotations, spaces, new line characters
-			char[] toTrim = { (char)34, ' ', '\n' };
-			return (PlayerCharacter.name, line.Trim(toTrim));
-		}
-	}
+			string[] commands = line.Substring(3).Split((char)44);
 
-	void SkipSlowText()
-    {
-		if (!currentTextDone)
+			// Try to run all commands
+			foreach (string command in commands)
+			{
+				command.Trim(toTrim);
+				// Assumes command is in form [function][ArgumentDelimiter][argument]
+				// with only 1 argument
+				string[] commandSplit = command.Split(ArgumentDelimiter);
+				string function = commandSplit[0].Trim();
+				string argument = commandSplit[1].Trim();
+
+				AllCommands[function].DynamicInvoke(argument);
+			}
+			return ("Narrator", "");
+		}
+		else
         {
-			currentTextDone = true;
-			StopAllCoroutines();
-			contentTextObj.text = currentLine;
-			CreateAllChoiceButtons();
+			// Assume player is speaking
+			return (PlayerCharacterData.name, line.Trim(toTrim));
 		}
 	}
+    #endregion
 
-	// When we click the choice button, tell the story to choose that choice!
-	void OnClickChoiceButton(Choice choice)
+    #region Player Control
+    void OnClickChoiceButton(Choice choice)
 	{
 		story.ChooseChoiceIndex(choice.index);
 		RefreshView();
 	}
+    #endregion
 
-	// Creates a textbox showing the the line of text
-	Text CreateContentView(string text)
+    #region Component Creation
+    Text CreateContentView(string text)
 	{
 		Text contentText = Instantiate(textPrefab);
 		contentText.text = text;
@@ -271,7 +345,6 @@ public class VN_Manager : MonoBehaviour
 		return nameText;
 	}
 
-	// Creates a button showing the choice text
 	Button CreateChoiceView(string text)
 	{
 		// Creates the button from a prefab
@@ -283,6 +356,17 @@ public class VN_Manager : MonoBehaviour
 		choiceText.text = text;
 
         return choice;
+	}
+
+	void CreateRestartStoryButton()
+	{
+		Button choice = CreateChoiceView("End of story.\nRestart?");
+		choice.onClick.AddListener(delegate
+		{
+			StopAllCoroutines();
+			ResetCharacterObjects();
+			StartStory();
+		});
 	}
 
 	void CreateAllChoiceButtons()
@@ -309,20 +393,16 @@ public class VN_Manager : MonoBehaviour
 			button.onClick.AddListener(delegate {
 				RefreshView();
 			});
-			// If there is no more content, prompt to restart
 		}
-		// If there is no more story content, reset and star story again
+		// If there is no more content, prompt to restart
 		else
 		{
-			Button choice = CreateChoiceView("End of story.\nRestart?");
-			choice.onClick.AddListener(delegate
-			{
-				ResetAllCharacters();
-				StartStory();
-			});
+			CreateRestartStoryButton();
 		}
 	}
+	#endregion
 
+	#region VN Clearing
 	void ClearContent()
 	{
 		// Reset all internal references
@@ -348,15 +428,15 @@ public class VN_Manager : MonoBehaviour
 		}
 	}
 
-	void ResetAllCharacters()
+	void ResetCharacterObjects()
     {
-		ActiveCharacters.Clear();
-		foreach (VN_Character character in AllCharacters)
+		// Make all CharacterObjects teleport exit
+		foreach (VN_Character charObj in CharacterObjects)
         {
-			// Change to default sprite
-			character.changeSprite("default");
-			// Teleport transition exit
-			character.Transition(CharacterData.MoveTransition.teleport, CharacterData.TransitionDirection.exit);
+			charObj.StopCoroutines();
+			charObj.ExitScreen(CharacterData.MoveTransition.teleport);
 		}
     }
+    #endregion
+
 }
