@@ -6,18 +6,23 @@ using UnityEngine;
 public class CharacterData : ScriptableObject
 {
     public enum ScreenSide { left, right };
-    [Header("Properties")]
-    [Tooltip("Position of character on the screen")]
-    public ScreenSide Side;
-
     public enum MoveTransition { teleport, slide };
+
+    [Header("Settings")]
+
+    [Tooltip("Starting sprite name; make sure it exists in the sprites list")]
+    public string defaultSpriteName;
+
+    [Tooltip("Position of character on the screen")]
+    public ScreenSide side;
+    
     [Tooltip("Style of sprite movement when entering/exiting the screen")]
     public MoveTransition transition;
 
     [Tooltip("Distance in pixels away from the edge of the screen")]
-    public int ScreenEdgeDistance;
+    public int screenEdgeDistance;
     [Tooltip("Duration in seconds of Character enter/exit transition")]
-    public float TransitionDuration;
+    public float transitionDuration;
 
     public enum TransitionDirection { enter, exit };
 
@@ -28,5 +33,5 @@ public class CharacterData : ScriptableObject
     }
     [Header("Character's Art Assets")]
     [Tooltip("List of character's sprites and their names")]
-    public List<CharacterSprites> Sprites;
+    public List<CharacterSprites> sprites;
 }

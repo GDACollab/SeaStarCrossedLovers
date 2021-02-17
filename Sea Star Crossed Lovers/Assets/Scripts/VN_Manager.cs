@@ -66,7 +66,7 @@ public class VN_Manager : MonoBehaviour
 	private VN_Character currentSpeaker = null;
 	// The tags in effect on the current text
 	private List<string> currentTags;
-	// Whether or not the current text is complete
+	// Whether or not the current text is done from slow text
 	private bool currentTextDone = false;
 
 	// Inky custom function calling
@@ -76,6 +76,7 @@ public class VN_Manager : MonoBehaviour
 	Dictionary<string, Delegate> AllCommands =
 		new Dictionary<string, Delegate>();
 
+
 	//Functions involved directly in the frame-to-frame running of the sceen
 	#region Unity gameloop
 	
@@ -83,9 +84,9 @@ public class VN_Manager : MonoBehaviour
 	// Adds the AddCharacter and SubtractCharacter functions to the AllCommands Dictionary
 	void Awake()
     {
-		AllCommands.Add("add", new Func<string, bool>(AddCharacter));
-		AllCommands.Add("subtract", new Func<string, bool>(SubtractCharacter));
-	}
+		AllCommands.Add("add", new Func<List<string>, bool>(AddCharacter));
+		AllCommands.Add("subtract", new Func<List<string>, bool>(SubtractCharacter));
+    }
 
 	// Called once upon the scene being enabled
 	// Removes the default message and begins the text
@@ -161,8 +162,8 @@ public class VN_Manager : MonoBehaviour
             {
 				CreateRestartStoryButton();
             }
-			return;
-		}
+            return;
+        }
 
 		// Instantiate story content
 		contentTextObj = CreateContentView("");
@@ -170,11 +171,11 @@ public class VN_Manager : MonoBehaviour
 		nameTextObj = CreateNameTextView(speaker);
 
 		// Start displaying text content
-		StartCoroutine(SlowTextCorountine(contentTextObj));
+		StartCoroutine(Co_SlowText(contentTextObj));
 	}
 
 	// Displays the current text on screen, one char at a time, then creates the choice buttons when it's done
-	IEnumerator SlowTextCorountine(Text storyText)
+	IEnumerator Co_SlowText(Text storyText)
 	{
 		foreach (char letter in currentLine.ToCharArray())
 		{
@@ -214,25 +215,41 @@ public class VN_Manager : MonoBehaviour
 	* @param characterName: the character whom we are attempting to add
 	* @return: whether or not the character could be added
 	*/
-	bool AddCharacter(string characterName)
+	bool AddCharacter(List<string> characterNames)
     {
-		CharacterData characterData = FindCharacterData(characterName);
+		bool result = true;
 
-		// Search for VN_Character with no data
-		// Assuming any with no data is offscreen
-		foreach (VN_Character charObj in CharacterObjects)
+		if(characterNames.Count == 0)
         {
-			Debug.Log(charObj.Data);
-			if(charObj.Data == null)
-            {
-				// If found, enter screen
-				charObj.EnterScreen(characterData.transition, characterData);
-				return true;
-			}
+			Debug.LogError("Args error");
+			return false;
         }
 
-		Debug.LogError("There is no empty VN_Character to give " + characterName + " in CharacterObjects");
-		return false;
+		foreach (string name in characterNames)
+        {
+			bool thisNameResult = false;
+
+			CharacterData characterData = FindCharacterData(name);
+
+			// Search for VN_Character with no data
+			// Assuming any with no data is offscreen
+			foreach (VN_Character charObj in CharacterObjects)
+			{
+				if (charObj.Data == null)
+				{
+					// If found, enter screen
+					charObj.EnterScreen(characterData.transition, characterData);
+					thisNameResult = true;
+					break;
+				}
+			}
+
+			if (!thisNameResult) {
+				result = false;
+				Debug.LogError("There is no empty VN_Character to give " + name + " in CharacterObjects");
+			}
+		}
+		return result;
     }
 
 	/**
@@ -241,28 +258,47 @@ public class VN_Manager : MonoBehaviour
 	* @param characterName: the character whom we are attempting to remove
 	* @return: whether or not the character could be removed
 	*/
-	bool SubtractCharacter(string characterName)
+	bool SubtractCharacter(List<string> characterNames)
 	{
-		CharacterData characterData = FindCharacterData(characterName);
-		// Search for VN_Character with matching data
-		foreach (VN_Character charObj in CharacterObjects)
+		bool result = true;
+
+		if (characterNames.Count == 0)
 		{
-			if (charObj.Data == characterData)
+			Debug.LogError("Args error");
+			return false;
+		}
+
+		foreach (string name in characterNames)
+        {
+			bool thisNameResult = false;
+
+			CharacterData characterData = FindCharacterData(name);
+			// Search for VN_Character with matching data
+			foreach (VN_Character charObj in CharacterObjects)
 			{
-				// If found, transition out of screen, set default sprite, clear data
-				charObj.ExitScreen(characterData.transition);
-				return true;
+				if (charObj.Data == characterData)
+				{
+					// If found, transition out of screen, set default sprite, clear data
+					charObj.ExitScreen(characterData.transition);
+					thisNameResult = true;
+					break;
+				}
+			}
+
+			if (!thisNameResult)
+			{
+				result = false;
+				Debug.LogError("No CharacterObjects with data of " + name);
 			}
 		}
-		
-		Debug.LogError("No CharacterObjects with data of " + characterName);
-		return false;
+		return result;
 	}
+
 	#endregion
 
 	// Methods to find specified objects or data
 	#region Finders
-	
+
 	/**
 	* Finds the data corresponding to a specified character
 	*
@@ -304,7 +340,7 @@ public class VN_Manager : MonoBehaviour
 			if (charObj.Data == characterData) return charObj;
 		}
 
-		Debug.LogError("Cannot find " + data.name + " in CharacterObjects");
+		Debug.LogError("Cannot find data of" + data.name + " in CharacterObjects");
 		return null;
 	}
     #endregion
@@ -332,6 +368,7 @@ public class VN_Manager : MonoBehaviour
 	*/
 	(string, string) ParseLine(string line)
     {
+		// Remove trailing and leading quotations, spaces, new line characters
 		char[] toTrim = { (char)34, ' ', '\n' };
 		// If line is in format "[character name]: [text to be spoken]"
 		// lineSplit holds [character name] in index 0 and [text to be spoken] in index 1
@@ -344,20 +381,31 @@ public class VN_Manager : MonoBehaviour
 		// Check if line is a function call
 		else if (line.Length > 3 && line.Substring(0, 3) == FunctionCallString)
 		{
-			// Remove trailing and leading quotations, spaces, new line characters
+			// (char)44 = ,
 			string[] commands = line.Substring(3).Split((char)44);
-
+			
 			// Try to run all commands
-			foreach (string command in commands)
+			foreach (string rawCommand in commands)
 			{
-				command.Trim(toTrim);
+				var command = rawCommand.Trim(toTrim);
 				// Assumes command is in form [function][ArgumentDelimiter][argument]
 				// with only 1 argument
-				string[] commandSplit = command.Split(ArgumentDelimiter);
-				string function = commandSplit[0].Trim();
-				string argument = commandSplit[1].Trim();
+				string[] commandArray = command.Split(ArgumentDelimiter);
+				List<string> commandList = new List<string>(commandArray);
+				string function = commandList[0].Trim();
+				// Assume all other strings after first (the function) are arguments
+				List<string> arguments = commandList.GetRange(1, commandList.Count - 1);
+				arguments.ForEach(arg => arg = arg.Trim(toTrim));
 
-				AllCommands[function].DynamicInvoke(argument);
+				// Can't say I understand but https://stackoverflow.com/questions/36184355/unity3d-return-value-with-a-delegate
+				// helped get the return value of the delegate
+				Delegate[] invokeList = AllCommands[function].GetInvocationList();
+				// Assume Delegate has only 1 method it invokes
+				bool commandResult = (bool)invokeList[0]
+					.DynamicInvoke(arguments);
+				//if (!commandResult) { Debug.LogError("Inky custom command call error at line " + inkyLineNumber); }
+				// Was going to log error to show where in the Inky file the command error came from
+				// but the inky sciprt line number is invisible to story.Continue()
 			}
 			return ("Narrator", "");
 		}

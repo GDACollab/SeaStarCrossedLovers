@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2792543f1b0a54dccbb3910190f8b1cd, type: 3}
   m_Name: CharacterB
   m_EditorClassIdentifier: 
-  Side: 1
+  defaultSpriteName: happy
+  side: 1
   transition: 1
-  ScreenEdgeDistance: 100
-  TransitionDuration: 2
-  Sprites:
+  screenEdgeDistance: 100
+  transitionDuration: 2
+  sprites:
   - spriteName: default
-    emotionSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+    emotionSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   - spriteName: happy
-    emotionSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+    emotionSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
   - spriteName: surprised
     emotionSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}

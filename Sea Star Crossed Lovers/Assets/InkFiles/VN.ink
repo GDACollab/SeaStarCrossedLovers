@@ -1,9 +1,10 @@
->>> add.CharacterA, add.CharacterB
+>>> add.CharacterA.CharacterB
+
 Narrator: Here come CharacterA and CharacterB
 -> intro
 
 === intro ===
-CharacterA: Hi, I'm CharacterA. #default
+CharacterA: Hi, I'm CharacterA. Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah. #default
 CharacterB: Hi, I'm CharacterB. #default
 * [Reach to shake hands.] #happy
 Narrator: CharacterB shakes your hand.

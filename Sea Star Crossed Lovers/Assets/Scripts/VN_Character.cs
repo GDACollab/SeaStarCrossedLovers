@@ -27,7 +27,7 @@ public class VN_Character : MonoBehaviour
         {
             // Debug nametag
             nameText.text = toSetData.name;
-            switch (toSetData.Side)
+            switch (toSetData.side)
             {
                 case CharacterData.ScreenSide.left:
                     // Change anchors and pivot to be on left middle of screen
@@ -56,7 +56,7 @@ public class VN_Character : MonoBehaviour
         if(Data)
         {
             // Find sprite name from Sprites
-            Sprite newSprite = Data.Sprites.Find(x => x.spriteName == newSpriteName).emotionSprite;
+            Sprite newSprite = Data.sprites.Find(x => x.spriteName == newSpriteName).emotionSprite;
             // If found, change image to newSprite
             if (newSprite) currentImage.sprite = newSprite;
             else Debug.LogError("VN_Character.ChangeSprite invalid newSpriteName");
@@ -89,7 +89,7 @@ public class VN_Character : MonoBehaviour
     public IEnumerator Co_EnterScreen(CharacterData.MoveTransition transition, CharacterData data)
     {
         SetData(data);
-        ChangeSprite("default");
+        ChangeSprite(data.defaultSpriteName);
         StartCoroutine(Co_Transition(transition, CharacterData.TransitionDirection.enter));
         yield break;
     }
@@ -123,10 +123,10 @@ public class VN_Character : MonoBehaviour
 
         var wait = new WaitForEndOfFrame();
 
-        while (time < Data.TransitionDuration)
+        while (time < Data.transitionDuration)
         {
             time += Time.deltaTime;
-            float t = time / Data.TransitionDuration;
+            float t = time / Data.transitionDuration;
             // "smootherstep" https://chicounity3d.wordpress.com/2014/05/23/how-to-lerp-like-a-pro/
             t = t * t * t * (t * (6f * t - 15f) + 10f);
             rectTransform.anchoredPosition = Vector2.Lerp(initialPosition, endPosition, t);
@@ -136,7 +136,6 @@ public class VN_Character : MonoBehaviour
         // Set postion to end in case Lerp isn't exact
         rectTransform.anchoredPosition = endPosition;
 
-        print("exit transition done");
         yield break;
     }
 
@@ -151,8 +150,8 @@ public class VN_Character : MonoBehaviour
         switch (direction)
         {
             case CharacterData.TransitionDirection.enter:
-                targetX = Data.ScreenEdgeDistance;
-                switch (Data.Side)
+                targetX = Data.screenEdgeDistance;
+                switch (Data.side)
                 {
                     // If on left, go right to be on target
                     case CharacterData.ScreenSide.left:
@@ -165,7 +164,7 @@ public class VN_Character : MonoBehaviour
             case CharacterData.TransitionDirection.exit:
                 targetX = GameObject.Find("VN_Manager").GetComponent<VN_Manager>()
                     .OffScreenDistance + rectTransform.sizeDelta.x;
-                switch (Data.Side)
+                switch (Data.side)
                 {
                     // If on left, go left to be on target
                     case CharacterData.ScreenSide.left:
