@@ -5,24 +5,28 @@ using UnityEngine.UI;
 
 public class VN_Character : MonoBehaviour
 {
-    public CharacterData Data;
-
-    // Internal
-    private Image currentImage;
-    private RectTransform rectTransform;
+    public CharacterData data;
+    public Image currentImage;
+    public RectTransform rectTransform;
 
     // Debug
     [SerializeField] private Text nameText;
 
-    private void Awake()
+    void Awake()
     {
         currentImage = GetComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
     }
 
+    /* TODO Try to follow SOLID for this class
+	 * - Somehow get and bind the transition with an interface so that
+	 * this class delegates the actual transitioning to another class
+	 * - Make interfaces for SetData and ChangeSprite? 
+	*/
+
     public void SetData(CharacterData toSetData)
     {
-        Data = toSetData;
+        data = toSetData;
         if (toSetData)
         {
             // Debug nametag
@@ -53,13 +57,17 @@ public class VN_Character : MonoBehaviour
 
     public void ChangeSprite(string newSpriteName)
     {
-        if(Data)
+        if(data)
         {
             // Find sprite name from Sprites
-            Sprite newSprite = Data.sprites.Find(x => x.spriteName == newSpriteName).emotionSprite;
+            Sprite newSprite = data.sprites.Find(x => x.spriteName == newSpriteName).emotionSprite;
             // If found, change image to newSprite
             if (newSprite) currentImage.sprite = newSprite;
-            else Debug.LogError("VN_Character.ChangeSprite invalid newSpriteName");
+            else
+            {
+                currentImage.sprite = null;
+                //Debug.LogError("VN_Character.ChangeSprite invalid newSpriteName");
+            }
         }
         else
         {
@@ -68,6 +76,7 @@ public class VN_Character : MonoBehaviour
     }
 
     #region Transition Functions
+
     public void EnterScreen(CharacterData.MoveTransition transition, CharacterData data)
     {
         StartCoroutine(Co_EnterScreen(transition, data));
@@ -97,8 +106,8 @@ public class VN_Character : MonoBehaviour
     IEnumerator Co_Transition(CharacterData.MoveTransition transition, CharacterData.TransitionDirection direction)
     {
         Vector2 initialPosition = rectTransform.anchoredPosition;
-        Vector2 endPosition = GetTargetPosition(direction);
-
+        //Vector2 endPosition = GetTargetPosition(direction);
+        Vector2 endPosition = VN_HelperFunctions.GetTransitionTarget(this, direction);
         switch (transition)
         {
             case CharacterData.MoveTransition.teleport:
@@ -123,10 +132,10 @@ public class VN_Character : MonoBehaviour
 
         var wait = new WaitForEndOfFrame();
 
-        while (time < Data.transitionDuration)
+        while (time < data.transitionDuration)
         {
             time += Time.deltaTime;
-            float t = time / Data.transitionDuration;
+            float t = time / data.transitionDuration;
             // "smootherstep" https://chicounity3d.wordpress.com/2014/05/23/how-to-lerp-like-a-pro/
             t = t * t * t * (t * (6f * t - 15f) + 10f);
             rectTransform.anchoredPosition = Vector2.Lerp(initialPosition, endPosition, t);
@@ -144,41 +153,5 @@ public class VN_Character : MonoBehaviour
         StopAllCoroutines();
     }
 
-    Vector2 GetTargetPosition(CharacterData.TransitionDirection direction)
-    {
-        float targetX = 0;
-        switch (direction)
-        {
-            case CharacterData.TransitionDirection.enter:
-                targetX = Data.screenEdgeDistance;
-                switch (Data.side)
-                {
-                    // If on left, go right to be on target
-                    case CharacterData.ScreenSide.left:
-                        return new Vector2(targetX, 0);
-                    case CharacterData.ScreenSide.right:
-                        // If on right, go left to be on target
-                        return new Vector2(-targetX, 0);
-                }
-                break;
-            case CharacterData.TransitionDirection.exit:
-                targetX = GameObject.Find("VN_Manager").GetComponent<VN_Manager>()
-                    .OffScreenDistance + rectTransform.sizeDelta.x;
-                switch (Data.side)
-                {
-                    // If on left, go left to be on target
-                    case CharacterData.ScreenSide.left:
-                        return new Vector2(-targetX, 0);
-                    case CharacterData.ScreenSide.right:
-                        // If on right, go right to be on target
-                        return new Vector2(targetX, 0);
-                }
-                break;
-        }
-
-        // This should never happen
-        Debug.LogError("Invalid transition target position found");
-        return Vector2.zero;
-    }
     #endregion
 }

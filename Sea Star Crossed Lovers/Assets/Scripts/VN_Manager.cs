@@ -76,15 +76,37 @@ public class VN_Manager : MonoBehaviour
 	Dictionary<string, Delegate> AllCommands =
 		new Dictionary<string, Delegate>();
 
+	/* TODO Try to follow Single Responsibility Principle for this class
+	 * Regions sort of map out responsibilities, but unclear as to
+	 * what this class should be responsible for and how to separate
+	 * currently tightly couple methods from this class
+	*/
+
+	/* TODO ? Make everything in VN loop a corountine so that function
+	 * calls like the transition are finished before text is started
+	 * to be shown; function calls are finished before another is called
+	 * + Reset causes errors because subtracting happens too slow for fast
+	 * reseting methods and next start story in this class
+	 * + doing ">>> add.CharacterA, subtract.CharacterA" breaks because
+	 * subtract is called when add isnt finished. Should result in behavior
+	 * where Character A enters and then immediately leaves while locking out
+	 * the VN from continuing until the sequence is done
+	 * - Maybe a function option/make default for parallel function call so
+	 * adding character isn't waited on to be finished before text is started
+	 * to be shown
+	*/
 
 	//Functions involved directly in the frame-to-frame running of the sceen
 	#region Unity gameloop
-	
+
 	// Called once upon initialization of the scene 
 	// Adds the AddCharacter and SubtractCharacter functions to the AllCommands Dictionary
 	void Awake()
     {
-		AllCommands.Add("add", new Func<List<string>, bool>(AddCharacter));
+        // TODO replace with even high level factory?
+        VN_HelperFunctions Helper = new VN_HelperFunctions(this);
+
+        AllCommands.Add("add", new Func<List<string>, bool>(AddCharacter));
 		AllCommands.Add("subtract", new Func<List<string>, bool>(SubtractCharacter));
     }
 
@@ -122,12 +144,23 @@ public class VN_Manager : MonoBehaviour
 
 		DisplaySlowText();
 	}
-    #endregion
+	#endregion
 
 	// Functions involved in the text appearing on the screen
-    #region Slow Text Functions
-    
+	#region Slow Text Functions
+
 	// Displays the current section of the story
+	/* TODO Fix text spasm when reaching edge of TextCanvas
+	 * Current solution: 
+	 * - Add method to adjust position of TextCanvas according to 
+	 * currentContent.Length such that the text will be centered on 
+	 * the screen when it is fully shown. 
+	 * - Change TextCanvas width to be maximum.
+	 * - Add field and functionality for maximum width in characters 
+	 * until a new line character is added (replace auto text new line 
+	 * from canvas that's probably causing the spasm with adding \n
+	 * character if any line of content reaches maxLineLength)
+	*/
 	void DisplaySlowText()
     {
 		currentTextDone = false;
@@ -235,7 +268,7 @@ public class VN_Manager : MonoBehaviour
 			// Assuming any with no data is offscreen
 			foreach (VN_Character charObj in CharacterObjects)
 			{
-				if (charObj.Data == null)
+				if (charObj.data == null)
 				{
 					// If found, enter screen
 					charObj.EnterScreen(characterData.transition, characterData);
@@ -276,7 +309,7 @@ public class VN_Manager : MonoBehaviour
 			// Search for VN_Character with matching data
 			foreach (VN_Character charObj in CharacterObjects)
 			{
-				if (charObj.Data == characterData)
+				if (charObj.data == characterData)
 				{
 					// If found, transition out of screen, set default sprite, clear data
 					charObj.ExitScreen(characterData.transition);
@@ -337,7 +370,7 @@ public class VN_Manager : MonoBehaviour
 
 		foreach(VN_Character charObj in CharacterObjects)
         {
-			if (charObj.Data == characterData) return charObj;
+			if (charObj.data == characterData) return charObj;
 		}
 
 		Debug.LogError("Cannot find data of" + data.name + " in CharacterObjects");

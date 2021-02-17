@@ -993,6 +993,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1009224490}
   - component: {fileID: 1009224491}
+  - component: {fileID: 1009224492}
   m_Layer: 0
   m_Name: VN_Manager
   m_TagString: Untagged
@@ -1042,6 +1043,18 @@ MonoBehaviour:
   NameCanvas: {fileID: 1326481040}
   textPrefab: {fileID: 11456674, guid: 1aab6ef84d87c416f8f0b3e1ef3d77d2, type: 3}
   buttonPrefab: {fileID: 11455116, guid: 37c108a6c38964f79a6621eccb33ddc1, type: 3}
+--- !u!114 &1009224492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1009224489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6ca0aac90c5246df9fd6e49ba69daf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1171135609 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 215021642760188442, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
