@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Ink.Runtime;
+using System.Linq;
 
 /// <summary>
 /// Creates and manages VN components and flow
@@ -22,7 +23,7 @@ public class VN_Manager : MonoBehaviour
 	[Header("Characters")]
 	[SerializeField] private CharacterData PlayerCharacterData;
 	[Tooltip("Generic VN_Character GameObjects; There should be only 2 in a scene")]
-	[SerializeField] private List<VN_Character> CharacterObjects;
+	public List<VN_Character> CharacterObjects;
 	[Tooltip("List of needed character data to pull from")]
 	public List<CharacterData> AllCharacterData;
 
@@ -75,6 +76,7 @@ public class VN_Manager : MonoBehaviour
 	// Store/call funcitons in a dictionary https://stackoverflow.com/questions/4233536/c-sharp-store-functions-in-a-dictionary
 	Dictionary<string, Delegate> AllCommands =
 		new Dictionary<string, Delegate>();
+	private List<ICommandCall> commandCalls;
 
 	/* TODO Try to follow Single Responsibility Principle for this class
 	 * Regions sort of map out responsibilities, but unclear as to
@@ -106,9 +108,27 @@ public class VN_Manager : MonoBehaviour
         // TODO replace with even high level factory?
         VN_HelperFunctions Helper = new VN_HelperFunctions(this);
 
-        AllCommands.Add("add", new Func<List<string>, bool>(AddCharacter));
-		AllCommands.Add("subtract", new Func<List<string>, bool>(SubtractCharacter));
-    }
+		commandCalls = FindObjectsOfType<MonoBehaviour>()
+			.OfType<ICommandCall>().ToList();
+
+		commandCalls.ForEach(command =>
+		{
+			command.Construct(this);
+			Func<List<string>, IEnumerator> newCommand = command.Command;
+			string rawCommandName = command.GetType().ToString();
+			string removeString = "Command";
+			string commandName = rawCommandName.Remove(rawCommandName.IndexOf(removeString), removeString.Length);
+            AllCommands.Add(commandName, newCommand);
+        });
+
+        foreach (var item in AllCommands)
+        {
+			print(item.Key);
+			print(item.Value.GetType().ToString());
+		}
+		//AllCommands.Add("add", new Func<List<string>, bool>(AddCharacter));
+		//AllCommands.Add("subtract", new Func<List<string>, bool>(SubtractCharacter));
+	}
 
 	// Called once upon the scene being enabled
 	// Removes the default message and begins the text
@@ -177,7 +197,8 @@ public class VN_Manager : MonoBehaviour
 		// Special case: Narrator is not a VN_Character and not in CharacterObjects
 		if (speaker != "Narrator")
         {
-			currentSpeaker = FindCharacterObj(FindCharacterData(speaker));
+			currentSpeaker = VN_HelperFunctions.FindCharacterObj(
+				VN_HelperFunctions.FindCharacterData(speaker));
 			// If valid speaker found, try changing emotion by tag
 			if (currentSpeaker) tagChangeEmotion();
 		}
@@ -248,42 +269,7 @@ public class VN_Manager : MonoBehaviour
 	* @param characterName: the character whom we are attempting to add
 	* @return: whether or not the character could be added
 	*/
-	bool AddCharacter(List<string> characterNames)
-    {
-		bool result = true;
-
-		if(characterNames.Count == 0)
-        {
-			Debug.LogError("Args error");
-			return false;
-        }
-
-		foreach (string name in characterNames)
-        {
-			bool thisNameResult = false;
-
-			CharacterData characterData = FindCharacterData(name);
-
-			// Search for VN_Character with no data
-			// Assuming any with no data is offscreen
-			foreach (VN_Character charObj in CharacterObjects)
-			{
-				if (charObj.data == null)
-				{
-					// If found, enter screen
-					charObj.EnterScreen(characterData.transition, characterData);
-					thisNameResult = true;
-					break;
-				}
-			}
-
-			if (!thisNameResult) {
-				result = false;
-				Debug.LogError("There is no empty VN_Character to give " + name + " in CharacterObjects");
-			}
-		}
-		return result;
-    }
+	
 
 	/**
 	* Removes a specified VN_Character from CharacterObjects
@@ -305,14 +291,14 @@ public class VN_Manager : MonoBehaviour
         {
 			bool thisNameResult = false;
 
-			CharacterData characterData = FindCharacterData(name);
+			CharacterData characterData = VN_HelperFunctions.FindCharacterData(name);
 			// Search for VN_Character with matching data
 			foreach (VN_Character charObj in CharacterObjects)
 			{
 				if (charObj.data == characterData)
 				{
 					// If found, transition out of screen, set default sprite, clear data
-					charObj.ExitScreen(characterData.transition);
+					//charObj.ExitScreen(characterData.moveTransition);
 					thisNameResult = true;
 					break;
 				}
@@ -338,19 +324,7 @@ public class VN_Manager : MonoBehaviour
 	* @param characterName: the name of the character we are getting the data from
 	* @return: the data for the specified character
 	*/
-	CharacterData FindCharacterData(string characterName)
-    {
-		// Get currentSpeaker by finding speakerName in CharacterObjects
-		CharacterData character = AllCharacterData.Find(x => x.name == characterName);
 
-		// Catch character being null
-		if (!character)
-		{
-			character = null;
-			Debug.LogError("Character of name " + characterName + " could not be found");
-		}
-		return character;
-	}
 
 	/**
 	* Finds a character corresponding to the given data
@@ -358,24 +332,7 @@ public class VN_Manager : MonoBehaviour
 	* @param data: the data of the character we are trying to find
 	* @return: the character for the specified data
 	*/
-	VN_Character FindCharacterObj(CharacterData data)
-    {
-		CharacterData characterData = AllCharacterData.Find(x => x == data);
-
-		if (!characterData)
-        {
-			Debug.LogError("Cannot find " + data.name + " in AllCharacterData");
-			return null;
-        }
-
-		foreach(VN_Character charObj in CharacterObjects)
-        {
-			if (charObj.data == characterData) return charObj;
-		}
-
-		Debug.LogError("Cannot find data of" + data.name + " in CharacterObjects");
-		return null;
-	}
+	
     #endregion
 
     // Methods to extract and/or edit data from lines of the story
@@ -430,12 +387,18 @@ public class VN_Manager : MonoBehaviour
 				List<string> arguments = commandList.GetRange(1, commandList.Count - 1);
 				arguments.ForEach(arg => arg = arg.Trim(toTrim));
 
+				print("function: " + function);
+
+				Func<List<string>, IEnumerator> Co_Command =
+					(Func<List<string>, IEnumerator>)AllCommands[function];
+
+				StartCoroutine(Co_Command(arguments));
 				// Can't say I understand but https://stackoverflow.com/questions/36184355/unity3d-return-value-with-a-delegate
 				// helped get the return value of the delegate
-				Delegate[] invokeList = AllCommands[function].GetInvocationList();
+				//Delegate[] invokeList = AllCommands[function].GetInvocationList();
 				// Assume Delegate has only 1 method it invokes
-				bool commandResult = (bool)invokeList[0]
-					.DynamicInvoke(arguments);
+				//bool commandResult = (bool)invokeList[0]
+				//	.DynamicInvoke(arguments);
 				//if (!commandResult) { Debug.LogError("Inky custom command call error at line " + inkyLineNumber); }
 				// Was going to log error to show where in the Inky file the command error came from
 				// but the inky sciprt line number is invisible to story.Continue()
@@ -597,13 +560,15 @@ public class VN_Manager : MonoBehaviour
 	}
 
 	// Resets all characters in CharacterObjects
+
+	// TODO broken due to this level not being all corountines
 	void ResetCharacterObjects()
     {
 		// Make all CharacterObjects teleport exit
 		foreach (VN_Character charObj in CharacterObjects)
         {
-			charObj.StopCoroutines();
-			charObj.ExitScreen(CharacterData.MoveTransition.teleport);
+			//charObj.StopCoroutines();
+			//charObj.ExitScreen(CharacterData.MoveTransition.teleport);
 		}
     }
     #endregion

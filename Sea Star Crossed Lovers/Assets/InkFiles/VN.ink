@@ -1,4 +1,5 @@
->>> add.CharacterA.CharacterB
+>>> Add.CharacterA
+>>> Add.CharacterB
 
 Narrator: Here come CharacterA and CharacterB
 -> intro

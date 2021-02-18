@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class VN_Character : MonoBehaviour
 {
     public CharacterData data;
     public Image currentImage;
     public RectTransform rectTransform;
+
+    public ICharacterTransition _characterTransition;
+
+    private List<ICharacterTransition> characterTransitions;
 
     // Debug
     [SerializeField] private Text nameText;
@@ -16,22 +21,29 @@ public class VN_Character : MonoBehaviour
     {
         currentImage = GetComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
+
+        // Must be in the scene to be found
+        // Put them into an empty game object as components
+        characterTransitions = FindObjectsOfType<MonoBehaviour>()
+            .OfType<ICharacterTransition>().ToList();
     }
 
     /* TODO Try to follow SOLID for this class
-	 * - Somehow get and bind the transition with an interface so that
-	 * this class delegates the actual transitioning to another class
-	 * - Make interfaces for SetData and ChangeSprite? 
-	*/
+     * - Somehow get and bind the transition with an interface so that
+     * this class delegates the actual transitioning to another class
+     * - Make interfaces for SetData and ChangeSprite? 
+    */
 
     public void SetData(CharacterData toSetData)
     {
         data = toSetData;
         if (toSetData)
         {
+            UpdateCharacterTransition();
+
             // Debug nametag
             nameText.text = toSetData.name;
-            switch (toSetData.side)
+            switch (toSetData.screenSide)
             {
                 case CharacterData.ScreenSide.left:
                     // Change anchors and pivot to be on left middle of screen
@@ -55,12 +67,30 @@ public class VN_Character : MonoBehaviour
         }
     }
 
+    /* Get the ICharacterTransition for the current data by trying to match data's
+     * moveTransition string to the name of a class type that extends ICharacterTransition
+    */
+    private void UpdateCharacterTransition()
+    {
+        characterTransitions.ForEach(transition =>
+        {
+            if (transition.GetType().ToString() == data.moveTransition)
+            {
+                _characterTransition = transition;
+                _characterTransition.Construct(this);
+
+                print("transition: " + transition.GetType().ToString());
+            }
+        });
+    }
+
     public void ChangeSprite(string newSpriteName)
     {
         if(data)
         {
             // Find sprite name from Sprites
-            Sprite newSprite = data.sprites.Find(x => x.spriteName == newSpriteName).emotionSprite;
+            Sprite newSprite = data.characterSprites.Find(
+                x => x.spriteName == newSpriteName).emotionSprite;
             // If found, change image to newSprite
             if (newSprite) currentImage.sprite = newSprite;
             else
@@ -77,76 +107,50 @@ public class VN_Character : MonoBehaviour
 
     #region Transition Functions
 
-    public void EnterScreen(CharacterData.MoveTransition transition, CharacterData data)
+
+    public void AddCharacter(CharacterData characterData)
     {
-        StartCoroutine(Co_EnterScreen(transition, data));
+        print("AddCharacter: " + characterData.name);
+        SetData(characterData);
+        ChangeSprite(characterData.defaultSpriteName);
+        StartCoroutine(_characterTransition.Co_EnterScreen());
     }
 
-    public void ExitScreen(CharacterData.MoveTransition transition)
+    /* TODO Make all custom inky function calls implement an interface with
+     * one method, process, that returns IEnumerator
+     * Subtract character won't work as a void since it needs to wait for
+     * the transition to be done before nulling the VN_Character.data
+    */
+
+    public IEnumerator Co_AddCharacter(CharacterData characterData)
     {
-        StartCoroutine(Co_ExitScreen(transition));
+        SetData(characterData);
+        yield return StartCoroutine(_characterTransition.Co_EnterScreen());
+        ChangeSprite(characterData.defaultSpriteName);
     }
 
-    public IEnumerator Co_ExitScreen(CharacterData.MoveTransition transition)
+    public IEnumerator Co_SubtractCharacter()
     {
-        yield return StartCoroutine(Co_Transition(transition, CharacterData.TransitionDirection.exit));
-        ChangeSprite("default");
+        yield return StartCoroutine(_characterTransition.Co_EnterScreen());
+        ChangeSprite("");
         SetData(null);
-        yield break;
     }
 
-    public IEnumerator Co_EnterScreen(CharacterData.MoveTransition transition, CharacterData data)
-    {
-        SetData(data);
-        ChangeSprite(data.defaultSpriteName);
-        StartCoroutine(Co_Transition(transition, CharacterData.TransitionDirection.enter));
-        yield break;
-    }
+    //public IEnumerator Co_ExitScreen(CharacterData.MoveTransition transition)
+    //{
+    //    yield return StartCoroutine(Co_Transition(transition, CharacterData.TransitionDirection.exit));
+    //    ChangeSprite("default");
+    //    SetData(null);
+    //    yield break;
+    //}
 
-    IEnumerator Co_Transition(CharacterData.MoveTransition transition, CharacterData.TransitionDirection direction)
-    {
-        Vector2 initialPosition = rectTransform.anchoredPosition;
-        //Vector2 endPosition = GetTargetPosition(direction);
-        Vector2 endPosition = VN_HelperFunctions.GetTransitionTarget(this, direction);
-        switch (transition)
-        {
-            case CharacterData.MoveTransition.teleport:
-                yield return StartCoroutine(Co_TeleportTransition(endPosition));
-                yield break;
-            case CharacterData.MoveTransition.slide:
-                yield return StartCoroutine(Co_SlideTransition(initialPosition, endPosition));
-                yield break;
-        }
-    }
-
-    IEnumerator Co_TeleportTransition(Vector2 endPosition)
-    {
-        rectTransform.anchoredPosition = endPosition;
-        yield break;
-    }
-
-    IEnumerator Co_SlideTransition(Vector2 initialPosition, Vector2 endPosition)
-    {
-        // From lerp tutorial: https://gamedevbeginner.com/the-right-way-to-lerp-in-unity-with-examples/
-        float time = 0;
-
-        var wait = new WaitForEndOfFrame();
-
-        while (time < data.transitionDuration)
-        {
-            time += Time.deltaTime;
-            float t = time / data.transitionDuration;
-            // "smootherstep" https://chicounity3d.wordpress.com/2014/05/23/how-to-lerp-like-a-pro/
-            t = t * t * t * (t * (6f * t - 15f) + 10f);
-            rectTransform.anchoredPosition = Vector2.Lerp(initialPosition, endPosition, t);
-
-            yield return wait;
-        }
-        // Set postion to end in case Lerp isn't exact
-        rectTransform.anchoredPosition = endPosition;
-
-        yield break;
-    }
+    //public IEnumerator Co_EnterScreen(CharacterData.MoveTransition transition, CharacterData data)
+    //{
+    //    SetData(data);
+    //    ChangeSprite(data.defaultSpriteName);
+    //    StartCoroutine(Co_Transition(transition, CharacterData.TransitionDirection.enter));
+    //    yield break;
+    //}
 
     public void StopCoroutines()
     {

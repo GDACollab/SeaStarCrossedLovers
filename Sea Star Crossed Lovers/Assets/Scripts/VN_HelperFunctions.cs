@@ -16,7 +16,8 @@ public class VN_HelperFunctions
     /// </summary>
     /// <param name="character">VN_Character who needs the target position</param>
     /// <param name="direction">TransitionDirection of character's planned transition</param>
-    public static Vector2 GetTransitionTarget(VN_Character character, CharacterData.TransitionDirection direction)
+    public static Vector2 GetTransitionTarget(VN_Character character,
+        CharacterData.TransitionDirection direction)
     {
         CharacterData data = character.data;
         float targetX = 0;
@@ -24,7 +25,7 @@ public class VN_HelperFunctions
         {
             case CharacterData.TransitionDirection.enter:
                 targetX = data.screenEdgeDistance;
-                switch (data.side)
+                switch (data.screenSide)
                 {
                     // If on left, go right to be on target
                     case CharacterData.ScreenSide.left:
@@ -36,7 +37,7 @@ public class VN_HelperFunctions
                 break;
             case CharacterData.TransitionDirection.exit:
                 targetX = _manager.OffScreenDistance + character.rectTransform.sizeDelta.x;
-                switch (data.side)
+                switch (data.screenSide)
                 {
                     // If on left, go left to be on target
                     case CharacterData.ScreenSide.left:
@@ -51,5 +52,38 @@ public class VN_HelperFunctions
         // This should never happen
         Debug.LogError("Invalid transition target position found");
         return Vector2.zero;
+    }
+
+    public static CharacterData FindCharacterData(string characterName)
+    {
+        // Get currentSpeaker by finding speakerName in CharacterObjects
+        CharacterData character = _manager.AllCharacterData.Find(x => x.name == characterName);
+
+        // Catch character being null
+        if (!character)
+        {
+            character = null;
+            Debug.LogError("Character of name " + characterName + " could not be found");
+        }
+        return character;
+    }
+
+    public static VN_Character FindCharacterObj(CharacterData data)
+    {
+        CharacterData characterData = _manager.AllCharacterData.Find(x => x == data);
+
+        if (!characterData)
+        {
+            Debug.LogError("Cannot find " + data.name + " in AllCharacterData");
+            return null;
+        }
+
+        foreach (VN_Character charObj in _manager.CharacterObjects)
+        {
+            if (charObj.data == characterData) return charObj;
+        }
+
+        Debug.LogError("Cannot find data of" + data.name + " in CharacterObjects");
+        return null;
     }
 }
