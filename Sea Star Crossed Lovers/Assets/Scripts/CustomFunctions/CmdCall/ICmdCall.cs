@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-public interface ICommandCall
+public interface ICmdCall
 {
     IEnumerator Command(List<string> args);
 
-    void Construct(VN_Manager manager);
+    void Construct(VN_Manager manager, ICmdFrame cmdFrame, ICmdPart cmdPart);
 }

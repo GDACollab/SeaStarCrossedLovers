@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AddCommand : MonoBehaviour, ICommandCall
+public class SubtractCmd : MonoBehaviour
+	//, ICmdCall
 {
 	static VN_Manager _manager;
 
@@ -11,6 +12,12 @@ public class AddCommand : MonoBehaviour, ICommandCall
 		_manager = manager;
 	}
 
+	/**
+	* Removes a specified VN_Character from CharacterObjects
+	*
+	* @param characterName: the character whom we are attempting to remove
+	* @return: whether or not the character could be removed
+	*/
 	public IEnumerator Command(List<string> args)
     {
 		if (args.Count == 0)
@@ -19,23 +26,23 @@ public class AddCommand : MonoBehaviour, ICommandCall
 			yield break;
 		}
 
+		
 		foreach (string name in args)
 		{
-			print("adding name: " + name);
-
 			bool thisNameResult = false;
 
-			CharacterData characterData = VN_HelperFunctions.FindCharacterData(name);
+			CharacterData characterData = VN_Util.FindCharacterData(name);
 
 			// Search for VN_Character with no data
 			// Assuming any with no data is offscreen
 			foreach (VN_Character charObj in _manager.CharacterObjects)
 			{
-				if (charObj.data == null)
+				if (charObj.data == characterData)
 				{
-					// If found, enter screen
+					yield return StartCoroutine(charObj._characterTransition.Co_ExitScreen());
+					charObj.ChangeSprite("");
+					charObj.SetData(null);
 
-					charObj.AddCharacter(characterData);
 					thisNameResult = true;
 					break;
 				}
@@ -43,7 +50,7 @@ public class AddCommand : MonoBehaviour, ICommandCall
 
 			if (!thisNameResult)
 			{
-				Debug.LogError("There is no empty VN_Character to give " + name + " in CharacterObjects");
+				Debug.LogError("No CharacterObjects with data of " + name);
 			}
 		}
 	}

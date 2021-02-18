@@ -17,23 +17,25 @@ public class VN_Character : MonoBehaviour
     // Debug
     [SerializeField] private Text nameText;
 
+    /* TODO Make VN_Character GameObject move to a designated starting location
+     * and store the Vector2 initialLocation as a public field to use in resetting
+     * and in tranisitions where the funciton needs initial location
+    */ 
     void Awake()
     {
         currentImage = GetComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
 
-        // Must be in the scene to be found
-        // Put them into an empty game object as components
-        characterTransitions = FindObjectsOfType<MonoBehaviour>()
-            .OfType<ICharacterTransition>().ToList();
+        characterTransitions = gameObject.GetComponents<ICharacterTransition>().ToList();
+        characterTransitions.ForEach(transition => transition.Construct(this));
     }
 
     /* TODO Try to follow SOLID for this class
-     * - Somehow get and bind the transition with an interface so that
-     * this class delegates the actual transitioning to another class
      * - Make interfaces for SetData and ChangeSprite? 
+     * ... Maybe not now that this class is smaller
     */
 
+    // Updates this VN_Character's data, it's CharacterTransition, its anchors, and debug nameText
     public void SetData(CharacterData toSetData)
     {
         data = toSetData;
@@ -68,35 +70,40 @@ public class VN_Character : MonoBehaviour
     }
 
     /* Get the ICharacterTransition for the current data by trying to match data's
-     * moveTransition string to the name of a class type that extends ICharacterTransition
+     * moveTransition string to the name of a class type that implements ICharacterTransition
+     * TODO Somehow make it so CharacterData.moveTransition can only be set as the name
+     * of an existing ICharacterTransition instead of inputing an unsafe string
     */
     private void UpdateCharacterTransition()
     {
-        characterTransitions.ForEach(transition =>
+        _characterTransition = characterTransitions.Find(transition =>
         {
-            if (transition.GetType().ToString() == data.moveTransition)
-            {
-                _characterTransition = transition;
-                _characterTransition.Construct(this);
-
-                print("transition: " + transition.GetType().ToString());
-            }
+            return transition.GetType().ToString() == data.moveTransition;
         });
     }
 
     public void ChangeSprite(string newSpriteName)
     {
+        if(newSpriteName == null || newSpriteName == "")
+        {
+            currentImage.sprite = null;
+            currentImage.enabled = false;
+            return;
+        }
         if(data)
         {
             // Find sprite name from Sprites
             Sprite newSprite = data.characterSprites.Find(
                 x => x.spriteName == newSpriteName).emotionSprite;
             // If found, change image to newSprite
-            if (newSprite) currentImage.sprite = newSprite;
+            if (newSprite)
+            {
+                currentImage.enabled = true;
+                currentImage.sprite = newSprite;
+            }
             else
             {
                 currentImage.sprite = null;
-                //Debug.LogError("VN_Character.ChangeSprite invalid newSpriteName");
             }
         }
         else
@@ -104,58 +111,4 @@ public class VN_Character : MonoBehaviour
             Debug.LogError("Cannot ChangeSprite when VN_Character has null Data");
         }
     }
-
-    #region Transition Functions
-
-
-    public void AddCharacter(CharacterData characterData)
-    {
-        print("AddCharacter: " + characterData.name);
-        SetData(characterData);
-        ChangeSprite(characterData.defaultSpriteName);
-        StartCoroutine(_characterTransition.Co_EnterScreen());
-    }
-
-    /* TODO Make all custom inky function calls implement an interface with
-     * one method, process, that returns IEnumerator
-     * Subtract character won't work as a void since it needs to wait for
-     * the transition to be done before nulling the VN_Character.data
-    */
-
-    public IEnumerator Co_AddCharacter(CharacterData characterData)
-    {
-        SetData(characterData);
-        yield return StartCoroutine(_characterTransition.Co_EnterScreen());
-        ChangeSprite(characterData.defaultSpriteName);
-    }
-
-    public IEnumerator Co_SubtractCharacter()
-    {
-        yield return StartCoroutine(_characterTransition.Co_EnterScreen());
-        ChangeSprite("");
-        SetData(null);
-    }
-
-    //public IEnumerator Co_ExitScreen(CharacterData.MoveTransition transition)
-    //{
-    //    yield return StartCoroutine(Co_Transition(transition, CharacterData.TransitionDirection.exit));
-    //    ChangeSprite("default");
-    //    SetData(null);
-    //    yield break;
-    //}
-
-    //public IEnumerator Co_EnterScreen(CharacterData.MoveTransition transition, CharacterData data)
-    //{
-    //    SetData(data);
-    //    ChangeSprite(data.defaultSpriteName);
-    //    StartCoroutine(Co_Transition(transition, CharacterData.TransitionDirection.enter));
-    //    yield break;
-    //}
-
-    public void StopCoroutines()
-    {
-        StopAllCoroutines();
-    }
-
-    #endregion
 }

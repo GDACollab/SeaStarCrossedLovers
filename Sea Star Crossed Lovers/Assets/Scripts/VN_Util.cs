@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VN_HelperFunctions
+public class VN_Util
 {
     static VN_Manager _manager;
 
-    public VN_HelperFunctions(VN_Manager manager)
+    public VN_Util(VN_Manager manager)
     {
         _manager = manager;
     }
@@ -54,6 +54,12 @@ public class VN_HelperFunctions
         return Vector2.zero;
     }
 
+    /**
+	* Finds the data corresponding to a specified character
+	*
+	* @param characterName: the name of the character we are getting the data from
+	* @return: the data for the specified character
+	*/
     public static CharacterData FindCharacterData(string characterName)
     {
         // Get currentSpeaker by finding speakerName in CharacterObjects
@@ -68,6 +74,12 @@ public class VN_HelperFunctions
         return character;
     }
 
+    /**
+	* Finds a character corresponding to the given data
+	*
+	* @param data: the data of the character we are trying to find
+	* @return: the character for the specified data
+	*/
     public static VN_Character FindCharacterObj(CharacterData data)
     {
         CharacterData characterData = _manager.AllCharacterData.Find(x => x == data);
@@ -85,5 +97,10 @@ public class VN_HelperFunctions
 
         Debug.LogError("Cannot find data of" + data.name + " in CharacterObjects");
         return null;
+    }
+
+    public static string RemoveSubstring(string source, string toRemove)
+    {
+        return source.Remove(source.IndexOf(toRemove), toRemove.Length);
     }
 }

@@ -70,13 +70,19 @@ public class VN_Manager : MonoBehaviour
 	// Whether or not the current text is done from slow text
 	private bool currentTextDone = false;
 
+	// Get parse results from corountine
+	private string speaker;
+	private string content;
+
 	// Inky custom function calling
 	const string FunctionCallString = ">>>";
 	const char ArgumentDelimiter = '.';
 	// Store/call funcitons in a dictionary https://stackoverflow.com/questions/4233536/c-sharp-store-functions-in-a-dictionary
 	Dictionary<string, Delegate> AllCommands =
 		new Dictionary<string, Delegate>();
-	private List<ICommandCall> commandCalls;
+	private List<ICmdCall> commandCalls;
+	private List<ICmdFrame> commandFrames;
+	private List<ICmdPart> commandParts;
 
 	/* TODO Try to follow Single Responsibility Principle for this class
 	 * Regions sort of map out responsibilities, but unclear as to
@@ -106,28 +112,70 @@ public class VN_Manager : MonoBehaviour
 	void Awake()
     {
         // TODO replace with even high level factory?
-        VN_HelperFunctions Helper = new VN_HelperFunctions(this);
+        VN_Util Helper = new VN_Util(this);
 
+		// TODO Replace getting interface implementers with something
+		// more efficent
+		// TODO Make ICmdCalls not implement MonoBehaviour (because they don't need it)
 		commandCalls = FindObjectsOfType<MonoBehaviour>()
-			.OfType<ICommandCall>().ToList();
+			.OfType<ICmdCall>().ToList();
 
+		commandFrames = FindObjectsOfType<MonoBehaviour>()
+			.OfType<ICmdFrame>().ToList();
+
+		commandParts = FindObjectsOfType<MonoBehaviour>()
+			.OfType<ICmdPart>().ToList();
+
+		// TODO Make a class for initializing everything for command calls
 		commandCalls.ForEach(command =>
 		{
-			command.Construct(this);
-			Func<List<string>, IEnumerator> newCommand = command.Command;
-			string rawCommandName = command.GetType().ToString();
-			string removeString = "Command";
-			string commandName = rawCommandName.Remove(rawCommandName.IndexOf(removeString), removeString.Length);
-            AllCommands.Add(commandName, newCommand);
-        });
+			/* ICmdFrame implementing classes must be named in the form
+			 * "[Frame name]Frame"
+			 * 
+			 * ICmdPart implementing classes must be named in the form
+			 * "[Inky custom command name]Part"
+			 * 
+			 * ICmdCall implementing classes must be named in the form
+			 * "[ICmdFrame class name - 'Frame']_[ICmdPart class name - 'Part']_Cmd"
+			 * 
+			 * Example: Ink Command Call "Add.CharacterA.CharacterB" uses...
+			 *		ICmdFrame called "MultiFrame" since it takes multiple character name args 
+			 *		ICmdPart called "AddPart" since it sets a VN_Character with null data
+			 *		to have the CharacterData of matching the character name and transitions
+			 *		the VN_Character onto the screen
+			 *		ICmdCall called "Multi_Add_Cmd" to combine the functionality of the MultiFrame
+			 *		with the AddPart. Underscores are used to parse the command in order to construct
+			 *		the class itself and add it to the AllCommands dictionary
+			*/
+			string commandString = command.GetType().ToString();
+			string[] parsedCommand = commandString.Split('_');
 
-        foreach (var item in AllCommands)
-        {
-			print(item.Key);
-			print(item.Value.GetType().ToString());
-		}
-		//AllCommands.Add("add", new Func<List<string>, bool>(AddCharacter));
-		//AllCommands.Add("subtract", new Func<List<string>, bool>(SubtractCharacter));
+			string frameString = parsedCommand[0];
+			string partString = parsedCommand[1];
+
+			ICmdFrame newFrame = commandFrames.Find(frame => {
+				string thisFrameString = VN_Util.RemoveSubstring(frame.GetType().ToString(), "Frame");
+				return thisFrameString == frameString;
+			});
+			if (newFrame == null)
+			{
+				Debug.LogError("Couldn't find ICmdFrame \"" + frameString + "\"");
+			}
+
+			ICmdPart newPart = commandParts.Find(part => {
+				string thisPartString = VN_Util.RemoveSubstring(part.GetType().ToString(), "Part");
+				return thisPartString == partString;
+			});
+			if (newPart == null)
+			{
+				Debug.LogError("Couldn't find ICmdPart \"" + partString + "\"");
+			}
+
+			command.Construct(this, newFrame, newPart);
+			Func<List<string>, IEnumerator> newCommand = command.Command;
+
+			AllCommands.Add(partString, newCommand);
+		});
 	}
 
 	// Called once upon the scene being enabled
@@ -162,7 +210,7 @@ public class VN_Manager : MonoBehaviour
 	{
 		ClearContent();
 
-		DisplaySlowText();
+		StartCoroutine(Co_DisplaySlowText());
 	}
 	#endregion
 
@@ -181,7 +229,7 @@ public class VN_Manager : MonoBehaviour
 	 * from canvas that's probably causing the spasm with adding \n
 	 * character if any line of content reaches maxLineLength)
 	*/
-	void DisplaySlowText()
+	IEnumerator Co_DisplaySlowText()
     {
 		currentTextDone = false;
 
@@ -192,13 +240,13 @@ public class VN_Manager : MonoBehaviour
 		currentTags = story.currentTags;
 
 		// Parses the line for speakerName and sets currentLine to content
-		var (speaker, content) = ParseLine(nextLine);
+		yield return StartCoroutine(Co_ParseLine(nextLine));
 
 		// Special case: Narrator is not a VN_Character and not in CharacterObjects
 		if (speaker != "Narrator")
         {
-			currentSpeaker = VN_HelperFunctions.FindCharacterObj(
-				VN_HelperFunctions.FindCharacterData(speaker));
+			currentSpeaker = VN_Util.FindCharacterObj(
+				VN_Util.FindCharacterData(speaker));
 			// If valid speaker found, try changing emotion by tag
 			if (currentSpeaker) tagChangeEmotion();
 		}
@@ -210,13 +258,13 @@ public class VN_Manager : MonoBehaviour
 		{
 			if (story.canContinue)
             {
-				DisplaySlowText();
+				StartCoroutine(Co_DisplaySlowText());
 			}
             else
             {
 				CreateRestartStoryButton();
             }
-            return;
+			yield break;
         }
 
 		// Instantiate story content
@@ -260,81 +308,6 @@ public class VN_Manager : MonoBehaviour
 	}
 	#endregion
 
-	// The functions in AllCommands
-	#region Function Calls
-	
-	/**
-	* Assigns an available VN_Character the data of a specified character
-	*
-	* @param characterName: the character whom we are attempting to add
-	* @return: whether or not the character could be added
-	*/
-	
-
-	/**
-	* Removes a specified VN_Character from CharacterObjects
-	*
-	* @param characterName: the character whom we are attempting to remove
-	* @return: whether or not the character could be removed
-	*/
-	bool SubtractCharacter(List<string> characterNames)
-	{
-		bool result = true;
-
-		if (characterNames.Count == 0)
-		{
-			Debug.LogError("Args error");
-			return false;
-		}
-
-		foreach (string name in characterNames)
-        {
-			bool thisNameResult = false;
-
-			CharacterData characterData = VN_HelperFunctions.FindCharacterData(name);
-			// Search for VN_Character with matching data
-			foreach (VN_Character charObj in CharacterObjects)
-			{
-				if (charObj.data == characterData)
-				{
-					// If found, transition out of screen, set default sprite, clear data
-					//charObj.ExitScreen(characterData.moveTransition);
-					thisNameResult = true;
-					break;
-				}
-			}
-
-			if (!thisNameResult)
-			{
-				result = false;
-				Debug.LogError("No CharacterObjects with data of " + name);
-			}
-		}
-		return result;
-	}
-
-	#endregion
-
-	// Methods to find specified objects or data
-	#region Finders
-
-	/**
-	* Finds the data corresponding to a specified character
-	*
-	* @param characterName: the name of the character we are getting the data from
-	* @return: the data for the specified character
-	*/
-
-
-	/**
-	* Finds a character corresponding to the given data
-	*
-	* @param data: the data of the character we are trying to find
-	* @return: the character for the specified data
-	*/
-	
-    #endregion
-
     // Methods to extract and/or edit data from lines of the story
 	#region Line Reading
     
@@ -356,7 +329,7 @@ public class VN_Manager : MonoBehaviour
 	* @param line: The line being parsed
 	* @return: tuple of 2 elements with element 0 being the speaker's name and 1 being what the speaker says
 	*/
-	(string, string) ParseLine(string line)
+	IEnumerator Co_ParseLine(string line)
     {
 		// Remove trailing and leading quotations, spaces, new line characters
 		char[] toTrim = { (char)34, ' ', '\n' };
@@ -366,7 +339,8 @@ public class VN_Manager : MonoBehaviour
 		if (lineSplit.Length == 2)
 		{
 			// Trim removes any white space from the beginning or end.
-			return (lineSplit[0].Trim(), lineSplit[1].Trim());
+			ParseResult(lineSplit[0].Trim(), lineSplit[1].Trim());
+			yield break;
 		}
 		// Check if line is a function call
 		else if (line.Length > 3 && line.Substring(0, 3) == FunctionCallString)
@@ -387,12 +361,18 @@ public class VN_Manager : MonoBehaviour
 				List<string> arguments = commandList.GetRange(1, commandList.Count - 1);
 				arguments.ForEach(arg => arg = arg.Trim(toTrim));
 
-				print("function: " + function);
+				if (AllCommands.ContainsKey(function))
+                {
+					Func<List<string>, IEnumerator> Co_Command =
+						(Func<List<string>, IEnumerator>)AllCommands[function];
 
-				Func<List<string>, IEnumerator> Co_Command =
-					(Func<List<string>, IEnumerator>)AllCommands[function];
-
-				StartCoroutine(Co_Command(arguments));
+					yield return StartCoroutine(Co_Command(arguments));
+				}
+				else
+                {
+					Debug.LogError("AllCommands doesn't contain key \"" + function + "\"");
+                }
+				
 				// Can't say I understand but https://stackoverflow.com/questions/36184355/unity3d-return-value-with-a-delegate
 				// helped get the return value of the delegate
 				//Delegate[] invokeList = AllCommands[function].GetInvocationList();
@@ -403,13 +383,21 @@ public class VN_Manager : MonoBehaviour
 				// Was going to log error to show where in the Inky file the command error came from
 				// but the inky sciprt line number is invisible to story.Continue()
 			}
-			return ("Narrator", "");
+			ParseResult("Narrator", "");
+			yield break;
 		}
 		else
         {
 			// Assume player is speaking
-			return (PlayerCharacterData.name, line.Trim(toTrim));
+			ParseResult(PlayerCharacterData.name, line.Trim(toTrim));
+			yield break;
 		}
+	}
+
+	void ParseResult(string first, string second)
+    {
+		speaker = first;
+		content = second;
 	}
     #endregion
 
@@ -490,9 +478,7 @@ public class VN_Manager : MonoBehaviour
 		Button choice = CreateChoiceView("End of story.\nRestart?");
 		choice.onClick.AddListener(delegate
 		{
-			StopAllCoroutines();
-			ResetCharacterObjects();
-			StartStory();
+			StartCoroutine(ResetAll());
 		});
 	}
 
@@ -562,15 +548,21 @@ public class VN_Manager : MonoBehaviour
 	// Resets all characters in CharacterObjects
 
 	// TODO broken due to this level not being all corountines
-	void ResetCharacterObjects()
+	IEnumerator ResetAll()
     {
-		// Make all CharacterObjects teleport exit
+		ClearContent();
 		foreach (VN_Character charObj in CharacterObjects)
-        {
-			//charObj.StopCoroutines();
-			//charObj.ExitScreen(CharacterData.MoveTransition.teleport);
+		{
+			if (charObj.data != null)
+			{
+				yield return StartCoroutine(charObj.GetComponent<TeleportCharacterTransition>().Co_ExitScreen());
+				charObj.ChangeSprite("");
+				charObj.SetData(null);
+			}
 		}
-    }
+		yield return new WaitForSeconds(3);
+		StartStory();
+	}
     #endregion
 
 }

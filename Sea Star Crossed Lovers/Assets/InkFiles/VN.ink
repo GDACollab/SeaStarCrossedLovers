@@ -1,7 +1,12 @@
->>> Add.CharacterA
->>> Add.CharacterB
+>>> Add.CharacterA.CharacterB
 
-Narrator: Here come CharacterA and CharacterB
+CharacterA: Nope I'm outta here.
+
+>>> Subtract.CharacterA, Add.CharacterA
+
+CharacterA: Just kidding.
+CharacterB: ...
+
 -> intro
 
 === intro ===
@@ -14,6 +19,6 @@ CharacterB: Nice to meet you. #happy
 CharacterB: Nice to meet you too. #surprised
 - CharacterA: Cool, bye. #surprised
 
->>> subtract.CharacterA
+>>> Subtract.CharacterA
 
 -> END
