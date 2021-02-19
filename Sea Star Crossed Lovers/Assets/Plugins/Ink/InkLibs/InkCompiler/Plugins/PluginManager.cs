@@ -9,7 +9,7 @@ namespace Ink
         {
             _plugins = new List<IPlugin> ();
 
-            // TODO: Make these plugin names DLL filenames, and load up their assemblies
+            // : Make these plugin names DLL filenames, and load up their assemblies
             foreach (string pluginName in pluginNames) {
                 //if (pluginName == "ChoiceListPlugin") {
                 //    _plugins.Add (new InkPlugin.ChoiceListPlugin ());

@@ -16,7 +16,7 @@ MonoBehaviour:
   screenSide: 0
   moveTransition: SlideCharacterTransition
   screenEdgeDistance: 100
-  transitionDuration: 2
+  transitionDuration: 1
   characterSprites:
   - spriteName: default
     emotionSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}

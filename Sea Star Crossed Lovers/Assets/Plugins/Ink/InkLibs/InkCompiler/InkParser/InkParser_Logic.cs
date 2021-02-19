@@ -40,7 +40,7 @@ namespace Ink
             // they're expecting C's lazy evaluation.
             if (result is Expression && !(result is FunctionCall || result is IncDecExpression) ) {
 
-                // TODO: Remove this specific error message when it has expired in usefulness
+                // : Remove this specific error message when it has expired in usefulness
                 var varRef = result as VariableReference;
                 if (varRef && varRef.name == "include") {
                     Error ("'~ include' is no longer the correct syntax - please use 'INCLUDE your_filename.ink', without the tilda, and in block capitals.");

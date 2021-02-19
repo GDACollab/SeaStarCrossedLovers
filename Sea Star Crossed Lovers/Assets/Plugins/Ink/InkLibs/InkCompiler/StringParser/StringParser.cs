@@ -549,7 +549,7 @@ namespace Ink
 			//  - When the end point is reached (or EOF), we're done
 			do {
 
-				// TODO: Perhaps if no pause or end characters are passed, we should check *every* character for stopRule?
+				// : Perhaps if no pause or end characters are passed, we should check *every* character for stopRule?
 				string partialParsedString = ParseUntilCharactersFromCharSet(pauseAndEnd);
 				if( partialParsedString != null ) {
 					parsedString.Append(partialParsedString);

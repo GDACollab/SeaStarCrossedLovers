@@ -155,7 +155,7 @@ namespace Ink.Parsed
             var rootContainer = runtimeObject as Runtime.Container;
 
             // Export initialisation of global variables
-            // TODO: We *could* add this as a declarative block to the story itself...
+            // : We *could* add this as a declarative block to the story itself...
             var variableInitialisation = new Runtime.Container ();
             variableInitialisation.AddContent (Runtime.ControlCommand.EvalStart ());
 

@@ -546,8 +546,6 @@ public class VN_Manager : MonoBehaviour
 	}
 
 	// Resets all characters in CharacterObjects
-
-	// TODO broken due to this level not being all corountines
 	IEnumerator ResetAll()
     {
 		ClearContent();

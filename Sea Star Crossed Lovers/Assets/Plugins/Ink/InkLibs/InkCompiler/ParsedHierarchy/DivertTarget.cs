@@ -101,7 +101,7 @@ namespace Ink.Parsed
             _runtimeDivertTargetValue.targetPath = _runtimeDivert.targetPath;
 
             // Tell hard coded (yet variable) divert targets that they also need to be counted
-            // TODO: Only detect DivertTargets that are values rather than being used directly for
+            // : Only detect DivertTargets that are values rather than being used directly for
             // read or turn counts. Should be able to detect this by looking for other uses of containerForCounting
             var targetContent = this.divert.targetContent;
             if (targetContent != null ) {

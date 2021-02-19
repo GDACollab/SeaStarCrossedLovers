@@ -157,7 +157,7 @@ namespace Ink
                 }
             }
 
-            // TODO: Come up with water-tight error conditions... it's quite a flexible system!
+            // : Come up with water-tight error conditions... it's quite a flexible system!
             // e.g.
             //   - inline conditionals must have exactly 1 or 2 alternatives
             //   - multiline expression shouldn't have mixed existence of branch-conditions?

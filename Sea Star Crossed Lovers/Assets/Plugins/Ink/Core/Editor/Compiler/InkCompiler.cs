@@ -95,7 +95,7 @@ namespace Ink.UnityIntegration {
                 var compilingFile = InkLibrary.Instance.compilationStack [i];
                 if (compilingFile.state == CompilationStackItem.State.Compiling) {
                     if (compilingFile.timeTaken > InkSettings.Instance.compileTimeout) {
-                        // TODO - Cancel the thread if it's still going. Not critical, since its kinda fine if it compiles a bit later, but it's not clear.
+                        // - Cancel the thread if it's still going. Not critical, since its kinda fine if it compiles a bit later, but it's not clear.
                         RemoveCompilingFile(i);
                         Debug.LogError("Ink Compiler timed out for "+compilingFile.inkAbsoluteFilePath+".\nCompilation should never take more than a few seconds, but for large projects or slow computers you may want to increase the timeout time in the InkSettings file.\nIf this persists there may be another issue; or else check an ink file exists at this path and try Assets/Recompile Ink, else please report as a bug with the following error log at this address: https://github.com/inkle/ink/issues\nError log:\n"+string.Join("\n",compilingFile.unhandledErrorOutput.ToArray()));
 						TryCompileNextFileInStack();

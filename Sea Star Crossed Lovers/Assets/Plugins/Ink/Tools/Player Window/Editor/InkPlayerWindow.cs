@@ -114,7 +114,7 @@ namespace Ink.UnityIntegration {
 
         // Allows you to change what the ink player does/is allowed to do when a story is loaded.
         // Especially handy for attached stories, where performance is critical or play controls might interfere with the game
-        // TODO: Show these params somewhere slightly out of the way (debug mode for the window?) so you can fiddle with them mid-game if you <i>really</i> need to
+        // : Show these params somewhere slightly out of the way (debug mode for the window?) so you can fiddle with them mid-game if you <i>really</i> need to
         public struct InkPlayerParams {
             public bool disablePlayControls;
             public bool disableUndoHistory;
@@ -1016,8 +1016,8 @@ namespace Ink.UnityIntegration {
 			}
             
 			EditorGUI.BeginChangeCheck();
-            // TODO: tooltips for options. I'd REALLY like for it not to show "Mixed ..." in the box mais c'est la vie
-            // TODO: Add a "default" option in the dropdown
+            // : tooltips for options. I'd REALLY like for it not to show "Mixed ..." in the box mais c'est la vie
+            // : Add a "default" option in the dropdown
             Enum newVisibilityOptions = EditorGUILayout.EnumFlagsField(GUIContent.none, InkPlayerWindowState.Instance.storyPanelState.displayOptions.visibilityOptions, EditorStyles.toolbarDropDown, GUILayout.Width(80));
     		InkPlayerWindowState.Instance.storyPanelState.displayOptions.visibilityOptions = (DisplayOptions.VisibilityOptions)(int)Convert.ChangeType(newVisibilityOptions, typeof(DisplayOptions.VisibilityOptions));
 			if(EditorGUI.EndChangeCheck()) {
@@ -1080,7 +1080,7 @@ namespace Ink.UnityIntegration {
             return false;
         }
         
-        // TODO - Only update this when the story or the search string/visibility options change.
+        //  - Only update this when the story or the search string/visibility options change.
         static List<InkHistoryContentItem> validHistory = new List<InkHistoryContentItem>();
         void GetValidHistory () {
             validHistory.Clear();
@@ -1499,7 +1499,7 @@ namespace Ink.UnityIntegration {
 		}
 
         void DrawFunctionInput () {
-			// TODO - Autocomplete function names using this, which I should add to Story.cs ( ask joe first! )	
+			//  - Autocomplete function names using this, which I should add to Story.cs ( ask joe first! )	
 			// public IEnumerable<string> allFunctionNames {
 			//     get {
 			//         return mainContentContainer.namedContent.Keys;
