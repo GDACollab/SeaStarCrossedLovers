@@ -35,7 +35,7 @@ public class VN_Character : MonoBehaviour
      * ... Maybe not now that this class is smaller
     */
 
-    // Updates this VN_Character's data, it's CharacterTransition, its anchors, and debug nameText
+    // Updates this VN_Character's data – it's CharacterTransition, its anchors, and debug nameText
     public void SetData(CharacterData toSetData)
     {
         data = toSetData;

@@ -93,10 +93,10 @@ public class VN_Manager : MonoBehaviour
     }
 
     // Called once per frame
-	// Skips the animation of text appearing if the spacebar is pressed
+	// Skips the animation of text appearing if the spacebar or primary mouse button is pressed
 	void Update()
     {
-		if (Input.GetKeyDown(KeyCode.Space)) SkipSlowText();
+		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0)) SkipSlowText();
 	}
 	#endregion
 
