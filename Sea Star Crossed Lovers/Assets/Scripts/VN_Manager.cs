@@ -11,10 +11,22 @@ using Ink.Runtime;
 /// </summary>
 public class VN_Manager : MonoBehaviour
 {
+	// The different speeds the text can go in characters per second
+	[Header("Text Speeds")]
+	/*[Tooltip("Speed of slow text in characters per second")]
+	//public float TextSpeed = 60;*/
+	[Tooltip("Normal speed of text in characters per second. Used in normal dialouge")]
+	public float normalSpeed = 60;
+	[Tooltip("Speed of the text (in characters per second) during a pause. Used at punctuation marks")]
+	public float pauseSpeed = 10;
+	
+	// Dictionary of the different speeds (Dictionaries are not serializable).
+	private Dictionary<string, float> TextSpeeds;
+	// List of characters the the text will pause at
+	public static readonly List<float> PauseChars = new List<float>(){',', '.', '!'};
+
 	// General settings for the textbox and appearance of text
 	[Header("Settings")]
-	[Tooltip("Speed of slow text in characters per second")]
-	public float TextSpeed = 60;
 	[Tooltip("Distance in pixels off screen away the edge")]
 	public int OffScreenDistance = 500;
 
@@ -82,6 +94,18 @@ public class VN_Manager : MonoBehaviour
 
 		UIFactory = GetComponent<VN_UIFactory>();
 		UIFactory.Construct(this);
+
+		// Initialize the TextSpeeds Dictionary
+		TextSpeeds = new Dictionary<string, float>{
+			{"Normal", normalSpeed},
+			{"Pause", pauseSpeed}
+		};
+
+		//Check to make sure all assigned text speeds are valid (i.e. speed > 0)
+		foreach(float value in TextSpeeds.Values)
+		{
+			if(value <= 0) Debug.LogError("At least one speed value is not greater than 0. Please fix this in the inspector");
+		}
 	}
 
 	// Called once upon the scene being enabled
@@ -188,12 +212,16 @@ public class VN_Manager : MonoBehaviour
 	private IEnumerator Co_SlowText(Text storyText)
 	{
 		currentTextDone = false;
+		float TextSpeed;
 		foreach (char letter in currentLine.ToCharArray())
 		{
 			storyText.text += letter;
 			// Delay appending more characters
 			// 1/TextSpeed because WaitForSeconds(TextSpeed) is 1 char per x seconds
 			// Convert to x char per second by inverting
+			if(PauseChars.Contains(letter)) TextSpeed = TextSpeeds["Pause"];
+			else TextSpeed = TextSpeeds["Normal"];
+			
 			yield return new WaitForSeconds(1 / TextSpeed);
 		}
 	}
