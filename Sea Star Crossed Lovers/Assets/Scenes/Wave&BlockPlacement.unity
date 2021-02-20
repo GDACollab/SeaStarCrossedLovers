@@ -247,6 +247,7 @@ GameObject:
   - component: {fileID: 121459785}
   - component: {fileID: 121459784}
   - component: {fileID: 121459783}
+  - component: {fileID: 121459786}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -319,6 +320,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &121459786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 121459782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bc08f4fdcea8c745b9bcc196153a279, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startPos: {x: 0, y: 0, z: -50}
+  gradual: 1
+  maxDelta: 0.05
+  inChunks: 1
+  chunkSize: 5
 --- !u!1 &177574285
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,6 +688,7 @@ GameObject:
   m_Component:
   - component: {fileID: 348458701}
   - component: {fileID: 348458703}
+  - component: {fileID: 348458700}
   m_Layer: 0
   m_Name: SpawnBlockController
   m_TagString: Untagged
@@ -677,6 +696,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &348458700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348458699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bc08f4fdcea8c745b9bcc196153a279, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startPos: {x: 0, y: 15, z: 0}
+  gradual: 0
+  maxDelta: 0
+  inChunks: 0
+  chunkSize: 0
 --- !u!4 &348458701
 Transform:
   m_ObjectHideFlags: 0

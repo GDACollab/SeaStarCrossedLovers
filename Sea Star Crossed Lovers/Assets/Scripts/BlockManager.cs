@@ -6,6 +6,8 @@ public class BlockManager : MonoBehaviour
 {
     // Active if player has control over it
     public bool isActive = true;
+    // Tracks if the block has made contact (ground or other block)
+    public bool madeContact = false;
     // Spawn new block if active block being deleted
     public bool beingDeleted = false;
 
@@ -34,5 +36,6 @@ public class BlockManager : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         isActive = false;
+        madeContact = true;
     }
 }
