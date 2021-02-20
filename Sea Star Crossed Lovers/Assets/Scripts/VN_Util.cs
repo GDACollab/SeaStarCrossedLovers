@@ -11,6 +11,8 @@ public class VN_Util
         _manager = manager;
     }
 
+    public static char[] toTrim = { '\"', ' ', '\n' };
+
     /// <summary>
     /// Gets the Vector2 target position of a transition for a VN_Character from a TransitionDirection
     /// </summary>

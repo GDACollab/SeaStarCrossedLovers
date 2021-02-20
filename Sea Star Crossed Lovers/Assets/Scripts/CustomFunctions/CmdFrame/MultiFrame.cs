@@ -30,10 +30,14 @@ public class MultiFrame : MonoBehaviour, ICmdFrame
 				// Returns true if reached a yield, false if not
 				bool result = cmdPart.MoveNext();
 				if(result) {
-					// If reached the yield, yield return it here
-					yield return cmdPart.Current;
-					cmdPart.MoveNext();
-					// break out of for loop because found valid VN_Character to add
+					// Yield return it here
+					while (result)
+					{
+						yield return cmdPart.Current;
+						result = cmdPart.MoveNext();
+					}
+					// break out of for loop because found valid VN_Character
+					// to run part.CmdPart functionality
 					break;
 				}
 			}
