@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Character", menuName = "CharacterData")]
+[CreateAssetMenu(fileName = "New Character", menuName = "ScriptableObjects/CharacterData")]
 public class CharacterData : ScriptableObject
 {
     public enum ScreenSide { left, right };
@@ -10,16 +10,13 @@ public class CharacterData : ScriptableObject
     public enum TransitionDirection { enter, exit };
 
     [Header("Settings")]
+    public CharacterTransition transition;
 
     [Tooltip("Starting sprite name; make sure it exists in the sprites list")]
     public string defaultSpriteName;
 
     [Tooltip("Position of character on the screen")]
     public ScreenSide screenSide;
-    
-    [Tooltip("Style of sprite movement when transitioning around the screen. " +
-        "String must match a name of a type that extends ICharacterTransition")]
-    public string moveTransition;
 
     [Tooltip("Distance in pixels away from the edge of the screen")]
     public int screenEdgeDistance;

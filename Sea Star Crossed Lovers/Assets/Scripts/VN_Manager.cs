@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Ink.Runtime;
+using UnityEditor;
 
 /// <summary>
 /// Creates and manages VN components and flow
@@ -338,7 +339,16 @@ public class VN_Manager : MonoBehaviour
 		{
 			if (charObj.data != null)
 			{
-				yield return StartCoroutine(charObj.GetComponent<TeleportCharacterTransition>().Co_ExitScreen());
+				// HACK Make new teleport to temp replace transition
+				CharacterTransition originalTransition = charObj.data.transition;
+				TeleportCharacterTransition tempTeleport =
+					(TeleportCharacterTransition)ScriptableObject.CreateInstance(typeof(TeleportCharacterTransition));
+				charObj.data.transition = tempTeleport;
+
+				// Do same thing as ExitPart
+				yield return StartCoroutine(charObj.data.transition
+					.Co_ExitScreen(charObj, this));
+				charObj.data.transition = originalTransition;
 				charObj.ChangeSprite("");
 				charObj.SetData(null);
 			}

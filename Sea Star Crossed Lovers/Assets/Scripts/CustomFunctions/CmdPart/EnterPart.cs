@@ -9,7 +9,7 @@ public class EnterPart : MonoBehaviour, ICmdPart
 		{
 			charObj.SetData(characterData);
 			charObj.ChangeSprite(characterData.defaultSpriteName);
-			yield return StartCoroutine(charObj._characterTransition.Co_EnterScreen());
+			yield return StartCoroutine(charObj.data.transition.Co_EnterScreen(charObj, this));
 		}
 	}
 }

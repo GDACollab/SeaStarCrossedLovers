@@ -9,11 +9,6 @@ public class VN_Character : MonoBehaviour
     public CharacterData data;
     public Image currentImage;
     public RectTransform rectTransform;
-
-    public ICharacterTransition _characterTransition;
-
-    private List<ICharacterTransition> characterTransitions;
-
     // Debug
     [SerializeField] private Text nameText;
 
@@ -25,9 +20,6 @@ public class VN_Character : MonoBehaviour
     {
         currentImage = GetComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
-
-        characterTransitions = gameObject.GetComponents<ICharacterTransition>().ToList();
-        characterTransitions.ForEach(transition => transition.Construct(this));
     }
 
     /* TODO Try to follow SOLID for this class
@@ -41,8 +33,6 @@ public class VN_Character : MonoBehaviour
         data = toSetData;
         if (toSetData)
         {
-            UpdateCharacterTransition();
-
             // Debug nametag
             nameText.text = toSetData.name;
             switch (toSetData.screenSide)
@@ -67,19 +57,6 @@ public class VN_Character : MonoBehaviour
         {
             nameText.text = "None";
         }
-    }
-
-    /* Get the ICharacterTransition for the current data by trying to match data's
-     * moveTransition string to the name of a class type that implements ICharacterTransition
-     * TODO Somehow make it so CharacterData.moveTransition can only be set as the name
-     * of an existing ICharacterTransition instead of inputing an unsafe string
-    */
-    private void UpdateCharacterTransition()
-    {
-        _characterTransition = characterTransitions.Find(transition =>
-        {
-            return transition.GetType().ToString() == data.moveTransition;
-        });
     }
 
     public void ChangeSprite(string newSpriteName)

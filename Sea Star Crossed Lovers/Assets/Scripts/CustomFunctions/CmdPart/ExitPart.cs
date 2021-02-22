@@ -7,7 +7,7 @@ public class ExitPart : MonoBehaviour, ICmdPart
 	{
 		if (charObj.data == characterData)
 		{
-			yield return StartCoroutine(charObj._characterTransition.Co_ExitScreen());
+			yield return StartCoroutine(charObj.data.transition.Co_ExitScreen(charObj, this));
 			charObj.ChangeSprite("");
 			charObj.SetData(null);
 		}

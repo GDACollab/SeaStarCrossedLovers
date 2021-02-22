@@ -2,36 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeleportCharacterTransition : MonoBehaviour, ICharacterTransition
+[CreateAssetMenu(fileName = "TeleportCharacterTransition", menuName = "ScriptableObjects/TeleportCharacterTransition")]
+public class TeleportCharacterTransition : CharacterTransition
 {
-    private VN_Character _character;
-    private RectTransform _rectTransform;
-
-    public void Construct(VN_Character character)
-    {
-        _character = character;
-        _rectTransform = character.rectTransform;
-    }
-
-    public IEnumerator Co_ExitScreen()
+    public override IEnumerator Co_ExitScreen(VN_Character character, MonoBehaviour caller)
     {
         Vector2 endPosition = VN_Util.GetTransitionTarget(
-            _character, CharacterData.TransitionDirection.exit);
+            character, CharacterData.TransitionDirection.exit);
 
-        yield return StartCoroutine(Co_TeleportTransition(endPosition));
+        yield return caller.StartCoroutine(Co_TeleportTransition(character, endPosition));
     }
 
-    public IEnumerator Co_EnterScreen()
+    public override IEnumerator Co_EnterScreen(VN_Character character, MonoBehaviour caller)
     {
         Vector2 endPosition = VN_Util.GetTransitionTarget(
-            _character, CharacterData.TransitionDirection.enter);
+            character, CharacterData.TransitionDirection.enter);
 
-        yield return StartCoroutine(Co_TeleportTransition(endPosition));
+        yield return caller.StartCoroutine(Co_TeleportTransition(character, endPosition));
     }
 
-    IEnumerator Co_TeleportTransition(Vector2 endPosition)
+    IEnumerator Co_TeleportTransition(VN_Character character, Vector2 endPosition)
     {
-        _rectTransform.anchoredPosition = endPosition;
+        character.rectTransform.anchoredPosition = endPosition;
         yield break;
     }
 }
