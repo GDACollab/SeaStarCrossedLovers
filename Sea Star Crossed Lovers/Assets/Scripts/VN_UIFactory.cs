@@ -103,6 +103,16 @@ public class VN_UIFactory : MonoBehaviour
 		});
 	}
 
+	// Creates a button to start the story
+	public void CreateStartStoryButton()
+	{
+		Button choice = CreateChoiceView("Start story");
+		choice.onClick.AddListener(delegate
+		{
+			_manager.StartStory();
+		});
+	}
+
 	// Creates all buttons correlating to a choice
 	public void CreateAllChoiceButtons()
 	{

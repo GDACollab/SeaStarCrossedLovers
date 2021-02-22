@@ -113,8 +113,8 @@ public class VN_Manager : MonoBehaviour
 	void Start()
 	{
 		ClearContent();
-        StartStory();
-    }
+		UIFactory.CreateStartStoryButton();
+	}
 
     // Called once per frame
 	// Skips the animation of text appearing if the spacebar or primary mouse button is pressed
@@ -128,7 +128,7 @@ public class VN_Manager : MonoBehaviour
 	#region Main Functions
 
 	// Initializes a story based on the imported JSON file
-	private void StartStory()
+	public void StartStory()
 	{
 		story = new Story(inkJSONAsset.text);
 		if (OnCreateStory != null) OnCreateStory(story);
@@ -269,8 +269,8 @@ public class VN_Manager : MonoBehaviour
 		if (lineSplit.Length == 2)
 		{
 			// Trim removes any white space from the beginning or end.
-			speaker = lineSplit[0].Trim();
-			content = lineSplit[1].Trim();
+			speaker = lineSplit[0].Trim(VN_Util.toTrim);
+			content = lineSplit[1].Trim(VN_Util.toTrim);
 			yield break;
 		}
         // Check if line is a function call

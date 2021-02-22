@@ -97,7 +97,7 @@ public class VN_Util
             if (charObj.data == characterData) return charObj;
         }
 
-        Debug.LogError("Cannot find data of" + data.name + " in CharacterObjects");
+        Debug.LogError("Cannot find data of " + data.name + " in CharacterObjects");
         return null;
     }
 

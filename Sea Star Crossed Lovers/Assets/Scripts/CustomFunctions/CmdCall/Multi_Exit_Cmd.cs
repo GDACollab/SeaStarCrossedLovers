@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Multi_Subtract_Cmd : MonoBehaviour, ICmdCall
+public class Multi_Exit_Cmd : MonoBehaviour, ICmdCall
 {
 	private VN_Manager _manager;
 	private ICmdFrame _cmdFrame;

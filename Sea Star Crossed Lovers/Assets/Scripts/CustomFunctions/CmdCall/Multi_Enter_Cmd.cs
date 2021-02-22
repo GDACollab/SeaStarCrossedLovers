@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Multi_Add_Cmd : MonoBehaviour, ICmdCall
+public class Multi_Enter_Cmd : MonoBehaviour, ICmdCall
 {
 	private VN_Manager _manager;
 	private ICmdFrame _cmdFrame;

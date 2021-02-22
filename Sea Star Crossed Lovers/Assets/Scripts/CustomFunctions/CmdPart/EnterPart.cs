@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class AddPart : MonoBehaviour, ICmdPart
+public class EnterPart : MonoBehaviour, ICmdPart
 {
 	public IEnumerator CmdPart(VN_Character charObj, CharacterData characterData)
     {
