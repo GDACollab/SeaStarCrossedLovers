@@ -7,11 +7,12 @@ public class SpawnBlock : MonoBehaviour
     public List<GameObject> BlockList;
 
     public float horizontalSpeed = 10;
-    public float fallSpeed = 5;
+    public float baseFallSpeed = 5;
     public float dropForce = 300;
     public int startingDownwardForce = 150;
     public int spawnDelay = 1;
 
+    private float currentFallSpeed;
     private float blockGravity;
     private bool waitingForBlock = false;
     private bool canSpawnBlock = false; 
@@ -23,26 +24,26 @@ public class SpawnBlock : MonoBehaviour
 
     private void Start()
     {
-
+        currentFallSpeed = baseFallSpeed;
     }
 
     private void Update()
     {
-
         // control an active block
         if (activeBlock != null) {
-
             // apply horizontal and vertical change
             float xOffset = Input.GetAxisRaw("Horizontal")*Time.deltaTime*horizontalSpeed;
-            activeBlock.transform.position += new Vector3(xOffset, -fallSpeed*Time.deltaTime, 0);
+            activeBlock.transform.position += new Vector3(xOffset, -currentFallSpeed*Time.deltaTime, 0);
         
             // detect if player has dropped block
-            if (Input.GetButtonDown("Drop")) {
-                // apply a starting force to make drop feel more natural (momentum)
-                // give block normal gravity
-                activeRB.AddForce(new Vector3(0, -dropForce, 0));
-                activeRB.gravityScale = blockGravity;
-                blockManager.isActive = false;
+            if (Input.GetButton("Drop")) {
+
+                //Implementation of block fall acceleration instead of activating physics
+                currentFallSpeed = baseFallSpeed * 3;
+            }
+            else
+            {
+                currentFallSpeed = baseFallSpeed;
             }
 
             // detect rotation
@@ -64,6 +65,8 @@ public class SpawnBlock : MonoBehaviour
             // Reset activeBlock to original gravity and null activeBlock
             activeRB.gravityScale = blockGravity;
             activeBlock = null;
+            activeRB.velocity = new Vector2(0, 0);
+
 
             StartCoroutine(delaySpawnBlock());
         }

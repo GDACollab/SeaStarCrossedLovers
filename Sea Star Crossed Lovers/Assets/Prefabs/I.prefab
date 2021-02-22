@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActive: 1
-  grounded: 0
+  beingDeleted: 0
 --- !u!1001 &3983544604214551286
 PrefabInstance:
   m_ObjectHideFlags: 0
