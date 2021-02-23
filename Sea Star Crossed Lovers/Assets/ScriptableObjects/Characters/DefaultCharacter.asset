@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2792543f1b0a54dccbb3910190f8b1cd, type: 3}
   m_Name: DefaultCharacter
   m_EditorClassIdentifier: 
+  transition: {fileID: 0}
   defaultSpriteName: default
   screenSide: 0
-  moveTransition: 
   screenEdgeDistance: 0
   transitionDuration: 0
   characterSprites: []
