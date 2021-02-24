@@ -9,12 +9,10 @@ public class VN_UIFactory : MonoBehaviour
 	*/
 
 	// Textbox canvas objects
-	// Canvas for text
 	public Canvas TextCanvas = null;
-	// Canvas for the buttons
 	public Canvas ButtonCanvas = null;
-	// Canvas for the characters' names
 	public Canvas NameCanvas = null;
+	public Canvas TextboxCanvas = null;
 	// Textbox text objects
 	// Text object that displays text content
 	[HideInInspector] public Text contentTextObj = null;

@@ -12,41 +12,39 @@ using UnityEditor;
 /// </summary>
 public class VN_Manager : MonoBehaviour
 {
+
+	// General settings for the textbox and appearance of text
+	[Header("Settings")]
+	[Tooltip("ActiveState of VN. Set before play to make VN appear or be hidden on start")]
+	public ActiveState activeState = ActiveState.hidden;
+	public enum ActiveState { hidden, active }
+	[Tooltip("Distance of off screen characters in pixels away the screen edge")]
+	public int OffScreenDistance = 500;
 	// The different speeds the text can go in characters per second
 	[Header("Text Speeds")]
-	/*[Tooltip("Speed of slow text in characters per second")]
-	//public float TextSpeed = 60;*/
 	[Tooltip("Normal speed of text in characters per second. Used in normal dialouge")]
 	public float normalSpeed = 60;
 	[Tooltip("Speed of the text (in characters per second) during a pause. Used at punctuation marks")]
 	public float pauseSpeed = 10;
-	
 	// Dictionary of the different speeds (Dictionaries are not serializable).
 	private Dictionary<string, float> TextSpeeds;
 	// List of characters the the text will pause at
-	public static readonly List<float> PauseChars = new List<float>(){',', '.', '!'};
+	public static readonly List<float> PauseChars = new List<float>() { ',', '.', '!' };
 
-	// General settings for the textbox and appearance of text
-	[Header("Settings")]
-	[Tooltip("Distance in pixels off screen away the edge")]
-	public int OffScreenDistance = 500;
-
-	// Settings regarding the 2 speakers
-	[Header("Characters")]
+	// Objects needed to create story from JSON
+	[Header("Required Objects")]
+	public Story story;
+	[Tooltip("Intermediate file for Unity to work with Ink; Created when a .ink file is saved in Unity")]
+	[SerializeField] private TextAsset inkJSONAsset = null;
+	[Tooltip("CharacterData of the player in the VN")]
 	[SerializeField] private CharacterData PlayerCharacterData;
 	[Tooltip("Generic VN_Character GameObjects; There should be only 2 in a scene")]
 	public List<VN_Character> CharacterObjects;
 	[Tooltip("List of needed character data to pull from")]
 	public List<CharacterData> AllCharacterData;
 
-	// Objects needed to create story from JSON
-	[Header("Required Objects")]
-	[SerializeField]
-	[Tooltip("Intermediate file for Unity to work with Ink; Created when a .ink file is saved in Unity")]
-	private TextAsset inkJSONAsset = null;
-	public Story story;
-
 	// Internal References
+	public RectTransform TextboxRectTransform;
 	// Keep track of story creation event
 	public static event Action<Story> OnCreateStory;
 	// The content to be displayed
@@ -87,14 +85,15 @@ public class VN_Manager : MonoBehaviour
 	// Adds the AddCharacter and SubtractCharacter functions to the AllCommands Dictionary
 	void Awake()
     {
-        // TODO replace with even high level factory?
-        VN_Util Helper = new VN_Util(this);
+		// TODO replace with even high level factory?
+		VN_Util Helper = new VN_Util(this);
 		// Get CommandCall script in gameobject
 		CommandCall = GetComponent<VN_CommandCall>();
 		CommandCall.Construct(this);
 
 		UIFactory = GetComponent<VN_UIFactory>();
 		UIFactory.Construct(this);
+		TextboxRectTransform = UIFactory.TextboxCanvas.GetComponent<RectTransform>();
 
 		// Initialize the TextSpeeds Dictionary
 		TextSpeeds = new Dictionary<string, float>{
@@ -115,12 +114,20 @@ public class VN_Manager : MonoBehaviour
 	{
 		ClearContent();
 		UIFactory.CreateStartStoryButton();
-	}
 
-    // Called once per frame
-	// Skips the animation of text appearing if the spacebar or primary mouse button is pressed
+		switch (activeState)
+		{
+			case ActiveState.hidden:
+				float height = TextboxRectTransform.sizeDelta.y;
+				TextboxRectTransform.anchoredPosition = new Vector2(0, -height);
+				break;
+			case ActiveState.active:
+				break;
+		}
+	}
 	void Update()
     {
+		// Skips the animation of text appearing if the spacebar or primary mouse button is pressed
 		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0)) SkipSlowText();
 	}
 	#endregion

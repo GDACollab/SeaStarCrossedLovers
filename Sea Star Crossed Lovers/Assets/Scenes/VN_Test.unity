@@ -279,6 +279,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3024939599575824783, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
+      propertyPath: TextboxCanvas
+      value: 
+      objectReference: {fileID: 1850266692}
     - target: {fileID: 7788690951677079932, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 700
@@ -433,7 +437,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7788690952886119466, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1024.4106
+      value: 1029.0437
       objectReference: {fileID: 0}
     - target: {fileID: 7788690952886119466, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: m_AnchorMin.y
@@ -525,7 +529,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7788690953542150142, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1375.5894
+      value: 1370.9563
       objectReference: {fileID: 0}
     - target: {fileID: 7788690953542150142, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: m_AnchorMin.y
@@ -573,3 +577,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
+--- !u!223 &1850266692 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 7788690952007004722, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
+  m_PrefabInstance: {fileID: 1850266691}
+  m_PrefabAsset: {fileID: 0}
