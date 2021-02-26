@@ -16,7 +16,6 @@ public class TowerGoalpoint : MonoBehaviour
     private void Awake()
     {
         goalHeight = gameObject.transform.position.y;
-        print("Goal: " + goalHeight);
     }
 
     public bool CheckWin()

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,7 +7,9 @@ public class LevelManager : MonoBehaviour
 {
     public float timeToWin;
     public float winTimerIncrement;
-    public float winTimerGracePeriod;
+    public float winTimerCooldown;
+
+    private bool WinTimerOnCooldown = false;
 
     public string defualtWinTimerMessage;
 
@@ -39,8 +40,9 @@ public class LevelManager : MonoBehaviour
     private void Update()
     {
         if(currentGameState == GameState.playing &&
-            _goalpoint.CheckWin())
+            _goalpoint.CheckWin() && !WinTimerOnCooldown)
         {
+            StopCoroutine(winTimer());
             currentGameState = GameState.winTimer;
             StartCoroutine(winTimer());
         }
@@ -53,7 +55,7 @@ public class LevelManager : MonoBehaviour
         float currWaitTime = 0;
         while (currWaitTime < timeToWin)
         {
-            if(_goalpoint.CheckWin())
+            if (_goalpoint.CheckWin())
             {
                 float timeLeft = timeToWin - currWaitTime;
                 winText.text = "Win timer: " + timeLeft.ToString("F1");
@@ -62,18 +64,23 @@ public class LevelManager : MonoBehaviour
             }
             else
             {
-                print("timer grace");
                 winText.text = defualtWinTimerMessage;
-                yield return new WaitForSeconds(winTimerGracePeriod);
-                StopCoroutine(winTimer());
-                print("ChangeScene back to playing");
+                StartCoroutine(WinTimerCooldown());
                 currentGameState = GameState.playing;
+                yield break;
             }
         }
 
+        Debug.Log("You win");
         winText.text = "YOU WIN!";
         currentGameState = GameState.won;
-        Debug.Log("You win");
+    }
+
+    private IEnumerator WinTimerCooldown()
+    {
+        WinTimerOnCooldown = true;
+        yield return new WaitForSeconds(winTimerCooldown);
+        WinTimerOnCooldown = false;
     }
 
     public void ChangeScene(string SceneName)

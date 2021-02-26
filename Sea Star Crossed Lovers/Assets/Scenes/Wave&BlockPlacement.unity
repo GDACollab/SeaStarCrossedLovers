@@ -1977,9 +1977,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a7e19403014d4beabed5b3c92ffd2b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToWin: 3
-  winTimerIncrement: 0.5
-  winTimerGracePeriod: 1
+  timeToWin: 10
+  winTimerIncrement: 0.1
+  winTimerCooldown: 1
   defualtWinTimerMessage: Tower must reach goal line to win
   currentGameState: 0
   winText: {fileID: 1080702309}
