@@ -4,38 +4,50 @@ using UnityEngine;
 
 public class BlockManager : MonoBehaviour
 {
-    // Active if player has control over it
-    public bool isActive = true;
-    // Tracks if the block has made contact (ground or other block)
-    public bool madeContact = false;
-    // Spawn new block if active block being deleted
-    public bool beingDeleted = false;
+    public List<Block> SceneBlockList;
 
-    // Start is called before the first frame update
-    void Start()
+    public Block highestBlock;
+    public float highestBlockHeight = 0;
+
+    private LevelManager _levelManager;
+
+    public void Construct(LevelManager levelManager)
     {
-
+        _levelManager = levelManager;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
-    }
-
-    public void Delete(int rowsToDelete)
-    {
-        beingDeleted = true;
-        //Find all blocklets that make up the tetronimo, mark them for deletion
-        foreach (Transform child in transform)
+        highestBlock = GetHighestTowerBlock();
+        if(highestBlock)
         {
-            child.gameObject.GetComponent<Blocklet>().MarkDelete(rowsToDelete);
+            highestBlockHeight = highestBlock.transform.position.y;
         }
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    public void AddBlockFromList(Block toAdd)
     {
-        isActive = false;
-        madeContact = true;
+        SceneBlockList.Add(toAdd);
+    }
+
+    public void RemoveBlockFromList(Block toRemove)
+    {
+        SceneBlockList.Remove(toRemove);
+    }
+
+    public Block GetHighestTowerBlock()
+    {
+        Block resultBlock = highestBlock;
+
+        SceneBlockList.ForEach(block => {
+            if (block != _levelManager.activeBlock &&
+                block.currentState == Block.BlockState.stable &&
+                block.transform.position.y > highestBlockHeight)
+            {
+                resultBlock = block;
+            }
+        });
+
+        return resultBlock;
     }
 }

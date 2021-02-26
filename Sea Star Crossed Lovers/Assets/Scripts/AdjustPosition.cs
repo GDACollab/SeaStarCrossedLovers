@@ -9,11 +9,6 @@ public class AdjustPosition : MonoBehaviour
     public float maxDelta;
     public bool inChunks;
     public int chunkSize;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -39,11 +34,11 @@ public class AdjustPosition : MonoBehaviour
 
     List<Blocklet> GetAllGroundedBlocklets()
     {
-        BlockManager[] blocks = FindObjectsOfType<BlockManager>();
+        Block[] blocks = FindObjectsOfType<Block>();
         List<Blocklet> blocklets = new List<Blocklet>();
-        foreach (BlockManager block in blocks)
+        foreach (Block block in blocks)
         {
-            if (block.madeContact)
+            if (block.currentState == Block.BlockState.stable)
             {
                 blocklets.AddRange(block.gameObject.GetComponentsInChildren<Blocklet>());
             }

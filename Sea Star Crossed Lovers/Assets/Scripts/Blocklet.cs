@@ -24,6 +24,13 @@ public class Blocklet : MonoBehaviour
     private TextMesh rowDebugText;
     private GameObject BlockParent;
 
+    private Block blockParent;
+
+    private void Awake()
+    {
+        blockParent = this.transform.parent.GetComponent<Block>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -63,8 +70,8 @@ public class Blocklet : MonoBehaviour
             }
             else if (blockColor.a <= fadeFinal && waves.GetComponent<SimpleWave>().waveIsOver)
             {
+                blockParent.CheckFullyDeleted();
                 Destroy(gameObject);
-                //Debug.Log("destroy");
             }
         }
     }

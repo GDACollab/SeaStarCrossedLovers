@@ -58,7 +58,7 @@ public class SimpleWave : MonoBehaviour
         
         if (other.tag == "Tetronimo")
         {         
-            BlockManager b = other.GetComponent<BlockManager>();
+            Block b = other.GetComponent<Block>();
             b.Delete(difficulty);
         }
         else if (other.name == "Endpoint")
