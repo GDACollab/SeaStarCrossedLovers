@@ -334,9 +334,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPos: {x: 0, y: 9, z: -50}
   gradual: 1
-  maxDelta: 0.05
+  maxDelta: 5
   inChunks: 1
-  chunkSize: 5
+  chunkSize: 10
 --- !u!1 &177574285
 GameObject:
   m_ObjectHideFlags: 0
@@ -889,7 +889,7 @@ MonoBehaviour:
   - {fileID: 6165506080579754258, guid: 3a5bdfb65f952f64c8f332cc9bac5454, type: 3}
   - {fileID: 7931705065305060765, guid: 9c1046b231d67a1488126b1424e779c9, type: 3}
   horizontalSpeed: 10
-  fallSpeed: 3
+  baseFallSpeed: 5
   dropForce: 300
   startingDownwardForce: 150
   spawnDelay: 1
@@ -1977,7 +1977,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a7e19403014d4beabed5b3c92ffd2b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToWin: 10
+  timeToWin: 3
   winTimerIncrement: 0.1
   winTimerCooldown: 1
   defualtWinTimerMessage: Tower must reach goal line to win
