@@ -38,7 +38,7 @@ public class VN_Util
                 }
                 break;
             case CharacterData.TransitionDirection.exit:
-                targetX = _manager.OffScreenDistance + character.rectTransform.sizeDelta.x;
+                targetX = character.rectTransform.sizeDelta.x;
                 switch (data.screenSide)
                 {
                     // If on left, go left to be on target

@@ -12,14 +12,11 @@ using UnityEditor;
 /// </summary>
 public class VN_Manager : MonoBehaviour
 {
-
 	// General settings for the textbox and appearance of text
 	[Header("Settings")]
 	[Tooltip("ActiveState of VN. Set before play to make VN appear or be hidden on start")]
 	public ActiveState activeState = ActiveState.hidden;
 	public enum ActiveState { hidden, active }
-	[Tooltip("Distance of off screen characters in pixels away the screen edge")]
-	public int OffScreenDistance = 500;
 	// The different speeds the text can go in characters per second
 	[Header("Text Speeds")]
 	[Tooltip("Normal speed of text in characters per second. Used in normal dialouge")]
@@ -44,7 +41,6 @@ public class VN_Manager : MonoBehaviour
 	public List<CharacterData> AllCharacterData;
 
 	// Internal References
-	public RectTransform TextboxRectTransform;
 	// Keep track of story creation event
 	public static event Action<Story> OnCreateStory;
 	// The content to be displayed
@@ -57,6 +53,7 @@ public class VN_Manager : MonoBehaviour
 	// Subordinate classes
 	private VN_CommandCall CommandCall;
 	private VN_UIFactory UIFactory;
+	private VN_AnimationManager AnimationManager;
 
 	// Flags/states
 	// Whether or not the current text is done from slow text
@@ -93,7 +90,9 @@ public class VN_Manager : MonoBehaviour
 
 		UIFactory = GetComponent<VN_UIFactory>();
 		UIFactory.Construct(this);
-		TextboxRectTransform = UIFactory.TextboxCanvas.GetComponent<RectTransform>();
+
+		AnimationManager = GetComponent<VN_AnimationManager>();
+		AnimationManager.Construct(this);
 
 		// Initialize the TextSpeeds Dictionary
 		TextSpeeds = new Dictionary<string, float>{
@@ -114,16 +113,6 @@ public class VN_Manager : MonoBehaviour
 	{
 		ClearContent();
 		UIFactory.CreateStartStoryButton();
-
-		switch (activeState)
-		{
-			case ActiveState.hidden:
-				float height = TextboxRectTransform.sizeDelta.y;
-				TextboxRectTransform.anchoredPosition = new Vector2(0, -height);
-				break;
-			case ActiveState.active:
-				break;
-		}
 	}
 	void Update()
     {

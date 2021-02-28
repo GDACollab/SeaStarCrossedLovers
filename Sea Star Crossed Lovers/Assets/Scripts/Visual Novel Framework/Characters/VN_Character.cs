@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class VN_Character : MonoBehaviour
@@ -6,6 +7,9 @@ public class VN_Character : MonoBehaviour
     public CharacterData data;
     public Image currentImage;
     public RectTransform rectTransform;
+
+    private Animator animator;
+
     // Debug
     [SerializeField] private Text nameText;
 
@@ -15,6 +19,12 @@ public class VN_Character : MonoBehaviour
     */ 
     void Awake()
     {
+        // TODO Temp way to make them start off screen
+        animator = GetComponent<Animator>();
+        animator.SetBool("OnScreen", true);
+
+
+        animator = gameObject.GetComponent<Animator>();
         currentImage = GetComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
     }
@@ -85,4 +95,20 @@ public class VN_Character : MonoBehaviour
             Debug.LogError("Cannot ChangeSprite when VN_Character has null Data");
         }
     }
+
+    // TODO Temp location to put this method, integrate with command call system
+    // if Unity animator is continued to be used
+    public IEnumerator Co_CharacterTransition()
+    {
+
+        if (data == null)
+        {
+            Debug.LogError("Cannot call CharacterTransition on VN_Character \"" + this + "\" with no data");
+            yield break;
+        }
+
+        yield return StartCoroutine(VN_AnimationManager.Co_ToggleBoolState(animator, "OnScreen"));
+    }
+
+    
 }

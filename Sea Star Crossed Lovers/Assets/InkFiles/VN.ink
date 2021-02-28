@@ -1,6 +1,8 @@
 LIST Time = (dusk), (noon), (midnight)
 ~ Time = noon
 
+Narrator: Here come CharacterA and CharacterB
+
 >>> Enter.CharacterA.CharacterB
 
 CharacterA: "Nope I'm outta here."
