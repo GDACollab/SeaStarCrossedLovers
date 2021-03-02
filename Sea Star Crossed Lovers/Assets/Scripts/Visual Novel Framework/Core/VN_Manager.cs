@@ -243,7 +243,14 @@ public class VN_Manager : MonoBehaviour
 			}
 			else
 			{
-				result += character;
+				if (character == '…')
+                {
+					result += "...";
+				}
+				else
+                {
+					result += character;
+				}
 				lineLength++;
 			}
 		}
