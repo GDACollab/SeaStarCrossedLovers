@@ -76,7 +76,7 @@ public class LevelManager : MonoBehaviour
         Debug.Log("You win");
         winText.text = "YOU WIN!";
         currentGameState = GameState.won;
-        //Now load temp VN:
+        //Now load Start:
         activeLoader.FadeOutLoad("Start", 0.5f);
     }
 
