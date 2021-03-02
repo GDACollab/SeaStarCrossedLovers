@@ -12,7 +12,6 @@ using UnityEditor;
 /// </summary>
 public class VN_Manager : MonoBehaviour
 {
-
 	// General settings for the textbox and appearance of text
 	[Header("Settings")]
 	[Tooltip("ActiveState of VN. Set before play to make VN appear or be hidden on start")]
@@ -20,6 +19,8 @@ public class VN_Manager : MonoBehaviour
 	public enum ActiveState { hidden, active }
 	[Tooltip("Distance of off screen characters in pixels away the screen edge")]
 	public int OffScreenDistance = 500;
+	[Tooltip("Max number of characters per line")]
+	public int LineCharNum;
 	// The different speeds the text can go in characters per second
 	[Header("Text Speeds")]
 	[Tooltip("Normal speed of text in characters per second. Used in normal dialouge")]
@@ -29,7 +30,8 @@ public class VN_Manager : MonoBehaviour
 	// Dictionary of the different speeds (Dictionaries are not serializable).
 	private Dictionary<string, float> TextSpeeds;
 	// List of characters the the text will pause at
-	public static readonly List<float> PauseChars = new List<float>() { ',', '.', '!' };
+	// TODO Put all settings/data for this manager into a scriptable object
+	public static readonly List<float> PauseChars = new List<float>() { ',', '.', '…', '!', '?', '\n', '-', '–' };
 
 	// Objects needed to create story from JSON
 	[Header("Required Objects")]
@@ -128,6 +130,7 @@ public class VN_Manager : MonoBehaviour
 	void Update()
     {
 		// Skips the animation of text appearing if the spacebar or primary mouse button is pressed
+		// TODO replace with input system to not hard code input bindings
 		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0)) SkipSlowText();
 	}
 	#endregion
@@ -155,18 +158,6 @@ public class VN_Manager : MonoBehaviour
 	// Functions involved in the text appearing on the screen
 	#region Slow Text Functions
 
-	// Displays the current section of the story
-	/* TODO Fix text spasm when reaching edge of TextCanvas
-	 * Current solution: 
-	 * - Add method to adjust position of TextCanvas according to 
-	 * currentContent.Length such that the text will be centered on 
-	 * the screen when it is fully shown. 
-	 * - Change TextCanvas width to be maximum.
-	 * - Add field and functionality for maximum width in characters 
-	 * until a new line character is added (replace auto text new line 
-	 * from canvas that's probably causing the spasm with adding \n
-	 * character if any line of content reaches maxLineLength)
-	*/
 	private IEnumerator Co_DisplaySlowText()
     {
 		// Get the next line of text
@@ -203,6 +194,9 @@ public class VN_Manager : MonoBehaviour
 			yield break;
         }
 
+		// Format text to have newline characters at porper locations
+		currentLine = FormatText(currentLine);
+
 		// Instantiate story content
 		UIFactory.contentTextObj = UIFactory.CreateContentView("");
 		// Instantiate character name text
@@ -221,17 +215,40 @@ public class VN_Manager : MonoBehaviour
 	{
 		currentTextDone = false;
 		float TextSpeed;
-		foreach (char letter in currentLine.ToCharArray())
+
+		foreach (char character in currentLine.ToCharArray())
 		{
-			storyText.text += letter;
+			storyText.text += character;
+			
+			if (PauseChars.Contains(character)) TextSpeed = TextSpeeds["Pause"];
+			else TextSpeed = TextSpeeds["Normal"];
+
 			// Delay appending more characters
 			// 1/TextSpeed because WaitForSeconds(TextSpeed) is 1 char per x seconds
 			// Convert to x char per second by inverting
-			if(PauseChars.Contains(letter)) TextSpeed = TextSpeeds["Pause"];
-			else TextSpeed = TextSpeeds["Normal"];
-			
 			yield return new WaitForSeconds(1 / TextSpeed);
 		}
+	}
+
+	private string FormatText(string text)
+	{
+		string result = "";
+		int lineLength = 0;
+		foreach (char character in text.ToCharArray())
+		{
+			if (lineLength > LineCharNum && character == ' ')
+			{
+				result += '\n';
+				lineLength = 0;
+			}
+			else
+			{
+				result += character;
+				lineLength++;
+			}
+		}
+
+		return result;
 	}
 
 	// Makes the remaining text appear instantly, then creates the choice buttons

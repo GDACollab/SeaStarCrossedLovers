@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2792543f1b0a54dccbb3910190f8b1cd, type: 3}
-  m_Name: CharacterB
+  m_Name: Ocean
   m_EditorClassIdentifier: 
   transition: {fileID: 11400000, guid: 3b8c7edcf2ae945a48152c552d124440, type: 2}
-  defaultSpriteName: happy
+  defaultSpriteName: default
   screenSide: 1
   screenEdgeDistance: 100
   transitionDuration: 1
   characterSprites:
   - spriteName: default
-    emotionSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+    emotionSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   - spriteName: happy
     emotionSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   - spriteName: surprised
-    emotionSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+    emotionSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
