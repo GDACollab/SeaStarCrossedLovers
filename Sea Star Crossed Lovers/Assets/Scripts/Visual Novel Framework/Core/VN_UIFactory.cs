@@ -94,10 +94,12 @@ public class VN_UIFactory : MonoBehaviour
 	// Creates a button to restart the story and resets the story if the button is clicked
 	public void CreateRestartStoryButton()
 	{
-		Button choice = CreateChoiceView("End of story.\nRestart?");
+		//Very quick hack.
+		//Hopefully you'll replace this with actual data, but here's a quick hack to get you back to the start screen:
+		Button choice = CreateChoiceView("End story");
 		choice.onClick.AddListener(delegate
 		{
-			StartCoroutine(_manager.ResetAll());
+			_manager.activeLoader.QuickFadeOutLoad("Wave&BlockPlacement");
 		});
 	}
 

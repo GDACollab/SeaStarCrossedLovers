@@ -11,4 +11,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Wave&BlockPlacement.unity
     guid: a4bce561fa472451496ae434fbed58d4
+  - enabled: 1
+    path: Assets/Scenes/Start.unity
+    guid: 5bc126b880116ea4ea2c833074fa1897
+  - enabled: 1
+    path: Assets/Scenes/Loading.unity
+    guid: f17977274174171479a63508700221d7
+  - enabled: 1
+    path: Assets/Scenes/VN_Test.unity
+    guid: d4caef70724c54a378e68ab16fd404d2
   m_configObjects: {}

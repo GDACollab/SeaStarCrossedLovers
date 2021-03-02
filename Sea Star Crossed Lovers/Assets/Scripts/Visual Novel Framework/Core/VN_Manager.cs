@@ -12,6 +12,12 @@ using UnityEditor;
 /// </summary>
 public class VN_Manager : MonoBehaviour
 {
+	//I feel like I'm messing with a work of art here. Please feel free to rearrange this however it best fits.
+	[Header("Transition Stuff (Unrelated to the things happening below)")]
+	// The scene loader to use to load things
+	[Tooltip("The scene loader to use to load things")]
+	public SceneLoader activeLoader;
+
 	// General settings for the textbox and appearance of text
 	[Header("Settings")]
 	[Tooltip("ActiveState of VN. Set before play to make VN appear or be hidden on start")]
