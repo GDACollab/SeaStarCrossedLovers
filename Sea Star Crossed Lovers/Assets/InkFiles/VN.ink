@@ -37,7 +37,7 @@ Noelani: You guys can see each other once a month, but sometimes you’re both s
  
 Ocean: Lots of questions, huh? 
 
-Ocean: Unfortunately, you and I — among many others — are bound to this planet. 
+Ocean: Unfortunately, you and I —among many others — are bound to this planet. 
 
 Ocean: And despite how close the moon and stars may seem, the distance from here to the space they reside is immense.
 
@@ -63,7 +63,7 @@ Noelani: I’m a nymph, the extent of my duties is usually just wrangling unruly
 
 Noelani: There’s so many of us, there’s usually not much to do anyways! 
  
-Ocean: The sea will still reach for you and tear down your attempts—not even I can void the flow of water—the most I could do is keep the water slightly calmer when you start, or allow you a short moment of rest.”
+Ocean: The sea will still reach for you and tear down your attempts—not even I can void the flow of water—the most I could do is keep the water slightly calmer when you start, or allow you a short moment of rest.
  
 Noelani: Then I’ll just keep building faster than the waves can break it down! 
 
@@ -75,4 +75,4 @@ Noelani: At least if I try I have the chance to see her again. And I'd rather tr
  
 Ocean: *sigh* You’ve already set your mind to it, huh? 
 
-Ocean: Well then, give it your all!”
+Ocean: Well then, give it your all!
