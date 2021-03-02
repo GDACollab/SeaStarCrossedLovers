@@ -7,8 +7,8 @@ public class AdjustPosition : MonoBehaviour
     public Vector3 startPos;
     public bool gradual;
     public float maxDelta;
-    public bool inChunks;
     public int chunkSize;
+    public int minHeightOnScreen;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,13 +20,10 @@ public class AdjustPosition : MonoBehaviour
     {
         int heightInRows = Mathf.Max(0, GetHeight(GetAllGroundedBlocklets()));
         float newY;
-        if (inChunks)
-        {
-            newY = startPos.y + (Mathf.FloorToInt(heightInRows / chunkSize) * 5);
-        } else
-        {
-            newY = startPos.y + heightInRows;
-        }
+        float adjustAmount;
+        adjustAmount = (Mathf.FloorToInt(heightInRows / chunkSize) * chunkSize);
+        adjustAmount = Mathf.Max(0f, adjustAmount - minHeightOnScreen);
+        newY = startPos.y + adjustAmount;
         Vector3 newPos = new Vector3(transform.position.x, newY, transform.position.z);
         if (gradual)
         {

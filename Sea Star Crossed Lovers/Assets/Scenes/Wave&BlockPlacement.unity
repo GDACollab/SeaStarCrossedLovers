@@ -334,9 +334,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPos: {x: 0, y: 0, z: -50}
   gradual: 1
-  maxDelta: 0.05
-  inChunks: 1
-  chunkSize: 5
+  maxDelta: 0.025
+  chunkSize: 1
+  minHeightOnScreen: 10
 --- !u!1 &177574285
 GameObject:
   m_ObjectHideFlags: 0
@@ -711,8 +711,8 @@ MonoBehaviour:
   startPos: {x: 0, y: 15, z: 0}
   gradual: 0
   maxDelta: 0
-  inChunks: 0
-  chunkSize: 0
+  chunkSize: 1
+  minHeightOnScreen: 10
 --- !u!4 &348458701
 Transform:
   m_ObjectHideFlags: 0
@@ -741,12 +741,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BlockList:
   - {fileID: 3983544603553613287, guid: 6a538852616a8cd47a3f5307ec8bc5e7, type: 3}
-  - {fileID: 1330211218297624703, guid: 72510c521b1f5a249a9ad7b2cb8c548b, type: 3}
-  - {fileID: 6292014992251084139, guid: 043061b85fd9e3d438b086e60ef8eca3, type: 3}
-  - {fileID: 177863096218219088, guid: a585141cecfe6b84e91fc51b6012398c, type: 3}
-  - {fileID: 7854107186023947348, guid: f1d02f471074ff4459095a036551825d, type: 3}
-  - {fileID: 2551199433650314731, guid: 3a5bdfb65f952f64c8f332cc9bac5454, type: 3}
-  - {fileID: 2943949567563305182, guid: 9c1046b231d67a1488126b1424e779c9, type: 3}
   horizontalSpeed: 10
   fallSpeed: 3
   dropForce: 300
