@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpawnBlock : MonoBehaviour
 {
-    public List<GameObject> BlockList;
+    public List<Block> SpawnBlockList;
 
     public float horizontalSpeed = 10;
     public float fallSpeed = 5;
@@ -16,14 +16,31 @@ public class SpawnBlock : MonoBehaviour
     private bool waitingForBlock = false;
     private bool canSpawnBlock = false; 
 
-    private GameObject activeBlock;
+    private Block activeBlock;
     private Rigidbody2D activeRB;
-    private BlockManager blockManager;
 
+    private LevelManager _levelManager;
+    private BlockManager _blockManager;
 
-    private void Start()
+    public void Construct(LevelManager levelManager, BlockManager blockManager)
     {
+        _levelManager = levelManager;
+        _blockManager = blockManager;
+    }
 
+    private void Awake()
+    {
+        foreach (Block block in SpawnBlockList)
+        {
+            if (block == null)
+            {
+                Debug.LogError("SpawnBlockList Error: null Block");
+            }
+        }
+        if (SpawnBlockList.Count == 0)
+        {
+            Debug.LogError("SpawnBlockList Error: empty list");
+        }
     }
 
     private void Update()
@@ -42,7 +59,7 @@ public class SpawnBlock : MonoBehaviour
                 // give block normal gravity
                 activeRB.AddForce(new Vector3(0, -dropForce, 0));
                 activeRB.gravityScale = blockGravity;
-                blockManager.isActive = false;
+                activeBlock.currentState = Block.BlockState.falling;
             }
 
             // detect rotation
@@ -51,13 +68,12 @@ public class SpawnBlock : MonoBehaviour
             } else if (Input.GetButtonDown("RotateClockwise")) {
                 activeRB.transform.Rotate(new Vector3(0, 0, -90));
             }
-            
         }
 
         // if an active block collides or is being deleted,
         // give it normal gravity and prepare to spawn new block
         if (canSpawnBlock && !waitingForBlock &&
-            (!blockManager.isActive || blockManager.beingDeleted))
+            (activeBlock.currentState == Block.BlockState.stable || activeBlock.currentState == Block.BlockState.deleting))
         {
             // Set true to ensure no additional block is spawned during the spawn delay
             waitingForBlock = true;
@@ -84,12 +100,16 @@ public class SpawnBlock : MonoBehaviour
         spawnPosition.z = 0;
 
         // Random select block from BlockList
-        var selectedBlock = BlockList[Random.Range(0, BlockList.Count)];
+        Block selectedBlock = SpawnBlockList[Random.Range(0, SpawnBlockList.Count)];
 
         // Spawn block and track components
         activeBlock = Instantiate(selectedBlock, spawnPosition, Quaternion.identity);
         activeRB = activeBlock.GetComponent<Rigidbody2D>();
-        blockManager = activeBlock.GetComponent<BlockManager>();
+        activeBlock = activeBlock.GetComponent<Block>();
+
+        // Pass active block to level manager and block manager
+        _levelManager.activeBlock = activeBlock;
+        _blockManager.AddBlockFromList(activeBlock);
 
         // Store original gravity
         blockGravity = activeRB.gravityScale;
@@ -106,10 +126,14 @@ public class SpawnBlock : MonoBehaviour
         
         if (canSpawnBlock)
         {
+            _levelManager.currentGameState =
+                LevelManager.GameState.paused;
             canSpawnBlock = false;
         }
         else
         {
+            _levelManager.currentGameState =
+                LevelManager.GameState.playing;
             spawnNewBlock();
             canSpawnBlock = true;
         }
