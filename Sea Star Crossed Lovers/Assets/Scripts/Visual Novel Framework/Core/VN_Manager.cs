@@ -24,9 +24,13 @@ public class VN_Manager : MonoBehaviour
 	public ActiveState activeState = ActiveState.hidden;
 	public enum ActiveState { hidden, active }
 	[Tooltip("Distance of off screen characters in pixels away the screen edge")]
-	public int OffScreenDistance = 500;
+	public int offScreenDistance = 500;
+
+	public float characterBoxScale = 1;
+
+	public float characterSpriteScale = 1;
 	[Tooltip("Max number of characters per line")]
-	public int LineCharNum;
+	public int lineCharNum = 100;
 	// The different speeds the text can go in characters per second
 	[Header("Text Speeds")]
 	[Tooltip("Normal speed of text in characters per second. Used in normal dialouge")]
@@ -113,6 +117,13 @@ public class VN_Manager : MonoBehaviour
 		foreach(float value in TextSpeeds.Values)
 		{
 			if(value <= 0) Debug.LogError("At least one speed value is not greater than 0. Please fix this in the inspector");
+		}
+
+		var VN_characters = GameObject.FindObjectsOfType<VN_Character>();
+
+		foreach(VN_Character character in VN_characters)
+        {
+			character.Construct(this);
 		}
 	}
 
@@ -242,7 +253,7 @@ public class VN_Manager : MonoBehaviour
 		int lineLength = 0;
 		foreach (char character in text.ToCharArray())
 		{
-			if (lineLength > LineCharNum && character == ' ')
+			if (lineLength > lineCharNum && character == ' ')
 			{
 				result += '\n';
 				lineLength = 0;

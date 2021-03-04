@@ -27,8 +27,6 @@ public class SlideCharacterTransition : CharacterTransition
         // From lerp tutorial: https://gamedevbeginner.com/the-right-way-to-lerp-in-unity-with-examples/
         float time = 0;
 
-        var wait = new WaitForEndOfFrame();
-
         while (time < character.data.transitionDuration)
         {
             time += Time.deltaTime;
@@ -37,7 +35,7 @@ public class SlideCharacterTransition : CharacterTransition
             t = t * t * t * (t * (6f * t - 15f) + 10f);
             character.rectTransform.anchoredPosition = Vector2.Lerp(initialPosition, endPosition, t);
 
-            yield return wait;
+            yield return null;
         }
         // Set postion to end in case Lerp isn't exact
         character.rectTransform.anchoredPosition = endPosition;

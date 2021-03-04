@@ -16,6 +16,8 @@ public class SimpleWave : MonoBehaviour
     private GameObject waveTimerText;
     private GameObject difficultyText;
 
+    [SerializeField] private LevelManager _levelManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,18 +33,21 @@ public class SimpleWave : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Adds 1 to difficulty if enough time has passed and difficulty isn't max
-        wTimer += Time.deltaTime;
-        dTimer += Time.deltaTime;
-        if (wTimer > waveCooldown)
+        if (_levelManager.currentGameState == LevelManager.GameState.playing)
         {
-            MakeWave(waveHeight);
-            wTimer = 0f;
-        }
-        if (dTimer > timeBetweenDifficulties && difficulty < maxDifficulty)
-        {
-            difficulty++;
-            dTimer = 0f;
+            //Adds 1 to difficulty if enough time has passed and difficulty isn't max
+            wTimer += Time.deltaTime;
+            dTimer += Time.deltaTime;
+            if (wTimer > waveCooldown)
+            {
+                MakeWave(waveHeight);
+                wTimer = 0f;
+            }
+            if (dTimer > timeBetweenDifficulties && difficulty < maxDifficulty)
+            {
+                difficulty++;
+                dTimer = 0f;
+            }
         }
 
         // Update wave timer text

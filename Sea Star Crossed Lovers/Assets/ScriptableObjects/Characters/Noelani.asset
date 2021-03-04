@@ -12,15 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2792543f1b0a54dccbb3910190f8b1cd, type: 3}
   m_Name: Noelani
   m_EditorClassIdentifier: 
-  transition: {fileID: 11400000, guid: 3b8c7edcf2ae945a48152c552d124440, type: 2}
-  defaultSpriteName: default
   screenSide: 0
   screenEdgeDistance: 100
+  transition: {fileID: 11400000, guid: 3b8c7edcf2ae945a48152c552d124440, type: 2}
   transitionDuration: 1
+  defaultSprite: {fileID: 21300000, guid: 1b27cafc7097149bc95801bda807c76a, type: 3}
+  characterBox: {fileID: 21300000, guid: 3d9a5ea559f05478686704833ea25694, type: 3}
   characterSprites:
-  - spriteName: default
-    emotionSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  - spriteName: happy
-    emotionSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  - spriteName: surprised
-    emotionSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 21300000, guid: 1b27cafc7097149bc95801bda807c76a, type: 3}

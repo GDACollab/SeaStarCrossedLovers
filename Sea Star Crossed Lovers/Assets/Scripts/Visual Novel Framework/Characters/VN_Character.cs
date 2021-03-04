@@ -4,18 +4,24 @@ using UnityEngine.UI;
 public class VN_Character : MonoBehaviour
 {
     public CharacterData data;
-    public Image currentImage;
-    public RectTransform rectTransform;
+
+    private Image VN_CharBox;
+    [SerializeField] private Image VN_CharSprite;
+
+    [HideInInspector] public RectTransform rectTransform;
     // Debug
     [SerializeField] private Text nameText;
 
-    /* TODO Make VN_Character GameObject move to a designated starting location
-     * and store the Vector2 initialLocation as a public field to use in resetting
-     * and in tranisitions where the funciton needs initial location
-    */ 
+    private VN_Manager _manager;
+
+    public void Construct(VN_Manager manager)
+    {
+        _manager = manager;
+    }
+
     void Awake()
     {
-        currentImage = GetComponent<Image>();
+        VN_CharBox = GetComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
     }
 
@@ -49,6 +55,9 @@ public class VN_Character : MonoBehaviour
                     rectTransform.anchorMax = new Vector2(1, 0.5f);
                     break;
             }
+            // Change character box
+            VN_CharBox.sprite = data.characterBox;
+            ScaleCanvasImage(VN_CharBox, _manager.characterBoxScale);
         }
         else
         {
@@ -58,31 +67,86 @@ public class VN_Character : MonoBehaviour
 
     public void ChangeSprite(string newSpriteName)
     {
-        if(newSpriteName == null || newSpriteName == "")
+        if (newSpriteName == null || newSpriteName == "")
         {
-            currentImage.sprite = null;
-            currentImage.enabled = false;
+            VN_CharSprite.sprite = null;
+            VN_CharSprite.enabled = false;
             return;
         }
         if(data)
         {
-            // Find sprite name from Sprites
-            Sprite newSprite = data.characterSprites.Find(
-                x => x.spriteName == newSpriteName).emotionSprite;
+            Sprite newSprite = data.characterSprites.Find(x =>
+            {
+                string emotionName = x.name;
+                var trimmed = emotionName.Split('_');
+                if(trimmed.Length > 1)
+                {
+                    emotionName = trimmed[1];
+                }
+                
+                return emotionName == newSpriteName;
+            });
             // If found, change image to newSprite
             if (newSprite)
             {
-                currentImage.enabled = true;
-                currentImage.sprite = newSprite;
+                VN_CharSprite.enabled = true;
+                VN_CharSprite.sprite = newSprite;
+                //ScaleCanvasImage(VN_CharSprite, _manager.characterSpriteScale);
             }
             else
             {
-                currentImage.sprite = null;
+                Debug.LogError("Couldn't find sprite name \"" + newSpriteName + "\"" +
+                    " in characterData \"" + data.name + "\"");
+                VN_CharSprite.sprite = data.defaultSprite;
             }
         }
         else
         {
             Debug.LogError("Cannot ChangeSprite when VN_Character has null Data");
         }
+    }
+
+    public void ChangeSprite(Sprite newSprite)
+    {
+        if (newSprite == null)
+        {
+            VN_CharSprite.sprite = null;
+            VN_CharSprite.enabled = false;
+            return;
+        }
+        if (data)
+        {
+            Sprite foundSprite = data.characterSprites.Find(x =>
+            {
+                 return x == newSprite;
+            });
+            // If found, change image to newSprite
+            if (foundSprite)
+            {
+                VN_CharSprite.enabled = true;
+                VN_CharSprite.sprite = foundSprite;
+                ScaleCanvasImage(VN_CharSprite, _manager.characterSpriteScale);
+            }
+            else
+            {
+                Debug.LogError("Couldn't find sprite name \"" + newSprite.name + "\"" +
+                    " in characterData \"" + data.name + "\"");
+                VN_CharSprite.sprite = data.defaultSprite;
+            }
+        }
+        else
+        {
+            Debug.LogError("Cannot ChangeSprite when VN_Character has null Data");
+        }
+    }
+
+    /* TODO replace this somehow, very jank since continually scales canvas everytime
+     * it is called when it should scale down to native size and then apply scale.
+    */
+    private void ScaleCanvasImage(Image image, float scale)
+    {
+        Vector2 orignalSize = image.rectTransform.sizeDelta;
+        image.SetNativeSize();
+        image.rectTransform.sizeDelta = new Vector2(orignalSize.x * scale, orignalSize.y * scale);
     }
 }

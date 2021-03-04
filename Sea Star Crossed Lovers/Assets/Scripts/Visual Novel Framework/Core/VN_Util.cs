@@ -22,6 +22,7 @@ public class VN_Util
         CharacterData.TransitionDirection direction)
     {
         CharacterData data = character.data;
+        float targetY = character.rectTransform.anchoredPosition.y;
         float targetX = 0;
         switch (direction)
         {
@@ -31,22 +32,22 @@ public class VN_Util
                 {
                     // If on left, go right to be on target
                     case CharacterData.ScreenSide.left:
-                        return new Vector2(targetX, 0);
+                        return new Vector2(targetX, targetY);
                     case CharacterData.ScreenSide.right:
                         // If on right, go left to be on target
-                        return new Vector2(-targetX, 0);
+                        return new Vector2(-targetX, targetY);
                 }
                 break;
             case CharacterData.TransitionDirection.exit:
-                targetX = _manager.OffScreenDistance + character.rectTransform.sizeDelta.x;
+                targetX = _manager.offScreenDistance + character.rectTransform.sizeDelta.x;
                 switch (data.screenSide)
                 {
                     // If on left, go left to be on target
                     case CharacterData.ScreenSide.left:
-                        return new Vector2(-targetX, 0);
+                        return new Vector2(-targetX, targetY);
                     case CharacterData.ScreenSide.right:
                         // If on right, go right to be on target
-                        return new Vector2(targetX, 0);
+                        return new Vector2(targetX, targetY);
                 }
                 break;
         }
