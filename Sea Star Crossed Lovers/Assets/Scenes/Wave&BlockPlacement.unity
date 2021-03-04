@@ -335,8 +335,8 @@ MonoBehaviour:
   startPos: {x: 0, y: 9, z: -50}
   gradual: 1
   maxDelta: 0.05
-  inChunks: 1
-  chunkSize: 5
+  chunkSize: 0
+  minHeightOnScreen: 7
 --- !u!1 &177574285
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,8 +852,8 @@ MonoBehaviour:
   startPos: {x: 0, y: 24, z: 0}
   gradual: 1
   maxDelta: 10
-  inChunks: 1
   chunkSize: 10
+  minHeightOnScreen: 0
 --- !u!4 &348458701
 Transform:
   m_ObjectHideFlags: 0
@@ -881,13 +881,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpawnBlockList:
-  - {fileID: 8167075450163280672, guid: 6a538852616a8cd47a3f5307ec8bc5e7, type: 3}
-  - {fileID: 4887555501995039644, guid: 72510c521b1f5a249a9ad7b2cb8c548b, type: 3}
-  - {fileID: 576745810992346608, guid: 043061b85fd9e3d438b086e60ef8eca3, type: 3}
-  - {fileID: 2167150179741697578, guid: a585141cecfe6b84e91fc51b6012398c, type: 3}
-  - {fileID: 388871558543863491, guid: f1d02f471074ff4459095a036551825d, type: 3}
-  - {fileID: 6165506080579754258, guid: 3a5bdfb65f952f64c8f332cc9bac5454, type: 3}
   - {fileID: 7931705065305060765, guid: 9c1046b231d67a1488126b1424e779c9, type: 3}
+  - {fileID: 6165506080579754258, guid: 3a5bdfb65f952f64c8f332cc9bac5454, type: 3}
+  - {fileID: 388871558543863491, guid: f1d02f471074ff4459095a036551825d, type: 3}
+  - {fileID: 2167150179741697578, guid: a585141cecfe6b84e91fc51b6012398c, type: 3}
+  - {fileID: 576745810992346608, guid: 043061b85fd9e3d438b086e60ef8eca3, type: 3}
+  - {fileID: 4887555501995039644, guid: 72510c521b1f5a249a9ad7b2cb8c548b, type: 3}
+  - {fileID: 8167075450163280672, guid: 6a538852616a8cd47a3f5307ec8bc5e7, type: 3}
   horizontalSpeed: 10
   fallSpeed: 3
   dropForce: 300
@@ -2012,6 +2012,7 @@ MonoBehaviour:
   SceneBlockList: []
   highestBlock: {fileID: 0}
   highestBlockHeight: 0
+  madeContact: 0
 --- !u!1 &1346112945
 GameObject:
   m_ObjectHideFlags: 0

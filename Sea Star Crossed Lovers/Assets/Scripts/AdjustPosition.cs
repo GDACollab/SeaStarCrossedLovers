@@ -21,7 +21,14 @@ public class AdjustPosition : MonoBehaviour
         int heightInRows = Mathf.Max(0, GetHeight(GetAllGroundedBlocklets()));
         float newY;
         float adjustAmount;
-        adjustAmount = (Mathf.FloorToInt(heightInRows / chunkSize) * chunkSize);
+        if (chunkSize != 0)
+        {
+            adjustAmount = (Mathf.FloorToInt(heightInRows / chunkSize) * chunkSize);
+        } else
+        {
+            adjustAmount = heightInRows;
+        }
+        
         adjustAmount = Mathf.Max(0f, adjustAmount - minHeightOnScreen);
         newY = startPos.y + adjustAmount;
         Vector3 newPos = new Vector3(transform.position.x, newY, transform.position.z);

@@ -10,6 +10,7 @@ public class BlockManager : MonoBehaviour
     public float highestBlockHeight = 0;
 
     private LevelManager _levelManager;
+    public bool madeContact = false;
 
     public void Construct(LevelManager levelManager)
     {
@@ -49,5 +50,10 @@ public class BlockManager : MonoBehaviour
         });
 
         return resultBlock;
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        madeContact = true;
     }
 }
