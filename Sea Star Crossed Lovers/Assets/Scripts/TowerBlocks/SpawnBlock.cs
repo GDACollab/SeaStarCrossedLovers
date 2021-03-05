@@ -50,19 +50,21 @@ public class SpawnBlock : MonoBehaviour
         currentFallSpeed = baseFallSpeed;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         // control an active block
-        if (activeBlock != null) {
+        if (activeBlock != null)
+        {
             // apply horizontal and vertical change
-            float xOffset = Input.GetAxisRaw("Horizontal")*Time.deltaTime*horizontalSpeed;
+            float xOffset = Input.GetAxisRaw("Horizontal") * Time.deltaTime * horizontalSpeed;
             activeRB.velocity = new Vector3(xOffset, -currentFallSpeed, 0);
-        
+
             // detect if player has dropped block
-            if (Input.GetButton("Drop")) {
+            if (Input.GetButton("Drop"))
+            {
 
                 //Implementation of block fall acceleration instead of activating physics
-                currentFallSpeed = baseFallSpeed * 3;
+                currentFallSpeed = baseFallSpeed * 4;
             }
             else
             {
@@ -70,13 +72,19 @@ public class SpawnBlock : MonoBehaviour
             }
 
             // detect rotation
-            if (Input.GetButtonDown("RotateCounterclockwise")) {
+            if (Input.GetButtonDown("RotateCounterclockwise"))
+            {
                 activeRB.transform.Rotate(new Vector3(0, 0, 90));
-            } else if (Input.GetButtonDown("RotateClockwise")) {
+            }
+            else if (Input.GetButtonDown("RotateClockwise"))
+            {
                 activeRB.transform.Rotate(new Vector3(0, 0, -90));
             }
         }
+    }
 
+    private void Update()
+    {
         // if an active block collides or is being deleted,
         // give it normal gravity and prepare to spawn new block
         if (canSpawnBlock && !waitingForBlock &&

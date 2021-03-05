@@ -908,8 +908,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 2cf584519604b4ac682a2a4134a31aee, type: 3}
   blockHitVolume: 0.1
   blockMass: 1000
-  horizontalSpeed: 2500
-  baseFallSpeed: 5
+  horizontalSpeed: 800
+  baseFallSpeed: 3
   dropForce: 300
   startingDownwardForce: 150
   spawnDelay: 1
