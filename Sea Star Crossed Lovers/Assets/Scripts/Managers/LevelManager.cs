@@ -23,8 +23,6 @@ public class LevelManager : MonoBehaviour
 
     public Block activeBlock { get; set; }
 
-    public SceneLoader activeLoader;
-
     private void Awake()
     {
         _blockManager = gameObject.GetComponent<BlockManager>();
@@ -76,8 +74,6 @@ public class LevelManager : MonoBehaviour
         Debug.Log("You win");
         winText.text = "YOU WIN!";
         currentGameState = GameState.won;
-        //Now load Start:
-        activeLoader.FadeOutLoad("Start", 0.5f);
     }
 
     private IEnumerator WinTimerCooldown()
