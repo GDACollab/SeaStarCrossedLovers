@@ -334,9 +334,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPos: {x: 0, y: 9, z: -50}
   gradual: 1
-  maxDelta: 5
-  inChunks: 1
-  chunkSize: 10
+  maxDelta: 0.025
+  chunkSize: 1
+  minHeightOnScreen: 5
 --- !u!1 &177574285
 GameObject:
   m_ObjectHideFlags: 0
@@ -864,10 +864,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startPos: {x: 0, y: 24, z: 0}
-  gradual: 1
+  gradual: 0
   maxDelta: 10
-  inChunks: 1
-  chunkSize: 10
+  chunkSize: 1
+  minHeightOnScreen: 0
 --- !u!4 &348458701
 Transform:
   m_ObjectHideFlags: 0
