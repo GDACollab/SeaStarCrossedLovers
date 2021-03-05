@@ -21,7 +21,7 @@ public class SimpleWave : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        difficulty = 1;
+        difficulty = 0;
         wTimer = 0f;
         dTimer = 0f;
         waveIsOver = true;
@@ -33,7 +33,9 @@ public class SimpleWave : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_levelManager.currentGameState == LevelManager.GameState.playing)
+        // TODO continues wave timer on win just for infinite playtesting purposes
+        if (_levelManager.currentGameState == LevelManager.GameState.playing ||
+            _levelManager.currentGameState == LevelManager.GameState.won)
         {
             //Adds 1 to difficulty if enough time has passed and difficulty isn't max
             wTimer += Time.deltaTime;

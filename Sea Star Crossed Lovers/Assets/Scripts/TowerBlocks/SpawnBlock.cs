@@ -5,8 +5,13 @@ using UnityEngine;
 public class SpawnBlock : MonoBehaviour
 {
     public List<Block> SpawnBlockList;
+    public List<AudioClip> BlockHitSounds;
 
-    public float horizontalSpeed = 10;
+    public float blockHitVolume = 1;
+
+    public float blockMass = 1;
+
+    public float horizontalSpeed = 2000;
     public float baseFallSpeed = 5;
     public float dropForce = 300;
     public int startingDownwardForce = 150;
@@ -51,7 +56,7 @@ public class SpawnBlock : MonoBehaviour
         if (activeBlock != null) {
             // apply horizontal and vertical change
             float xOffset = Input.GetAxisRaw("Horizontal")*Time.deltaTime*horizontalSpeed;
-            activeBlock.transform.position += new Vector3(xOffset, -currentFallSpeed*Time.deltaTime, 0);
+            activeRB.velocity = new Vector3(xOffset, -currentFallSpeed, 0);
         
             // detect if player has dropped block
             if (Input.GetButton("Drop")) {
@@ -110,6 +115,17 @@ public class SpawnBlock : MonoBehaviour
         activeBlock = Instantiate(selectedBlock, spawnPosition, Quaternion.identity);
         activeRB = activeBlock.GetComponent<Rigidbody2D>();
         activeBlock = activeBlock.GetComponent<Block>();
+
+        // TODO Temp adding audio via script since there are multiple prefabs of blocks
+        // Replace with single block prefab with audio source and scriptable object of
+        // BlockData with blocklet sprite, mass, audio, and shape (a 2d array maybe?)
+
+        activeBlock.audioSource = activeBlock.gameObject.AddComponent(typeof(AudioSource)) as AudioSource;
+        activeBlock.audioSource.playOnAwake = false;
+        activeBlock.audioSource.clip = BlockHitSounds[Random.Range(0, BlockHitSounds.Count)];
+        activeBlock.audioSource.volume = blockHitVolume;
+
+        activeRB.mass = blockMass;
 
         // Pass active block to level manager and block manager
         _levelManager.activeBlock = activeBlock;

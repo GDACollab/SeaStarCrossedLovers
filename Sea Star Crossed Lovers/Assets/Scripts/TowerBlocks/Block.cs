@@ -6,6 +6,8 @@ public class Block : MonoBehaviour
 {
     public enum BlockState { active, falling, stable, deleting };
     public BlockState currentState = BlockState.active;
+
+    public AudioSource audioSource;
     //// Active if player has control over it
     //public bool isActive = true;
     //// Tracks if the block has made contact (ground or other block)
@@ -41,6 +43,10 @@ public class Block : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        if (currentState != BlockState.stable)
+        {
+            audioSource.Play();
+        }
         currentState = BlockState.stable;
     }
 }

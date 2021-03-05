@@ -56,8 +56,7 @@ public class VN_Character : MonoBehaviour
                     break;
             }
             // Change character box
-            VN_CharBox.sprite = data.characterBox;
-            ScaleCanvasImage(VN_CharBox, _manager.characterBoxScale);
+            ScaleImageCanvas(VN_CharBox, data.characterBox, _manager.characterBoxScale);
         }
         else
         {
@@ -90,8 +89,7 @@ public class VN_Character : MonoBehaviour
             if (newSprite)
             {
                 VN_CharSprite.enabled = true;
-                VN_CharSprite.sprite = newSprite;
-                //ScaleCanvasImage(VN_CharSprite, _manager.characterSpriteScale);
+                ScaleImageCanvas(VN_CharSprite, newSprite, _manager.characterSpriteScale);
             }
             else
             {
@@ -124,8 +122,7 @@ public class VN_Character : MonoBehaviour
             if (foundSprite)
             {
                 VN_CharSprite.enabled = true;
-                VN_CharSprite.sprite = foundSprite;
-                ScaleCanvasImage(VN_CharSprite, _manager.characterSpriteScale);
+                ScaleImageCanvas(VN_CharSprite, foundSprite, _manager.characterSpriteScale);
             }
             else
             {
@@ -140,13 +137,25 @@ public class VN_Character : MonoBehaviour
         }
     }
 
-    /* TODO replace this somehow, very jank since continually scales canvas everytime
-     * it is called when it should scale down to native size and then apply scale.
+    /* TODO replace this somehow, very jank since forces the image canvas to the size of
+     * the image in pixels. Pixel size varies so every character and character box looks
+     * different.
     */
-    private void ScaleCanvasImage(Image image, float scale)
+    private void ScaleImageCanvas(Image image, Sprite sprite, float scale)
     {
-        Vector2 orignalSize = image.rectTransform.sizeDelta;
-        image.SetNativeSize();
-        image.rectTransform.sizeDelta = new Vector2(orignalSize.x * scale, orignalSize.y * scale);
+        if(!image)
+        {
+            Debug.LogError("Cannot ScaleImageCanvas of null image");
+            return;
+        }
+        if (!sprite)
+        {
+            Debug.LogError("Cannot ScaleImageCanvas of null sprite");
+            return;
+        }
+
+        Vector2 spriteSize = sprite.rect.size;
+        image.rectTransform.sizeDelta = new Vector2(spriteSize.x * scale, spriteSize.y * scale);
+        image.sprite = sprite;
     }
 }

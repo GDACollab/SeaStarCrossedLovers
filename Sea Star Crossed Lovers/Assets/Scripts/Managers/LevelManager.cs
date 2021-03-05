@@ -72,7 +72,7 @@ public class LevelManager : MonoBehaviour
         }
 
         Debug.Log("You win");
-        winText.text = "YOU WIN!";
+        winText.text = "YOU WIN! You may continue playing.";
         currentGameState = GameState.won;
     }
 
