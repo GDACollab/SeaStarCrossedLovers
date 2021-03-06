@@ -6,6 +6,7 @@ public class Block : MonoBehaviour
 {
     public enum BlockState { active, falling, stable, deleting };
     public BlockState currentState = BlockState.active;
+    public SimpleWave wave;
 
     public AudioSource audioSource;
     //// Active if player has control over it
@@ -17,6 +18,11 @@ public class Block : MonoBehaviour
 
     private BlockManager _blockManager;
 
+    void Start()
+    {
+        wave = GameObject.Find("Waves").GetComponent<SimpleWave>();
+    }
+
     public void Construct(BlockManager blockManager)
     {
         _blockManager = blockManager;
@@ -25,15 +31,18 @@ public class Block : MonoBehaviour
     public void Delete(int rowsToDelete)
     {
         currentState = BlockState.deleting;
-        //Find all blocklets that make up the tetronimo, mark them for deletion
-        foreach (Transform child in transform)
+        if (!wave.waveIsOver)
         {
-            child.gameObject.GetComponent<Blocklet>().MarkDelete(rowsToDelete);
+            //Find all blocklets that make up the tetronimo, mark them for deletion
+            foreach (Transform child in transform)
+                child.gameObject.GetComponent<Blocklet>().MarkDelete(rowsToDelete);
         }
+
     }
 
     public void CheckFullyDeleted()
     {
+
         if (transform.childCount == 0)
         {
             _blockManager.RemoveBlockFromList(this);
