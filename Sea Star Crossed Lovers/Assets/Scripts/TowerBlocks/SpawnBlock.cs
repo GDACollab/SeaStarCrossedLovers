@@ -70,16 +70,6 @@ public class SpawnBlock : MonoBehaviour
             {
                 currentFallSpeed = baseFallSpeed;
             }
-
-            // detect rotation
-            if (Input.GetButtonDown("RotateCounterclockwise"))
-            {
-                activeRB.transform.Rotate(new Vector3(0, 0, 90));
-            }
-            else if (Input.GetButtonDown("RotateClockwise"))
-            {
-                activeRB.transform.Rotate(new Vector3(0, 0, -90));
-            }
         }
     }
 
@@ -99,6 +89,19 @@ public class SpawnBlock : MonoBehaviour
 
 
             StartCoroutine(delaySpawnBlock());
+        }
+
+        // detect rotation
+        if (activeBlock != null)
+        {
+            if (Input.GetButtonDown("RotateCounterclockwise"))
+            {
+                activeRB.transform.Rotate(new Vector3(0, 0, 90));
+            }
+            else if (Input.GetButtonDown("RotateClockwise"))
+            {
+                activeRB.transform.Rotate(new Vector3(0, 0, -90));
+            }
         }
     }
 
