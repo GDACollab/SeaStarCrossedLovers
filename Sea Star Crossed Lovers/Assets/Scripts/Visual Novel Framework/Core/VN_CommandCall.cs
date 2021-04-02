@@ -9,8 +9,10 @@ public class VN_CommandCall : MonoBehaviour
 	private VN_Manager _manager;
 
 	// Inky custom command calling
-	const string FunctionCallString = ">>>";
-	const char ArgumentDelimiter = '.';
+	private readonly string FunctionCallString = ">>>";
+	private readonly char[] MultiCommandChar = { ';' };
+	private readonly char[] CommandDelimeters = { ',', '(', ')' };
+	private readonly char ImmediateMarker = '!';
 	// Store/call funcitons in a dictionary https://stackoverflow.com/questions/4233536/c-sharp-store-functions-in-a-dictionary
 	Dictionary<string, Delegate> AllCommands =
 		new Dictionary<string, Delegate>();
@@ -82,9 +84,9 @@ public class VN_CommandCall : MonoBehaviour
 			}
 
 			command.Construct(_manager, newFrame, newPart);
-			Func<List<string>, IEnumerator> newCommand = command.Command;
+            Func<List<string>, bool, IEnumerator> newCommand = command.Command;
 
-			AllCommands.Add(partString, newCommand);
+            AllCommands.Add(partString, newCommand);
 		});
 	}
 
@@ -92,28 +94,43 @@ public class VN_CommandCall : MonoBehaviour
 	{
 		if (line.Length > 3 && line.Substring(0, 3) == FunctionCallString)
 		{
-			// (char)44 = ,
-			string[] commands = line.Substring(3).Split((char)44);
+			List<string> commands = line.Substring(3).Split(MultiCommandChar).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
 
-			// Try to run all commands
-			foreach (string rawCommand in commands)
+            //print(commands.Count + "commands: " + commands.ToFString());
+
+            // Try to run all commands
+            foreach (string rawCommand in commands)
 			{
 				var command = rawCommand.Trim(VN_Util.toTrim);
+				bool isImmediate = false;
 				// Assumes command is in form [function][ArgumentDelimiter][argument]
 				// with only 1 argument
-				string[] commandArray = command.Split(ArgumentDelimiter);
-				List<string> commandList = new List<string>(commandArray);
-				string function = commandList[0].Trim();
+				//string[] commandArray = command.Split(ArgumentDelimiter);
+				string[] commandArray = command.Split(CommandDelimeters, StringSplitOptions.RemoveEmptyEntries);
+
+				List<string> commandList = new List<string>();
+				foreach (string s in commandArray)
+                {
+					commandList.Add(s.Trim(VN_Util.toTrim));
+				}
+				
+				string function = commandList[0];
+				if (function[0] == ImmediateMarker)
+                {
+					function = function.Trim(ImmediateMarker);
+					isImmediate = true;
+				}
 				// Assume all other strings after first (the function) are arguments
 				List<string> arguments = commandList.GetRange(1, commandList.Count - 1);
-				arguments.ForEach(arg => arg = arg.Trim(VN_Util.toTrim));
 
-				if (AllCommands.ContainsKey(function))
+                //print("commandList: " + commandList.ToFString());
+
+                if (AllCommands.ContainsKey(function))
 				{
-					Func<List<string>, IEnumerator> Co_Command =
-						(Func<List<string>, IEnumerator>)AllCommands[function];
+					Func<List<string>, bool, IEnumerator> Co_Command =
+						(Func<List<string>, bool, IEnumerator>)AllCommands[function];
 
-					yield return StartCoroutine(Co_Command(arguments));
+					yield return StartCoroutine(Co_Command(arguments, isImmediate));
 				}
 				else
 				{

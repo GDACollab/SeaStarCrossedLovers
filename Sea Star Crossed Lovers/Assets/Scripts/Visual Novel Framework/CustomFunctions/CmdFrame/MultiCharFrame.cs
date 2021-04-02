@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MultiFrame : MonoBehaviour, ICmdFrame
+public class MultiCharFrame : MonoBehaviour, ICmdFrame
 {
 	static VN_Manager _manager;
 
@@ -12,7 +12,7 @@ public class MultiFrame : MonoBehaviour, ICmdFrame
 		_manager = manager;
 	}
 
-	public IEnumerator CmdFrame(List<string> args, ICmdPart part)
+	public IEnumerator CmdFrame(List<string> args, ICmdPart part, bool isImmediate)
 	{
 		if (args.Count == 0)
 		{
@@ -26,7 +26,7 @@ public class MultiFrame : MonoBehaviour, ICmdFrame
 
 			foreach (VN_Character charObj in _manager.CharacterObjects)
 			{
-				IEnumerator cmdPart = part.CmdPart(charObj, characterData);
+				IEnumerator cmdPart = part.CmdPart(charObj, characterData, isImmediate);
 				// Returns true if reached a yield, false if not
 				bool result = cmdPart.MoveNext();
 				if(result) {

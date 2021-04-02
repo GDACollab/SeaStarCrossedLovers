@@ -5,7 +5,7 @@ using UnityEngine;
 
 public interface ICmdFrame
 {
-    IEnumerator CmdFrame(List<string> args, ICmdPart part);
+    IEnumerator CmdFrame(List<string> args, ICmdPart part, bool isImmediate);
 
     void Construct(VN_Manager manager);
 }

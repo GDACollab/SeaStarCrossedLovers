@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ICmdPart
 {
-    IEnumerator CmdPart(VN_Character charObj, CharacterData characterData);
+    IEnumerator CmdPart(VN_Character charObj, CharacterData characterData, bool isImmediate);
 }

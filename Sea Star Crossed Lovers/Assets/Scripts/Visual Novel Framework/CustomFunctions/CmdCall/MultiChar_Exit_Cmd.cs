@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Multi_Enter_Cmd : MonoBehaviour, ICmdCall
+public class MultiChar_Exit_Cmd : MonoBehaviour, ICmdCall
 {
 	private VN_Manager _manager;
 	private ICmdFrame _cmdFrame;
@@ -15,11 +15,11 @@ public class Multi_Enter_Cmd : MonoBehaviour, ICmdCall
 		_cmdPart = cmdPart;
 	}
 
-	public IEnumerator Command(List<string> args)
+	public IEnumerator Command(List<string> args, bool isImmediate)
 	{
 		_cmdFrame.Construct(_manager);
 
-		yield return _cmdFrame.CmdFrame(args, _cmdPart);
+		yield return _cmdFrame.CmdFrame(args, _cmdPart, isImmediate);
 	}
 }
 
