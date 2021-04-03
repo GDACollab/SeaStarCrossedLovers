@@ -5,13 +5,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Character", menuName = "ScriptableObjects/CharacterData")]
 public class CharacterData : ScriptableObject
 {
-    public enum ScreenSide { left, right };
+    public enum ScenePosition { left, right };
     public enum MoveTransition { teleport, slide };
     public enum TransitionDirection { enter, exit };
 
     [Header("Settings")]
     [Tooltip("Position of character on the screen")]
-    public ScreenSide screenSide;
+    public ScenePosition scenePosition;
     [Tooltip("Distance in pixels away from the edge of the screen")]
     public int screenEdgeDistance;
     [Tooltip("Transition animation script for the character")]

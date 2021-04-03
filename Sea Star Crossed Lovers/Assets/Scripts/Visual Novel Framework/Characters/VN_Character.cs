@@ -1,9 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class VN_Character : MonoBehaviour
 {
     public CharacterData data;
+
+    public enum ScenePosition { left, right };
+    public ScenePosition scenePosition;
 
     private Image VN_CharBox;
     [SerializeField] private Image VN_CharSprite;
@@ -38,16 +42,16 @@ public class VN_Character : MonoBehaviour
         {
             // Debug nametag
             nameText.text = toSetData.name;
-            switch (toSetData.screenSide)
+            switch (toSetData.scenePosition)
             {
-                case CharacterData.ScreenSide.left:
+                case CharacterData.ScenePosition.left:
                     // Change anchors and pivot to be on left middle of screen
                     // rectTransform.anchoredPosition of (0,0) means the Character's left edge will be on the left screen edge
                     rectTransform.pivot = new Vector2(0, 0.5f);
                     rectTransform.anchorMin = new Vector2(0, 0.5f);
                     rectTransform.anchorMax = new Vector2(0, 0.5f);
                     break;
-                case CharacterData.ScreenSide.right:
+                case CharacterData.ScenePosition.right:
                     // Change anchors and pivot to be on right middle of screen
                     // rectTransform.anchoredPosition of (0,0) means the Character's right edge will be on the right screen edge
                     rectTransform.pivot = new Vector2(1, 0.5f);
@@ -157,5 +161,36 @@ public class VN_Character : MonoBehaviour
         Vector2 spriteSize = sprite.rect.size;
         image.rectTransform.sizeDelta = new Vector2(spriteSize.x * scale, spriteSize.y * scale);
         image.sprite = sprite;
+    }
+
+    public IEnumerator Enter(CharacterData characterData, bool isImmediate)
+    {
+        if (data == null)
+        {
+            SetData(characterData);
+            ChangeSprite(characterData.defaultSprite);
+            if (isImmediate)
+            {
+                StartCoroutine(data.transition.Co_EnterScreen(this, this));
+            }
+            else
+            {
+                yield return StartCoroutine(data.transition.Co_EnterScreen(this, this));
+            }
+        }
+    }
+
+    public IEnumerator Exit(bool isImmediate)
+    {
+        if (isImmediate)
+        {
+            StartCoroutine(data.transition.Co_ExitScreen(this, this));
+        }
+        else
+        {
+            yield return StartCoroutine(data.transition.Co_ExitScreen(this, this));
+        }
+        ChangeSprite("");
+        SetData(null);
     }
 }

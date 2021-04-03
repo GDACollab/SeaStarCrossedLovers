@@ -28,24 +28,24 @@ public class VN_Util
         {
             case CharacterData.TransitionDirection.enter:
                 targetX = data.screenEdgeDistance;
-                switch (data.screenSide)
+                switch (data.scenePosition)
                 {
                     // If on left, go right to be on target
-                    case CharacterData.ScreenSide.left:
+                    case CharacterData.ScenePosition.left:
                         return new Vector2(targetX, targetY);
-                    case CharacterData.ScreenSide.right:
+                    case CharacterData.ScenePosition.right:
                         // If on right, go left to be on target
                         return new Vector2(-targetX, targetY);
                 }
                 break;
             case CharacterData.TransitionDirection.exit:
                 targetX = _manager.offScreenDistance + character.rectTransform.sizeDelta.x;
-                switch (data.screenSide)
+                switch (data.scenePosition)
                 {
                     // If on left, go left to be on target
-                    case CharacterData.ScreenSide.left:
+                    case CharacterData.ScenePosition.left:
                         return new Vector2(-targetX, targetY);
-                    case CharacterData.ScreenSide.right:
+                    case CharacterData.ScenePosition.right:
                         // If on right, go right to be on target
                         return new Vector2(targetX, targetY);
                 }
@@ -99,6 +99,26 @@ public class VN_Util
         }
 
         Debug.LogError("Cannot find data of " + data.name + " in CharacterObjects");
+        return null;
+    }
+
+    public static VN_Character FindEmptyCharObj(CharacterData data)
+    {
+        CharacterData characterData = _manager.AllCharacterData.Find(x => x == data);
+
+        if (!characterData)
+        {
+            Debug.LogError("Cannot find " + data.name + " in AllCharacterData");
+            return null;
+        }
+
+        foreach (VN_Character charObj in _manager.CharacterObjects)
+        {
+            if (charObj.data == null &&
+                charObj.scenePosition.ToString() == data.scenePosition.ToString()) return charObj;
+        }
+
+        Debug.LogError("Cannot find available CharacterObject for " + data.name);
         return null;
     }
 
