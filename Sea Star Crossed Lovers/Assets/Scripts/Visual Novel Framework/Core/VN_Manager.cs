@@ -191,8 +191,6 @@ public class VN_Manager : MonoBehaviour
 		// Parses the line for speakerName and sets currentLine to content
 		yield return StartCoroutine(Co_ParseLine(nextLine));
 
-		print("Speaker: " + speaker + " content: " + content);
-
 		// Special case: Narrator is not a VN_Character and not in CharacterObjects
 		if (speaker != "Narrator")
         {
@@ -323,11 +321,8 @@ public class VN_Manager : MonoBehaviour
 		// lineSplit holds [character name] in index 0 and [text to be spoken] in index 1
 		string[] lineSplit = line.Split(':');
 
-		print("lineSplit: " + lineSplit.ToFString());
-
 		if (lineSplit.Length == 2)
 		{
-			print("isTalking");
 			// Trim removes any white space from the beginning or end.
 			speaker = lineSplit[0].Trim(VN_Util.toTrim);
 			content = lineSplit[1].Trim(VN_Util.toTrim);
@@ -341,7 +336,6 @@ public class VN_Manager : MonoBehaviour
 			// If line is a command;
 			if(commandResult)
             {
-				print("isCommand");
 				// Finish rest of command processing
 				while (commandResult)
                 {
@@ -353,8 +347,8 @@ public class VN_Manager : MonoBehaviour
 			}
 			else
             {
-				// Assume player is speaking
-				speaker = PlayerCharacterData.name;
+				// Assume narrator is speaking
+				speaker = "Narrator";
 				content = line.Trim(VN_Util.toTrim);
 				yield break;
 			}

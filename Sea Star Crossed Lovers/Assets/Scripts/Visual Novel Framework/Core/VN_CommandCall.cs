@@ -9,7 +9,8 @@ public class VN_CommandCall : MonoBehaviour
 	private VN_Manager _manager;
 
 	// Inky custom command calling
-	private readonly string FunctionCallString = ">>>";
+	private readonly string CommandCallStringNormal = ">>>";
+	private readonly string CommandCallStringImmediate = ">^>";
 	private readonly char[] MultiCommandChar = { ';' };
 	private readonly char[] CommandDelimeters = { ',', '(', ')' };
 	private readonly char ImmediateMarker = '!';
@@ -28,9 +29,7 @@ public class VN_CommandCall : MonoBehaviour
 		foreach (var command in commandCalls)
         {
 			string commandName = VN_Util.RemoveSubstring(command.GetType().ToString(), "Cmd");
-			Func<List<string>, MonoBehaviour, bool, IEnumerator> newCommand = command.Command;
-
-			print(commandName);
+			Func<List<string>, bool, IEnumerator> newCommand = command.Command;
 
 			AllCommands.Add(commandName, newCommand);
 		}
@@ -38,11 +37,10 @@ public class VN_CommandCall : MonoBehaviour
 
 	public IEnumerator TryCommand(string line)
 	{
-		if (line.Length > 3 && line.Substring(0, 3) == FunctionCallString)
+		if (line.Length > 3 && line.Substring(0, 3) == CommandCallStringNormal)
 		{
-			string[] commands = line.Substring(3).Split(MultiCommandChar, StringSplitOptions.RemoveEmptyEntries);
-
-            //print(commands.Count + "commands: " + commands.ToFString());
+			List<string> commands = line.Substring(3).Split(MultiCommandChar, StringSplitOptions.RemoveEmptyEntries)
+				.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
 
             // Try to run all commands
             foreach (string rawCommand in commands)
@@ -69,21 +67,20 @@ public class VN_CommandCall : MonoBehaviour
 				// Assume all other strings after first (the function) are arguments
 				List<string> arguments = commandList.GetRange(1, commandList.Count - 1);
 
-                print("commandList: " + commandList.ToFString());
+                //print("commandList: " + commandList.ToFString());
 
                 if (AllCommands.ContainsKey(function))
                 {
-                    Func<List<string>, MonoBehaviour, bool, IEnumerator> Co_Command =
-                        (Func<List<string>, MonoBehaviour, bool, IEnumerator>)AllCommands[function];
+                    Func<List<string>, bool, IEnumerator> Co_Command =
+                        (Func<List<string>, bool, IEnumerator>)AllCommands[function];
 
-                    yield return StartCoroutine(Co_Command(arguments, this, isImmediate));
+					yield return StartCoroutine(Co_Command(arguments, isImmediate));
                 }
                 else
                 {
                     Debug.LogError("AllCommands doesn't contain key \"" + function + "\"");
                 }
             }
-			yield break;
 		}
 	}
 }

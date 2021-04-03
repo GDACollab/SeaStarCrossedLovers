@@ -1,1 +1,1 @@
-﻿{"inkVersion":19,"root":[["^>>> CharEnter(Noelani, Ocean);","\n","^Hi I'm the narrator.","\n",["done",{"#f":5,"#n":"g-0"}],null],"done",{"#f":1}],"listDefs":{}}
+﻿{"inkVersion":19,"root":[["^>>> !CharEnter(Noelani); CharEnter(Ocean); Wait(1); CharExit(Noelani); CharExit(Ocean)","\n","^Narrator: I am the narrator.","\n","^Noelani: Hi. I'm Noelani.","\n","^>>> !CharExit(Ocean)","\n","^Noelani: Wait don't leave Ocean.","\n",["done",{"#f":5,"#n":"g-0"}],null],"done",{"#f":1}],"listDefs":{}}
