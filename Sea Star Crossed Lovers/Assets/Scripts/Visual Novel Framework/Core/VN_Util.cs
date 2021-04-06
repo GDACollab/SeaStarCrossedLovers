@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class VN_Util
 {
-    static VN_Manager _manager;
+    public static VN_Manager manager;
 
     public VN_Util(VN_Manager manager)
     {
-        _manager = manager;
+        VN_Util.manager = manager;
     }
 
     public static char[] toTrim = { '\"', ' ', '\n' };
@@ -39,7 +39,7 @@ public class VN_Util
                 }
                 break;
             case CharacterData.TransitionDirection.exit:
-                targetX = _manager.offScreenDistance + character.rectTransform.sizeDelta.x;
+                targetX = manager.offScreenDistance + character.rectTransform.sizeDelta.x;
                 switch (data.scenePosition)
                 {
                     // If on left, go left to be on target
@@ -66,7 +66,7 @@ public class VN_Util
     public static CharacterData FindCharacterData(string characterName)
     {
         // Get currentSpeaker by finding speakerName in CharacterObjects
-        CharacterData character = _manager.AllCharacterData.Find(x => x.name == characterName);
+        CharacterData character = manager.AllCharacterData.Find(x => x.name == characterName);
 
         // Catch character being null
         if (!character)
@@ -85,7 +85,7 @@ public class VN_Util
 	*/
     public static VN_Character FindCharacterObj(CharacterData data)
     {
-        CharacterData characterData = _manager.AllCharacterData.Find(x => x == data);
+        CharacterData characterData = manager.AllCharacterData.Find(x => x == data);
 
         if (!characterData)
         {
@@ -93,7 +93,7 @@ public class VN_Util
             return null;
         }
 
-        foreach (VN_Character charObj in _manager.CharacterObjects)
+        foreach (VN_Character charObj in manager.CharacterObjects)
         {
             if (charObj.data == characterData) return charObj;
         }
@@ -104,7 +104,7 @@ public class VN_Util
 
     public static VN_Character FindEmptyCharObj(CharacterData data)
     {
-        CharacterData characterData = _manager.AllCharacterData.Find(x => x == data);
+        CharacterData characterData = manager.AllCharacterData.Find(x => x == data);
 
         if (!characterData)
         {
@@ -112,7 +112,7 @@ public class VN_Util
             return null;
         }
 
-        foreach (VN_Character charObj in _manager.CharacterObjects)
+        foreach (VN_Character charObj in manager.CharacterObjects)
         {
             if (charObj.data == null &&
                 charObj.scenePosition.ToString() == data.scenePosition.ToString()) return charObj;

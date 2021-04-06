@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+using PrintExtensions;
+
 public class VN_CommandCall : MonoBehaviour
 {
 	private VN_Manager _manager;
@@ -67,7 +69,7 @@ public class VN_CommandCall : MonoBehaviour
 				// Assume all other strings after first (the function) are arguments
 				List<string> arguments = commandList.GetRange(1, commandList.Count - 1);
 
-                //print("commandList: " + commandList.ToFString());
+                //print("args: " + commandList.ToFString());
 
                 if (AllCommands.ContainsKey(function))
                 {

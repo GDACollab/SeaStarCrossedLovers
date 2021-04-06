@@ -15,11 +15,11 @@ public class CharEnterCmd : MonoBehaviour, ICommandCall
             charObj.ChangeSprite(data.defaultSprite);
             if (isImmediate)
             {
-                StartCoroutine(charObj.data.transition.Co_EnterScreen(charObj, this));
+                StartCoroutine(charObj.data.transition.Co_EnterScreen(charObj, charObj));
             }
             else
             {
-                yield return StartCoroutine(charObj.data.transition.Co_EnterScreen(charObj, this));
+                yield return StartCoroutine(charObj.data.transition.Co_EnterScreen(charObj, charObj));
             }
         }
     }

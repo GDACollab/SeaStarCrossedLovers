@@ -55,8 +55,14 @@ public class VN_Manager : MonoBehaviour
 	[Tooltip("List of needed character data to pull from")]
 	public List<CharacterData> AllCharacterData;
 
+	[Header("UI settings")]
+	public float textboxTransitionDuration = 1;
+	public TextboxTransition textboxTransition;
+
+	// Public references
+	[HideInInspector] public RectTransform textboxRectTransform;
+
 	// Internal References
-	public RectTransform TextboxRectTransform;
 	// Keep track of story creation event
 	public static event Action<Story> OnCreateStory;
 	// The content to be displayed
@@ -68,7 +74,7 @@ public class VN_Manager : MonoBehaviour
 
 	// Subordinate classes
 	private VN_CommandCall CommandCall;
-	private VN_UIFactory UIFactory;
+	[HideInInspector] public VN_UIFactory UIFactory;
 
 	// Flags/states
 	// Whether or not the current text is done from slow text
@@ -105,7 +111,7 @@ public class VN_Manager : MonoBehaviour
 
 		UIFactory = GetComponent<VN_UIFactory>();
 		UIFactory.Construct(this);
-		TextboxRectTransform = UIFactory.TextboxCanvas.GetComponent<RectTransform>();
+		textboxRectTransform = UIFactory.TextboxCanvas.GetComponent<RectTransform>();
 
 		// Initialize the TextSpeeds Dictionary
 		TextSpeeds = new Dictionary<string, float>{
@@ -132,17 +138,20 @@ public class VN_Manager : MonoBehaviour
 	void Start()
 	{
 		ClearContent();
-		UIFactory.CreateStartStoryButton();
+		//UIFactory.CreateStartStoryButton();
 
 		switch (activeState)
 		{
 			case ActiveState.hidden:
-				float height = TextboxRectTransform.sizeDelta.y;
-				TextboxRectTransform.anchoredPosition = new Vector2(0, -height);
+				float height = textboxRectTransform.sizeDelta.y;
+				textboxRectTransform.anchoredPosition = new Vector2(0, -height);
 				break;
 			case ActiveState.active:
+				textboxRectTransform.anchoredPosition = Vector2.zero;
 				break;
 		}
+
+		StartStory();
 	}
 	void Update()
     {

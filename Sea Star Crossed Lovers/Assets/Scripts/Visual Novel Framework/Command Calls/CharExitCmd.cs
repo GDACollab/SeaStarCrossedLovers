@@ -8,11 +8,10 @@ public class CharExitCmd : MonoBehaviour, ICommandCall
 	{
         foreach (string arg in args)
         {
-
             CharacterData data = VN_Util.FindCharacterData(arg);
             VN_Character charObj = VN_Util.FindCharacterObj(data);
 
-            yield return StartCoroutine(charObj.data.transition.Co_ExitScreen(charObj, this));
+            yield return StartCoroutine(charObj.data.transition.Co_ExitScreen(charObj, charObj));
             charObj.ChangeSprite("");
             charObj.SetData(null);
         }
