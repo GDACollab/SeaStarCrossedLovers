@@ -4,21 +4,17 @@ using UnityEngine;
 
 public class Block : MonoBehaviour
 {
-    public enum BlockState { active, falling, stable, deleting };
-    public BlockState currentState = BlockState.active;
-    public SimpleWave wave;
+    [HideInInspector] public BlockData data;
+
+    [HideInInspector] public enum BlockState { active, falling, stable, deleting };
+    [HideInInspector] public BlockState currentState = BlockState.active;
+    [HideInInspector] public SimpleWave wave;
 
     public AudioSource audioSource;
-    //// Active if player has control over it
-    //public bool isActive = true;
-    //// Tracks if the block has made contact (ground or other block)
-    //public bool madeContact = false;
-    // Spawn new block if active block being deleted
-    //public bool beingDeleted = false;
 
     private BlockManager _blockManager;
 
-    void Start()
+    void Awake()
     {
         wave = GameObject.Find("Waves").GetComponent<SimpleWave>();
     }
@@ -57,5 +53,59 @@ public class Block : MonoBehaviour
             audioSource.Play();
         }
         currentState = BlockState.stable;
+    }
+
+    public Block Construct(BlockData data, Vector2 origin)
+    {
+        this.data = data;
+        // Construct the block out of the filled cell grid
+        for (int cell_x = 0; cell_x < data.GRID_SIZE; cell_x++)
+        {
+            for (int cell_y = 0; cell_y < data.GRID_SIZE; cell_y++)
+            {
+                BlockletData thisBlockletData = data.GridCellDictionary[(cell_x, cell_y)];
+
+                if (thisBlockletData != null)
+                {
+                    Vector3 blockletScale = thisBlockletData.blockletPrefab.transform.localScale;
+
+                    /* I honestly don't know why 4 works but it does since blocklet positions all seem
+                     * corret when changing the blocklet prefab scale
+                    */
+                    Vector2 blockletPosition = new Vector2(origin.x + 4 * blockletScale.x * cell_x,
+                        origin.y + 4 * blockletScale.y * cell_y);
+
+                    Blocklet newBlocklet = Instantiate(thisBlockletData.blockletPrefab,
+                        blockletPosition, Quaternion.identity, gameObject.transform);
+                    newBlocklet.Construct(thisBlockletData, this);
+                }
+            }
+        }
+        /* Since each was given a transform bases on a grid, the center position 
+         * of the children isn't where the same as the Block gameobject position
+         * 
+        */
+        int numChildren = 0;
+        Vector3 sumVector = new Vector3(0, 0, 0);
+        foreach (Transform child in gameObject.transform)
+        {
+            numChildren++;
+            sumVector += child.transform.position;
+        }
+
+        Vector3 center = sumVector / numChildren;
+
+        /* Some wizardary vector math. After getting the children's center position
+         * by averaging their positions, each child position is changed so that they
+         * originate from the gameobject position with an offset calculated from the
+         * childrens relative position to their center.
+        */
+        foreach (Transform child in gameObject.transform)
+        {
+            child.transform.position = gameObject.transform.position -
+                (center - child.transform.position);
+        }
+
+        return this;
     }
 }

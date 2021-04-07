@@ -207,6 +207,8 @@ public class Waves : MonoBehaviour
 		{
 			activeWaveList.Remove(toRemove);
 		}
+
+		oceanMesh.RecalculateBounds();
 	}
 
 }

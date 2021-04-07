@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpawnBlock : MonoBehaviour
 {
-    public List<Block> SpawnBlockList;
+    public List<BlockData> SpawnBlockList;
     public List<AudioClip> BlockHitSounds;
 
     public float blockHitVolume = 1;
@@ -36,7 +36,7 @@ public class SpawnBlock : MonoBehaviour
 
     private void Awake()
     {
-        foreach (Block block in SpawnBlockList)
+        foreach (BlockData block in SpawnBlockList)
         {
             if (block == null)
             {
@@ -120,10 +120,12 @@ public class SpawnBlock : MonoBehaviour
         spawnPosition.z = 0;
 
         // Random select block from BlockList
-        Block selectedBlock = SpawnBlockList[Random.Range(0, SpawnBlockList.Count)];
+        BlockData selectedBlockData = SpawnBlockList[Random.Range(0, SpawnBlockList.Count)];
 
-        // Spawn block and track components
-        activeBlock = Instantiate(selectedBlock, spawnPosition, Quaternion.identity);
+        Block newBlock = Instantiate(selectedBlockData.blockPrefab, spawnPosition, Quaternion.identity);
+        newBlock.Construct(selectedBlockData, spawnPosition);
+
+        activeBlock = newBlock;
         activeRB = activeBlock.GetComponent<Rigidbody2D>();
         activeBlock = activeBlock.GetComponent<Block>();
 

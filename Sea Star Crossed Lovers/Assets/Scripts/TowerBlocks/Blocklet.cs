@@ -1,15 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public class Blocklet : MonoBehaviour
 {
+    [HideInInspector] public BlockletData data;
+
     [Range(0, 1)]
     public float fadeFinal;
     [Range(0, 10)]
     public float fadeSpeed;
 
-    public int row;
+    [HideInInspector] public int row;
     //blocklet position relative to platform
     private Vector3 relativePos;
     //size of blocklet
@@ -17,21 +20,20 @@ public class Blocklet : MonoBehaviour
     private bool canFade;
     private bool markForDeletion;
 
-    public GameObject platform;
-    public GameObject waves;
+    [HideInInspector] public GameObject platform;
+    [HideInInspector] public GameObject waves;
 
     public GameObject rowDebugObj;
     private TextMesh rowDebugText;
-    private GameObject BlockParent;
-
     private Block blockParent;
+
+    private SpriteShapeRenderer spriteShapeRenderer;
 
     private void Awake()
     {
-        blockParent = this.transform.parent.GetComponent<Block>();
+        spriteShapeRenderer = GetComponent<SpriteShapeRenderer>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         row = -1;
@@ -40,7 +42,6 @@ public class Blocklet : MonoBehaviour
         waves = GameObject.FindWithTag("Wave");
 
         rowDebugText = rowDebugObj.GetComponent<TextMesh>();
-        BlockParent = gameObject.transform.parent.gameObject;
     }
 
     // Update is called once per frame
@@ -83,5 +84,16 @@ public class Blocklet : MonoBehaviour
             markForDeletion = true;
             //Debug.Log("markForDeletion");
         }
+    }
+
+    public Blocklet Construct(BlockletData blockletData, Block block)
+    {
+        blockParent = block;
+        data = blockletData;
+
+        // TODO Set blocklet's texture, etc based on given BlockletData
+        spriteShapeRenderer.color = blockletData.color;
+
+        return this;
     }
 }

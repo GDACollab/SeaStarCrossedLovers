@@ -475,7 +475,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6165143644612118523, guid: 030427581ee9d1943a12ffe03b0fb3e1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.4
+      value: 21.75
       objectReference: {fileID: 0}
     - target: {fileID: 6165143644612118523, guid: 030427581ee9d1943a12ffe03b0fb3e1, type: 3}
       propertyPath: m_LocalPosition.y
@@ -895,20 +895,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpawnBlockList:
-  - {fileID: 8167075450163280672, guid: 6a538852616a8cd47a3f5307ec8bc5e7, type: 3}
-  - {fileID: 4887555501995039644, guid: 72510c521b1f5a249a9ad7b2cb8c548b, type: 3}
-  - {fileID: 576745810992346608, guid: 043061b85fd9e3d438b086e60ef8eca3, type: 3}
-  - {fileID: 2167150179741697578, guid: a585141cecfe6b84e91fc51b6012398c, type: 3}
-  - {fileID: 388871558543863491, guid: f1d02f471074ff4459095a036551825d, type: 3}
-  - {fileID: 6165506080579754258, guid: 3a5bdfb65f952f64c8f332cc9bac5454, type: 3}
-  - {fileID: 7931705065305060765, guid: 9c1046b231d67a1488126b1424e779c9, type: 3}
+  - {fileID: 11400000, guid: 8fef3438d1a3f409bbe03a97e099001f, type: 2}
+  - {fileID: 11400000, guid: 1c179c6d5084f4a7eb6df2a9d8520bea, type: 2}
+  - {fileID: 11400000, guid: 6b8d7f02cfc734ff992db472093c84af, type: 2}
+  - {fileID: 11400000, guid: 4e083c8477ef7417bbe97f10d6657d4c, type: 2}
   BlockHitSounds:
   - {fileID: 8300000, guid: 0684cdb36036f41bba0b55cb9ee709e1, type: 3}
   - {fileID: 8300000, guid: e44c606d1ca3d4ae4b4be1951753f541, type: 3}
   - {fileID: 8300000, guid: 2cf584519604b4ac682a2a4134a31aee, type: 3}
   blockHitVolume: 0.1
   blockMass: 1000
-  horizontalSpeed: 200
+  horizontalSpeed: 400
   baseFallSpeed: 3
   dropForce: 300
   startingDownwardForce: 150
@@ -2865,7 +2862,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2672804603493449802, guid: e6df304c6bb96b94d95ac0434fb8d0c1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -21.2
+      value: -21.91
       objectReference: {fileID: 0}
     - target: {fileID: 2672804603493449802, guid: e6df304c6bb96b94d95ac0434fb8d0c1, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2910,6 +2907,10 @@ PrefabInstance:
     - target: {fileID: 2672804603493449803, guid: e6df304c6bb96b94d95ac0434fb8d0c1, type: 3}
       propertyPath: waveSpeed
       value: 0.003
+      objectReference: {fileID: 0}
+    - target: {fileID: 2672804603493449803, guid: e6df304c6bb96b94d95ac0434fb8d0c1, type: 3}
+      propertyPath: seaResolution
+      value: 220
       objectReference: {fileID: 0}
     - target: {fileID: 2672804603493449807, guid: e6df304c6bb96b94d95ac0434fb8d0c1, type: 3}
       propertyPath: m_Name
