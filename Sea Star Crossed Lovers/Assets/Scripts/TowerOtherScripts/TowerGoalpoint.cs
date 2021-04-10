@@ -35,4 +35,10 @@ public class TowerGoalpoint : MonoBehaviour
             return false;
         }
     }
+    
+    // Returns the goal height of the tower
+    public float getGoalHeight()
+    {
+        return goalHeight;
+    }
 }
