@@ -57,7 +57,7 @@ public class SpawnBlock : MonoBehaviour
         {
             // apply horizontal and vertical change
             float xOffset = Input.GetAxisRaw("Horizontal") * Time.deltaTime * horizontalSpeed;
-            activeRB.velocity = new Vector3(xOffset, -currentFallSpeed, 0);
+            activeRB.velocity = new Vector2(xOffset, -currentFallSpeed);
 
             // detect if player has dropped block
             if (Input.GetButton("Drop"))
@@ -78,7 +78,8 @@ public class SpawnBlock : MonoBehaviour
         // if an active block collides or is being deleted,
         // give it normal gravity and prepare to spawn new block
         if (canSpawnBlock && !waitingForBlock &&
-            (activeBlock.currentState == Block.BlockState.stable || activeBlock.currentState == Block.BlockState.deleting))
+            (activeBlock.currentState == Block.BlockState.stable ||
+            activeBlock.currentState == Block.BlockState.deleting))
         {
             // Set true to ensure no additional block is spawned during the spawn delay
             waitingForBlock = true;
@@ -86,7 +87,6 @@ public class SpawnBlock : MonoBehaviour
             activeRB.gravityScale = blockGravity;
             activeBlock = null;
             activeRB.velocity = new Vector2(0, 0);
-
 
             StartCoroutine(delaySpawnBlock());
         }
@@ -119,29 +119,29 @@ public class SpawnBlock : MonoBehaviour
         Vector3 spawnPosition = gameObject.transform.position;
         spawnPosition.z = 0;
 
-        // Random select block from BlockList
+        // Random select BlockData from SpawnBlockList
         BlockData selectedBlockData = SpawnBlockList[Random.Range(0, SpawnBlockList.Count)];
 
+        if (!selectedBlockData.blockPrefab)
+        {
+            Debug.LogError("BlockData \"" + selectedBlockData.name + "\" has null blockPrefab");
+        }
         Block newBlock = Instantiate(selectedBlockData.blockPrefab, spawnPosition, Quaternion.identity);
-        newBlock.Construct(selectedBlockData, spawnPosition);
+        newBlock.Construct(_blockManager, selectedBlockData, spawnPosition);
 
+        // Set active block to be controlled
         activeBlock = newBlock;
         activeRB = activeBlock.GetComponent<Rigidbody2D>();
         activeBlock = activeBlock.GetComponent<Block>();
 
-        // TODO Temp adding audio via script since there are multiple prefabs of blocks
-        // Replace with single block prefab with audio source and scriptable object of
-        // BlockData with blocklet sprite, mass, audio, and shape (a 2d array maybe?)
-
-        activeBlock.audioSource = activeBlock.gameObject.AddComponent(typeof(AudioSource)) as AudioSource;
-        activeBlock.audioSource.playOnAwake = false;
+        // Give random collision sound
         activeBlock.audioSource.clip = BlockHitSounds[Random.Range(0, BlockHitSounds.Count)];
         activeBlock.audioSource.volume = blockHitVolume;
 
         activeRB.mass = blockMass;
 
         // Pass active block to level manager and block manager
-        _levelManager.activeBlock = activeBlock;
+        _blockManager.activeBlock = activeBlock;
         _blockManager.AddBlockFromList(activeBlock);
 
         // Store original gravity

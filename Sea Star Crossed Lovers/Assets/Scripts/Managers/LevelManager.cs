@@ -21,8 +21,6 @@ public class LevelManager : MonoBehaviour
     private BlockManager _blockManager;
     private TowerGoalpoint _goalpoint;
 
-    public Block activeBlock { get; set; }
-
     private void Awake()
     {
         // Getting all necessary references

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2757253596951623951}
   m_Layer: 0
   m_Name: Blocklet
-  m_TagString: Untagged
+  m_TagString: Blocklet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -198,6 +198,7 @@ MonoBehaviour:
   platform: {fileID: 0}
   waves: {fileID: 0}
   rowDebugObj: {fileID: 4379117522841190516}
+  blockParent: {fileID: 0}
 --- !u!1 &4379117522841190516
 GameObject:
   m_ObjectHideFlags: 0

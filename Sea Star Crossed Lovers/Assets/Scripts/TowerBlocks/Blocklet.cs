@@ -25,7 +25,7 @@ public class Blocklet : MonoBehaviour
 
     public GameObject rowDebugObj;
     private TextMesh rowDebugText;
-    private Block blockParent;
+    [HideInInspector] public Block blockParent;
 
     private SpriteShapeRenderer spriteShapeRenderer;
 
@@ -53,7 +53,7 @@ public class Blocklet : MonoBehaviour
         //row = (int)(relativePos.y / size.y);
         row = (int)(relativePos.y);
 
-        // Update rowDebugObj rotation
+        // Freeze rowDebugObj rotation
         rowDebugObj.transform.rotation = Quaternion.identity;
         // Update rowDebugObj text
         rowDebugText.text = row.ToString();
@@ -71,6 +71,8 @@ public class Blocklet : MonoBehaviour
             }
             else if (blockColor.a <= fadeFinal && waves.GetComponent<SimpleWave>().waveIsOver)
             {
+                // Delete Blocklets
+                blockParent.blockletChildren.Remove(gameObject);
                 blockParent.CheckFullyDeleted();
                 Destroy(gameObject);
             }
@@ -82,7 +84,6 @@ public class Blocklet : MonoBehaviour
         if (row <= rowsToDelete)
         {
             markForDeletion = true;
-            //Debug.Log("markForDeletion");
         }
     }
 

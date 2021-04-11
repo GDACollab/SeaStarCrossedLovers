@@ -62,7 +62,6 @@ public class SimpleWave : MonoBehaviour
 
     void OnParticleCollision(GameObject other)
     {
-        
         if (other.tag == "Tetronimo")
         {         
             Block b = other.GetComponent<Block>();

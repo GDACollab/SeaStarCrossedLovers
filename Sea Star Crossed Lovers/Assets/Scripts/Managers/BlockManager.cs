@@ -9,7 +9,9 @@ public class BlockManager : MonoBehaviour
     public Block highestBlock;
     public float highestBlockHeight = 0;
 
-    private LevelManager _levelManager;
+    public LevelManager _levelManager;
+
+    public Block activeBlock { get; set; }
 
     public void Construct(LevelManager levelManager)
     {
@@ -32,6 +34,7 @@ public class BlockManager : MonoBehaviour
 
     public void RemoveBlockFromList(Block toRemove)
     {
+        Destroy(toRemove.gameObject);
         SceneBlockList.Remove(toRemove);
     }
 
@@ -39,8 +42,9 @@ public class BlockManager : MonoBehaviour
     {
         Block resultBlock = highestBlock;
 
-        SceneBlockList.ForEach(block => {
-            if (block != _levelManager.activeBlock &&
+        SceneBlockList.ForEach(block =>
+        {
+            if (block != activeBlock &&
                 block.currentState == Block.BlockState.stable &&
                 block.transform.position.y > highestBlockHeight)
             {

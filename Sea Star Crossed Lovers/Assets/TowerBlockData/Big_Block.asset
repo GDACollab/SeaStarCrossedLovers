@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Big_Block
   m_EditorClassIdentifier: 
   GRID_SIZE: 4
-  blockPrefab: {fileID: 4473175659359252422, guid: 0fd4c92f5f6734fc8ae293ac8f47c855, type: 3}
+  blockPrefab: {fileID: 4887555501995039644, guid: 22bd5e006002641beb970da1538b8372, type: 3}
   cell_00: {fileID: 11400000, guid: b199d10352a5d4f2ba4b2ad5f10d174e, type: 2}
   cell_10: {fileID: 11400000, guid: ac028db4294514a6b8509daf0a62c567, type: 2}
   cell_20: {fileID: 11400000, guid: b199d10352a5d4f2ba4b2ad5f10d174e, type: 2}
