@@ -4,28 +4,15 @@ using Ink.Runtime;
 
 public class VN_UIFactory : MonoBehaviour
 {
-	/* TODO ? Find a way to make TextCanavs and other references
-	 * be public to only VN_Manager.
-	*/
-
-	// Textbox canvas objects
-	public Canvas TextCanvas = null;
-	public Canvas ButtonCanvas = null;
-	public Canvas NameCanvas = null;
-	public Canvas TextboxCanvas = null;
-
-	// Textbox text objects
-	// Text object that displays text content
-	[HideInInspector] public Text contentTextObj = null;
-	// Text object that displays speaker name
-	[HideInInspector] public Text nameTextObj = null;
-
 	// UI Prefabs
 	[SerializeField]
-	[Tooltip("Used for VN text context")]
-	private Text textPrefab = null;
+	[Tooltip("Used for VN name text")]
+	private Text nameTextPrefab = null;
 	[SerializeField]
-	[Tooltip("Used for VN buttons")]
+	[Tooltip("Used for VN content text")]
+	private Text contentTextPrefab = null;
+	[SerializeField]
+	[Tooltip("Used for VN choice buttons")]
 	private Button buttonPrefab = null;
 
 	private VN_Manager _manager;
@@ -43,9 +30,9 @@ public class VN_UIFactory : MonoBehaviour
 	 */
 	public Text CreateContentView(string text)
 	{
-		Text contentText = Instantiate(textPrefab);
+		Text contentText = Instantiate(contentTextPrefab);
 		contentText.text = text;
-		contentText.transform.SetParent(TextCanvas.transform, false);
+		contentText.transform.SetParent(_manager.TextCanvas.transform, false);
 		return contentText;
 	}
 
@@ -57,13 +44,13 @@ public class VN_UIFactory : MonoBehaviour
 	 */
 	public Text CreateNameTextView(string name)
 	{
-		Text nameText = Instantiate(textPrefab);
-		nameText.transform.SetParent(NameCanvas.transform, false);
+		Text nameText = Instantiate(nameTextPrefab);
+		nameText.transform.SetParent(_manager.NameCanvas.transform, false);
 		// Update NameText
 		if (name == "Narrator")
 		{
 			nameText.text = "";
-			contentTextObj.fontStyle = FontStyle.Italic;
+			_manager.contentTextObj.fontStyle = FontStyle.Italic;
 		}
 		else
 		{
@@ -83,7 +70,7 @@ public class VN_UIFactory : MonoBehaviour
 	{
 		// Creates the button from a prefab
 		Button choice = Instantiate(buttonPrefab) as Button;
-		choice.transform.SetParent(ButtonCanvas.transform, false);
+		choice.transform.SetParent(_manager.ButtonCanvas.transform, false);
 
 		// Gets the text from the button prefab
 		Text choiceText = choice.GetComponentInChildren<Text>();
@@ -100,7 +87,7 @@ public class VN_UIFactory : MonoBehaviour
 		Button choice = CreateChoiceView("End story");
 		choice.onClick.AddListener(delegate
 		{
-			_manager.activeLoader.QuickFadeOutLoad("Wave&BlockPlacement");
+			_manager.activeLoader.QuickFadeOutLoad("TowerLevel1");
 		});
 	}
 

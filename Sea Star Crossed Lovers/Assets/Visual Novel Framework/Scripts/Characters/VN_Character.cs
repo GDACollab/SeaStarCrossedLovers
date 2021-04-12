@@ -29,11 +29,6 @@ public class VN_Character : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
     }
 
-    /* TODO Try to follow SOLID for this class
-     * - Make interfaces for SetData and ChangeSprite? 
-     * ... Maybe not now that this class is smaller
-    */
-
     // Updates this VN_Character's data – it's CharacterTransition, its anchors, and debug nameText
     public void SetData(CharacterData toSetData)
     {
@@ -161,6 +156,7 @@ public class VN_Character : MonoBehaviour
         Vector2 spriteSize = sprite.rect.size;
         image.rectTransform.sizeDelta = new Vector2(spriteSize.x * scale, spriteSize.y * scale);
         image.sprite = sprite;
+        image.SetNativeSize();
     }
 
     public IEnumerator Enter(CharacterData characterData, bool isImmediate)

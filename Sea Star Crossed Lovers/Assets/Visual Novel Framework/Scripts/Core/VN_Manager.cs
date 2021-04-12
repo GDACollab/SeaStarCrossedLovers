@@ -29,8 +29,6 @@ public class VN_Manager : MonoBehaviour
 	public float characterBoxScale = 1;
 
 	public float characterSpriteScale = 1;
-	[Tooltip("Max number of characters per line")]
-	public int lineCharNum = 100;
 	// The different speeds the text can go in characters per second
 	[Header("Text Speeds")]
 	[Tooltip("Normal speed of text in characters per second. Used in normal dialouge")]
@@ -54,13 +52,26 @@ public class VN_Manager : MonoBehaviour
 	public List<VN_Character> CharacterObjects;
 	[Tooltip("List of needed character data to pull from")]
 	public List<CharacterData> AllCharacterData;
+	[Tooltip("List of textbox data to pull from")]
+	public List<TextboxData> AllTextboxData;
 
 	[Header("UI settings")]
 	public float textboxTransitionDuration = 1;
 	public TextboxTransition textboxTransition;
 
 	// Public references
-	[HideInInspector] public RectTransform textboxRectTransform;
+	public Canvas TextboxCanvas;
+	public RectTransform textboxRectTransform;
+	public Canvas TextCanvas;
+	public Canvas ButtonCanvas;
+	public Canvas NameCanvas;
+	// Text object that displays text content
+	public Text contentTextObj;
+	// Text object that displays speaker name
+	public Text nameTextObj;
+
+	public Canvas Decor_RTCanvas;
+	public Canvas Decor_LBCanvas;
 
 	// Internal References
 	// Keep track of story creation event
@@ -75,6 +86,7 @@ public class VN_Manager : MonoBehaviour
 	// Subordinate classes
 	private VN_CommandCall CommandCall;
 	[HideInInspector] public VN_UIFactory UIFactory;
+	[HideInInspector] public VN_TextboxManager textboxManager;
 
 	// Flags/states
 	// Whether or not the current text is done from slow text
@@ -84,18 +96,6 @@ public class VN_Manager : MonoBehaviour
 	private string speaker;
 	private string content;
 
-	/* TODO Try to follow Single Responsibility Principle for this class
-	 * Regions sort of map out responsibilities, but unclear as to
-	 * what this class should be responsible for and how to separate
-	 * currently tightly couple methods from this class
-	*/
-
-	/* TODO ? Make everything in VN loop a corountine
-	 * - Maybe a function option for parallel function call so
-	 * adding character isn't waited on to be finished before text is started
-	 * to be shown
-	*/
-
 	//Functions involved directly in the frame-to-frame running of the sceen
 	#region Unity gameloop
 
@@ -103,7 +103,6 @@ public class VN_Manager : MonoBehaviour
 	// Adds the AddCharacter and SubtractCharacter functions to the AllCommands Dictionary
 	void Awake()
     {
-		// TODO replace with even high level factory?
 		VN_Util Helper = new VN_Util(this);
 		// Get CommandCall script in gameobject
 		CommandCall = GetComponent<VN_CommandCall>();
@@ -111,7 +110,10 @@ public class VN_Manager : MonoBehaviour
 
 		UIFactory = GetComponent<VN_UIFactory>();
 		UIFactory.Construct(this);
-		textboxRectTransform = UIFactory.TextboxCanvas.GetComponent<RectTransform>();
+		textboxRectTransform = TextboxCanvas.GetComponent<RectTransform>();
+
+		textboxManager = GetComponent<VN_TextboxManager>();
+		textboxManager.Construct(this);
 
 		// Initialize the TextSpeeds Dictionary
 		TextSpeeds = new Dictionary<string, float>{
@@ -133,7 +135,6 @@ public class VN_Manager : MonoBehaviour
 		}
 	}
 
-	// Called once upon the scene being enabled
 	// Removes the default message and begins the text
 	void Start()
 	{
@@ -144,7 +145,7 @@ public class VN_Manager : MonoBehaviour
 		{
 			case ActiveState.hidden:
 				float height = textboxRectTransform.sizeDelta.y;
-				textboxRectTransform.anchoredPosition = new Vector2(0, -height);
+				textboxRectTransform.anchoredPosition = new Vector2(0, -(height + 50));
 				break;
 			case ActiveState.active:
 				textboxRectTransform.anchoredPosition = Vector2.zero;
@@ -161,7 +162,7 @@ public class VN_Manager : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.F))
 		{
-			activeLoader.QuickFadeOutLoad("Wave&BlockPlacement");
+			activeLoader.QuickFadeOutLoad("TowerLevel1");
 		}
 	}
 	#endregion
@@ -228,13 +229,13 @@ public class VN_Manager : MonoBehaviour
 		// Format text to have newline characters at porper locations
 		currentLine = FormatText(currentLine);
 
-		// Instantiate story content
-		UIFactory.contentTextObj = UIFactory.CreateContentView("");
-		// Instantiate character name text
-		UIFactory.nameTextObj = UIFactory.CreateNameTextView(speaker);
+        //// Instantiate story content
+        contentTextObj = UIFactory.CreateContentView("");
+        //// Instantiate character name text
+        nameTextObj = UIFactory.CreateNameTextView(speaker);
 
-		// Start displaying text content
-		yield return StartCoroutine(Co_SlowText(UIFactory.contentTextObj));
+        // Start displaying text content
+        yield return StartCoroutine(Co_SlowText(contentTextObj));
 
 		// Once done with showing text content, show all choice buttons
 		UIFactory.CreateAllChoiceButtons();
@@ -264,25 +265,15 @@ public class VN_Manager : MonoBehaviour
 	private string FormatText(string text)
 	{
 		string result = "";
-		int lineLength = 0;
 		foreach (char character in text.ToCharArray())
 		{
-			if (lineLength > lineCharNum && character == ' ')
-			{
-				result += '\n';
-				lineLength = 0;
+			if (character == '…')
+            {
+				result += "...";
 			}
 			else
-			{
-				if (character == '…')
-                {
-					result += "...";
-				}
-				else
-                {
-					result += character;
-				}
-				lineLength++;
+            {
+				result += character;
 			}
 		}
 
@@ -297,7 +288,7 @@ public class VN_Manager : MonoBehaviour
 		{
 			currentTextDone = true;
 			StopAllCoroutines();
-			UIFactory.contentTextObj.text = currentLine;
+			contentTextObj.text = currentLine;
 			UIFactory.CreateAllChoiceButtons();
 		}
 	}
@@ -372,23 +363,23 @@ public class VN_Manager : MonoBehaviour
 	void ClearContent()
 	{
 		// Reset all internal references
-		UIFactory.contentTextObj = null;
+		contentTextObj = null;
 		currentLine = null;
 		currentSpeaker = null;
 		currentTags = null;
 
 		// Destroys all the children of all Canvases
-		foreach (Transform child in UIFactory.TextCanvas.transform)
+		foreach (Transform child in TextCanvas.transform)
 		{
 			Destroy(child.gameObject);
 		}
 
-		foreach (Transform child in UIFactory.ButtonCanvas.transform)
+		foreach (Transform child in ButtonCanvas.transform)
 		{
 			Destroy(child.gameObject);
 		}
 
-		foreach (Transform child in UIFactory.NameCanvas.transform)
+		foreach (Transform child in NameCanvas.transform)
 		{
 			Destroy(child.gameObject);
 		}

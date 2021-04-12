@@ -1,8 +1,8 @@
 >>> !CharEnter(Noelani); CharEnter(Ocean); Wait(1); CharExit(Noelani); CharExit(Ocean)
 
->>> TextboxEnter();
+>>> TextboxEnter(Default, WavesDecorationSprite);
 
-Narrator: I am the narrator.
+Narrator: I am the narrator. Test text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text 
 
 >>> !CharEnter(Noelani)
 
@@ -10,7 +10,7 @@ Noelani: Hi. I'm Noelani.
 
 >>> TextboxExit(); CharEnter(Ocean);
 
->>> TextboxEnter();
+>>> TextboxEnter(Default, StarsDecorationSprite);
 
 Ocean: Hi. I'm Ocean
 
@@ -18,4 +18,8 @@ Ocean: Hi. I'm Ocean
 
 Noelani: Wait don't leave Ocean.
 
->>> !CharExit(Noelani); TextboxExit();
+>>> Wait(2);
+
+Noelani: Guess I'll follow.
+
+>>> !CharExit(Noelani)

@@ -12,7 +12,6 @@ public class VN_CommandCall : MonoBehaviour
 
 	// Inky custom command calling
 	private readonly string CommandCallStringNormal = ">>>";
-	private readonly string CommandCallStringImmediate = ">^>";
 	private readonly char[] MultiCommandChar = { ';' };
 	private readonly char[] CommandDelimeters = { ',', '(', ')' };
 	private readonly char ImmediateMarker = '!';

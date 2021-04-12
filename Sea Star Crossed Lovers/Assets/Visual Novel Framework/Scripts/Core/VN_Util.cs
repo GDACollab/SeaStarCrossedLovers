@@ -122,6 +122,28 @@ public class VN_Util
         return null;
     }
 
+    public static TextboxData FindTextboxData(string target)
+    {
+        TextboxData textboxData = manager.AllTextboxData.Find(x => x.name == target);
+        if (!textboxData)
+        {
+            textboxData = null;
+            Debug.LogError("TextboxData of name " + textboxData.name + " could not be found");
+        }
+        return textboxData;
+    }
+
+    public static Sprite FindTextboxCornerDecor(TextboxData data, string target)
+    {
+        Sprite decor = data.FindCornerDecorSprite(target);
+        if (!decor)
+        {
+            decor = null;
+            Debug.LogError("Sprite of name " + decor.name + " could not be found");
+        }
+        return decor;
+    }
+
     public static string RemoveSubstring(string source, string toRemove)
     {
         return source.Remove(source.IndexOf(toRemove), toRemove.Length);

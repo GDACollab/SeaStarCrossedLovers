@@ -12,6 +12,11 @@ public class TextboxEnterCmd : MonoBehaviour, ICommandCall
 
         VN_Manager manager = VN_Util.manager;
 
+        TextboxData data = VN_Util.FindTextboxData(args[0]);
+        Sprite decor = VN_Util.FindTextboxCornerDecor(data, args[1]);
+
+        manager.textboxManager.SetTextboxData(data, decor);
+
         if (isImmediate)
         {
             StartCoroutine(manager.textboxTransition.Co_EnterScreen(manager, this));

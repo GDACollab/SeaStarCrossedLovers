@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ee9b0592f31174445924eab29370e021
+guid: 02837f84b991d4d7d9f2dfb95ebaacf8
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -7,31 +7,22 @@ TextureImporter:
     second: TextboxSprite
   - first:
       213: 6872780178432195060
-    second: NameBoxSprite
+    second: NameboxSprite
   - first:
       213: -181825988385964324
     second: SettingsSprite
   - first:
       213: 2179885054669333904
-    second: WavesDecoration_LBSprite
+    second: WavesDecorationSprite
   - first:
       213: 8124731487720925193
-    second: WavesDecoration_RTSprite
+    second: StarsDecorationSprite
   - first:
       213: -844208298926270715
-    second: StarsDecoration_LBSprite
-  - first:
-      213: 6269978233984575778
-    second: StarsDecoration_RTSprite
-  - first:
-      213: 1408193934214000229
     second: SkipSprite
   - first:
-      213: -1036943330271934899
-    second: DialogueBoxUIAssets_Megan_Chau_8
-  - first:
-      213: -6402154475687204316
-    second: DialogueBoxUIAssets_Megan_Chau_9
+      213: 6269978233984575778
+    second: DialogueBoxUIAssets_Megan_Chau_6
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -72,13 +63,13 @@ TextureImporter:
   lightmap: 0
   compressionQuality: 50
   spriteMode: 2
-  spriteExtrude: 0
+  spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 0
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -135,9 +126,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 39
-        y: 275
+        y: 274
         width: 1630
-        height: 305
+        height: 306
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -152,7 +143,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: NameBoxSprite
+      name: NameboxSprite
       rect:
         serializedVersion: 2
         x: 42
@@ -194,7 +185,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WavesDecoration_LBSprite
+      name: WavesDecorationSprite
       rect:
         serializedVersion: 2
         x: 549
@@ -215,13 +206,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WavesDecoration_RTSprite
+      name: StarsDecorationSprite
       rect:
         serializedVersion: 2
-        x: 678
-        y: 46
-        width: 266
-        height: 197
+        x: 852
+        y: 50
+        width: 284
+        height: 162
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -236,13 +227,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: StarsDecoration_LBSprite
+      name: SkipSprite
       rect:
         serializedVersion: 2
-        x: 967
-        y: 33
-        width: 284
-        height: 161
+        x: 458
+        y: 95
+        width: 47
+        height: 45
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -252,48 +243,6 @@ TextureImporter:
       bones: []
       spriteID: 50710126605c844f0800000000000000
       internalID: -844208298926270715
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: StarsDecoration_RTSprite
-      rect:
-        serializedVersion: 2
-        x: 1083
-        y: 78
-        width: 284
-        height: 162
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 229e41aebff630750800000000000000
-      internalID: 6269978233984575778
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SkipSprite
-      rect:
-        serializedVersion: 2
-        x: 460
-        y: 95
-        width: 47
-        height: 45
-      alignment: 9
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 56e6fa71ce8ea8310800000000000000
-      internalID: 1408193934214000229
       vertices: []
       indices: 
       edges: []

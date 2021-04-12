@@ -1,4 +1,5 @@
->>> Enter.Noelani.Ocean
+>>> !CharEnter(Noelani); CharEnter(Ocean);
+>>> TextboxEnter(Default, WavesDecorationSprite);
 
 Ocean: Hey Noelani… are you doing alright? #concerned(eyes), neutral(mouth)
 

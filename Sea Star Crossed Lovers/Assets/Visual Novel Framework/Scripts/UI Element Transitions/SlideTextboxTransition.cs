@@ -7,14 +7,16 @@ public class SlideTextboxTransition : TextboxTransition
 {
     public override IEnumerator Co_EnterScreen(VN_Manager manager, MonoBehaviour caller)
     {
-        Vector2 endPosition = Vector2.zero;
+        float offset = manager.textboxManager.data.activeOffset;
+        Vector2 endPosition = new Vector2(0, offset);
         yield return caller.StartCoroutine(Co_Move(manager, endPosition, Ease.OutSine));
     }
 
     public override IEnumerator Co_ExitScreen(VN_Manager manager, MonoBehaviour caller)
     {
         RectTransform textbox = manager.textboxRectTransform;
-        Vector2 endPosition = new Vector2 (0, -textbox.sizeDelta.y);
+        float offset = manager.textboxManager.data.hiddenOffset;
+        Vector2 endPosition = new Vector2 (0, -(textbox.sizeDelta.y + offset));
         yield return caller.StartCoroutine(Co_Move(manager, endPosition, Ease.InSine));
     }
 
