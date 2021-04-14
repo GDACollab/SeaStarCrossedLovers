@@ -9,6 +9,12 @@ public class ProgressBar : MonoBehaviour
     // The Slider object that moves the progress bar
     public Slider slider;
 
+    /** The maximum amount the slider can change each update
+     *  If 0, no maximum change will be enforced
+     *  Default value = 0 
+     */
+    public float maxChange = 0;
+
     // Object that manages block position. Gives provides information to update the slider
     private BlockManager _blockManager;
     /**
@@ -26,8 +32,6 @@ public class ProgressBar : MonoBehaviour
     /**
      * Updates the value of the progress bar to the maximum height of the tower
      * Doesn't update if the tower height isn't within the bounds of the slider
-     * 
-     * TODO: Make slider update smoothly (look at camera movement coroutines)
      */
     public void updateProgress()
     {
@@ -35,14 +39,33 @@ public class ProgressBar : MonoBehaviour
         float currentHeight = slider.value;
         if(towerHeight != currentHeight && towerHeight >= slider.minValue)
         {
-            if(towerHeight <= slider.maxValue)
+            slider.value = getProgressValue(towerHeight);
+        }
+    }
+
+    /**
+     * Calculates to what value the slider needs to change this update to be as accurate and smooth as possible
+     * If maxChange == 0, the progress value will be the tower height
+     * 
+     * @Param towerHeight: the current height of the tower and the value the slider aims to reflect
+     * @Return: How much the progress slider will change this update
+     */
+    private float getProgressValue(float towerHeight)
+    {
+        float progressValue = towerHeight;
+        // The reflected progress will be the height of the tower unless the distance between the current and new height is larger than maxChange
+        if(maxChange != 0 && Mathf.Abs(towerHeight - slider.value) > maxChange)
+        {
+            // If the target height is larger than the current value, add maxChange, otherwise subtract maxChange
+            if(towerHeight > slider.value)
             {
-                slider.value = towerHeight;
+                progressValue = slider.value + maxChange;
             }
             else
             {
-                slider.value = slider.maxValue;
+                progressValue = slider.value - maxChange;
             }
         }
+        return progressValue;
     }
 }
