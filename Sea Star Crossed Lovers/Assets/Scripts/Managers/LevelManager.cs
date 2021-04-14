@@ -18,20 +18,25 @@ public class LevelManager : MonoBehaviour
 
     public Text winText;
 
-    private BlockManager _blockManager;
-    private TowerGoalpoint _goalpoint;
+    public BlockManager blockManager;
+    public TowerGoalpoint goalpoint;
+    public SpawnBlock spawnBlock;
+    public BlockController blockController;
 
     private void Awake()
     {
         // Getting all necessary references
-        _blockManager = gameObject.GetComponent<BlockManager>();
-        _blockManager.Construct(this);
+        blockManager = gameObject.GetComponent<BlockManager>();
+        blockManager.Construct(this);
 
-        _goalpoint = (TowerGoalpoint)FindObjectOfType(typeof(TowerGoalpoint));
-        _goalpoint.Construct(_blockManager);
+        goalpoint = (TowerGoalpoint)FindObjectOfType(typeof(TowerGoalpoint));
+        goalpoint.Construct(blockManager);
 
-        SpawnBlock spawnBlock = (SpawnBlock)FindObjectOfType(typeof(SpawnBlock));
-        spawnBlock.Construct(this, _blockManager);
+        spawnBlock = (SpawnBlock)FindObjectOfType(typeof(SpawnBlock));
+        spawnBlock.Construct(this, blockManager);
+
+        blockController = (BlockController)FindObjectOfType(typeof(BlockController));
+        blockController.Construct(spawnBlock);
 
         winText.text = defualtWinTimerMessage;
     }
@@ -39,7 +44,7 @@ public class LevelManager : MonoBehaviour
     private void Update()
     {
         if(currentGameState == GameState.playing &&
-            _goalpoint.CheckWin() && !WinTimerOnCooldown)
+            goalpoint.CheckWin() && !WinTimerOnCooldown)
         {
             // In case the winTimer is already running
             // (theoretically not possible?) stop it so it doesn't run twice
@@ -58,7 +63,7 @@ public class LevelManager : MonoBehaviour
         // is still elligible to win until the win timer reaches timeToWin
         while (currWaitTime < timeToWin)
         {
-            if (_goalpoint.CheckWin())
+            if (goalpoint.CheckWin())
             {
                 // Update text
                 float timeLeft = timeToWin - currWaitTime;

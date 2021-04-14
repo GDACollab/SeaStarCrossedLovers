@@ -44,7 +44,7 @@ public class AdjustPosition : MonoBehaviour
         List<Blocklet> blocklets = new List<Blocklet>();
         foreach (Block block in blocks)
         {
-            if (block.currentState == Block.BlockState.stable)
+            if (block.state == Block.BlockState.stable)
             {
                 blocklets.AddRange(block.gameObject.GetComponentsInChildren<Blocklet>());
             }

@@ -45,7 +45,7 @@ public class BlockManager : MonoBehaviour
         SceneBlockList.ForEach(block =>
         {
             if (block != activeBlock &&
-                block.currentState == Block.BlockState.stable &&
+                block.state == Block.BlockState.stable &&
                 block.transform.position.y > highestBlockHeight)
             {
                 resultBlock = block;

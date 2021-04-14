@@ -6,8 +6,8 @@ public class Block : MonoBehaviour
 {
     [HideInInspector] public BlockData data;
 
-    [HideInInspector] public enum BlockState { active, falling, stable, deleting };
-    [HideInInspector] public BlockState currentState = BlockState.active;
+    [HideInInspector] public enum BlockState { active, preStable, falling, stable, deleting };
+    [HideInInspector] public BlockState state = BlockState.active;
     [HideInInspector] public SimpleWave wave;
     [HideInInspector] public List<GameObject> blockletChildren = new List<GameObject>();
 
@@ -15,7 +15,8 @@ public class Block : MonoBehaviour
 
     public AudioSource audioSource;
 
-    private BlockManager _blockManager;
+    private BlockManager blockManager;
+    private BlockController blockController;
 
     public GameObject debugObj;
     private TextMesh debugObjText;
@@ -26,9 +27,10 @@ public class Block : MonoBehaviour
         debugObjText = debugObj.GetComponent<TextMesh>();
     }
 
-    public Block Construct(BlockManager blockManager, BlockData data, Vector2 origin)
+    public Block Construct(BlockManager blockManager, BlockController blockController, BlockData data, Vector2 origin)
     {
-        _blockManager = blockManager;
+        this.blockManager = blockManager;
+        this.blockController = blockController;
         this.data = data;
         // Construct the block out of the filled cell grid
         for (int cell_x = 0; cell_x < data.GRID_SIZE; cell_x++)
@@ -102,15 +104,15 @@ public class Block : MonoBehaviour
         // Delete Block GameObject if go far below wave
         if (gameObject.transform.position.y < wave.transform.position.y - 10)
         {
-            _blockManager.RemoveBlockFromList(this);
+            blockManager.RemoveBlockFromList(this);
         }
     }
 
     public void Delete(int rowsToDelete)
     {
-        if (currentState != BlockState.deleting)
+        if (state != BlockState.deleting)
         {
-            currentState = BlockState.deleting;
+            state = BlockState.deleting;
             if (!wave.waveIsOver)
             {
                 //Find all blocklets that make up the tetronimo, mark them for deletion
@@ -125,21 +127,26 @@ public class Block : MonoBehaviour
     {
         if (blockletChildren.Count == 0)
         {
-            _blockManager.RemoveBlockFromList(this);
+            blockManager.RemoveBlockFromList(this);
             Destroy(this);
         }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision != null && collision.gameObject.layer == default)
+        if(collision != null && collision.gameObject.layer == default &&
+            state == BlockState.active)
         {
-            if (currentState != BlockState.stable)
-            {
-                audioSource.Play();
-            }
-            currentState = BlockState.stable;
+            state = BlockState.preStable;
+            audioSource.Play();
+            StartCoroutine(PreStableControlTimer(blockController.prestableControlTime));
         }
+    }
+
+    private IEnumerator PreStableControlTimer(float time)
+    {
+        yield return new WaitForSeconds(time);
+        state = BlockState.stable;
     }
 
     

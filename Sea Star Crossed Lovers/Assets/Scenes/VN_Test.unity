@@ -421,6 +421,14 @@ PrefabInstance:
       propertyPath: textboxTransitionDuration
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7788690952332685026, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
+      propertyPath: commandDebug
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7788690952332685026, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
+      propertyPath: DebugEnabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7788690952332685027, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -623,6 +631,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7993067095481302583, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: scenePosition
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9029017032059937155, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
+      propertyPath: commandDebug
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9039910010715460570, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}

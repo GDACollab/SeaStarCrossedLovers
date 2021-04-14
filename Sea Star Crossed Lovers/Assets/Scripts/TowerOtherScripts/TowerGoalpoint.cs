@@ -39,7 +39,7 @@ public class TowerGoalpoint : MonoBehaviour
         // If blocklet is found, check if Block is not active and is stable
         Block block = blockletCheck.blockParent;
         if (blockletCheck != _blockManager.activeBlock &&
-            block.currentState == Block.BlockState.stable)
+            block.state == Block.BlockState.stable)
         {
             // Add to winningBlocks if passed 
             if (!winningBlocks.Contains(block))

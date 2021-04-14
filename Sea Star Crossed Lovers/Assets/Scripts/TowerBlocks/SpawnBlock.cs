@@ -8,22 +8,16 @@ public class SpawnBlock : MonoBehaviour
     public List<AudioClip> BlockHitSounds;
 
     public float blockHitVolume = 1;
-
     public float blockMass = 1;
-
-    public float horizontalSpeed = 2000;
-    public float baseFallSpeed = 5;
-    public float dropForce = 300;
-    public int startingDownwardForce = 150;
     public int spawnDelay = 1;
 
-    private float currentFallSpeed;
-    private float blockGravity;
     private bool waitingForBlock = false;
-    private bool canSpawnBlock = false; 
+    private bool canSpawnBlock = false;
 
-    private Block activeBlock;
-    private Rigidbody2D activeRB;
+    public float blockGravity;
+
+    public Block activeBlock;
+    public Rigidbody2D activeRB;
 
     private LevelManager _levelManager;
     private BlockManager _blockManager;
@@ -47,30 +41,6 @@ public class SpawnBlock : MonoBehaviour
         {
             Debug.LogError("SpawnBlockList Error: empty list");
         }
-        currentFallSpeed = baseFallSpeed;
-    }
-
-    private void FixedUpdate()
-    {
-        // control an active block
-        if (activeBlock != null)
-        {
-            // apply horizontal and vertical change
-            float xOffset = Input.GetAxisRaw("Horizontal") * Time.deltaTime * horizontalSpeed;
-            activeRB.velocity = new Vector2(xOffset, -currentFallSpeed);
-
-            // detect if player has dropped block
-            if (Input.GetButton("Drop"))
-            {
-
-                //Implementation of block fall acceleration instead of activating physics
-                currentFallSpeed = baseFallSpeed * 4;
-            }
-            else
-            {
-                currentFallSpeed = baseFallSpeed;
-            }
-        }
     }
 
     private void Update()
@@ -78,30 +48,15 @@ public class SpawnBlock : MonoBehaviour
         // if an active block collides or is being deleted,
         // give it normal gravity and prepare to spawn new block
         if (canSpawnBlock && !waitingForBlock &&
-            (activeBlock.currentState == Block.BlockState.stable ||
-            activeBlock.currentState == Block.BlockState.deleting))
+            (activeBlock.state == Block.BlockState.stable ||
+            activeBlock.state == Block.BlockState.deleting))
         {
             // Set true to ensure no additional block is spawned during the spawn delay
             waitingForBlock = true;
             // Reset activeBlock to original gravity and null activeBlock
-            activeRB.gravityScale = blockGravity;
             activeBlock = null;
-            activeRB.velocity = new Vector2(0, 0);
 
             StartCoroutine(delaySpawnBlock());
-        }
-
-        // detect rotation
-        if (activeBlock != null)
-        {
-            if (Input.GetButtonDown("RotateCounterclockwise"))
-            {
-                activeRB.transform.Rotate(new Vector3(0, 0, 90));
-            }
-            else if (Input.GetButtonDown("RotateClockwise"))
-            {
-                activeRB.transform.Rotate(new Vector3(0, 0, -90));
-            }
         }
     }
 
@@ -127,7 +82,7 @@ public class SpawnBlock : MonoBehaviour
             Debug.LogError("BlockData \"" + selectedBlockData.name + "\" has null blockPrefab");
         }
         Block newBlock = Instantiate(selectedBlockData.blockPrefab, spawnPosition, Quaternion.identity);
-        newBlock.Construct(_blockManager, selectedBlockData, spawnPosition);
+        newBlock.Construct(_blockManager, _levelManager.blockController, selectedBlockData, spawnPosition);
 
         // Set active block to be controlled
         activeBlock = newBlock;
@@ -171,5 +126,4 @@ public class SpawnBlock : MonoBehaviour
             canSpawnBlock = true;
         }
     }
-
 }

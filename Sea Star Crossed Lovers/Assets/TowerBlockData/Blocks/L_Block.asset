@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1cded47f5323e42e388e3e8a59d89ff8, type: 3}
-  m_Name: T_Block
+  m_Name: L_Block
   m_EditorClassIdentifier: 
   GRID_SIZE: 4
   blockPrefab: {fileID: 4887555501995039644, guid: 22bd5e006002641beb970da1538b8372, type: 3}
-  cell_00: {fileID: 0}
+  cell_00: {fileID: 11400000, guid: ac028db4294514a6b8509daf0a62c567, type: 2}
   cell_10: {fileID: 0}
   cell_20: {fileID: 0}
   cell_30: {fileID: 0}
-  cell_01: {fileID: 0}
+  cell_01: {fileID: 11400000, guid: b199d10352a5d4f2ba4b2ad5f10d174e, type: 2}
   cell_11: {fileID: 0}
   cell_21: {fileID: 0}
   cell_31: {fileID: 0}
-  cell_02: {fileID: 0}
-  cell_12: {fileID: 11400000, guid: ac028db4294514a6b8509daf0a62c567, type: 2}
+  cell_02: {fileID: 11400000, guid: ac028db4294514a6b8509daf0a62c567, type: 2}
+  cell_12: {fileID: 0}
   cell_22: {fileID: 0}
   cell_32: {fileID: 0}
   cell_03: {fileID: 11400000, guid: b199d10352a5d4f2ba4b2ad5f10d174e, type: 2}
-  cell_13: {fileID: 11400000, guid: b199d10352a5d4f2ba4b2ad5f10d174e, type: 2}
-  cell_23: {fileID: 11400000, guid: ac028db4294514a6b8509daf0a62c567, type: 2}
+  cell_13: {fileID: 0}
+  cell_23: {fileID: 0}
   cell_33: {fileID: 0}
