@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Ink.Runtime;
-using UnityEditor;
 
 /// <summary>
 /// Creates and manages VN components and flow
@@ -23,8 +22,6 @@ public class VN_Manager : MonoBehaviour
 	[Tooltip("ActiveState of VN. Set before play to make VN appear or be hidden on start")]
 	public ActiveState activeState = ActiveState.hidden;
 	public enum ActiveState { hidden, active }
-	[Tooltip("Distance of off screen characters in pixels away the screen edge")]
-	public int offScreenDistance = 500;
 
 	public float characterBoxScale = 1;
 
@@ -45,7 +42,7 @@ public class VN_Manager : MonoBehaviour
 	[Header("Required Objects")]
 	public Story story;
 	[Tooltip("Intermediate file for Unity to work with Ink; Created when a .ink file is saved in Unity")]
-	[SerializeField] private TextAsset inkJSONAsset = null;
+	[SerializeField] private TextAsset inkJSONAsset;
 	[Tooltip("CharacterData of the player in the VN")]
 	[SerializeField] private CharacterData PlayerCharacterData;
 	[Tooltip("Generic VN_Character GameObjects; There should be only 2 in a scene")]
@@ -55,11 +52,10 @@ public class VN_Manager : MonoBehaviour
 	[Tooltip("List of textbox data to pull from")]
 	public List<TextboxData> AllTextboxData;
 
-	[Header("UI settings")]
-	public float textboxTransitionDuration = 1;
-	public TextboxTransition textboxTransition;
+	[Header("Debugging")]
+	public bool DebugEnabled;
 
-	// Public references
+	[Header("Public References")]
 	public Canvas TextboxCanvas;
 	public RectTransform textboxRectTransform;
 	public Canvas TextCanvas;
@@ -103,7 +99,7 @@ public class VN_Manager : MonoBehaviour
 	// Adds the AddCharacter and SubtractCharacter functions to the AllCommands Dictionary
 	void Awake()
     {
-		VN_Util Helper = new VN_Util(this);
+		VN_Util Helper = new VN_Util(this, DebugEnabled);
 		// Get CommandCall script in gameobject
 		CommandCall = GetComponent<VN_CommandCall>();
 		CommandCall.Construct(this);
@@ -141,14 +137,20 @@ public class VN_Manager : MonoBehaviour
 		ClearContent();
 		//UIFactory.CreateStartStoryButton();
 
+		textboxManager.SetDefaultData();
+
 		switch (activeState)
 		{
 			case ActiveState.hidden:
-				float height = textboxRectTransform.sizeDelta.y;
-				textboxRectTransform.anchoredPosition = new Vector2(0, -(height + 50));
+				float textboxHeight = textboxRectTransform.sizeDelta.y;
+				float hiddenOffset = textboxManager.data.hiddenOffset;
+				textboxRectTransform.anchoredPosition =
+					new Vector2(0, -(textboxHeight + hiddenOffset));
 				break;
 			case ActiveState.active:
-				textboxRectTransform.anchoredPosition = Vector2.zero;
+				float activeOffset = textboxManager.data.activeOffset;
+				textboxRectTransform.anchoredPosition =
+					new Vector2(0, activeOffset);
 				break;
 		}
 
@@ -176,6 +178,12 @@ public class VN_Manager : MonoBehaviour
 		story = new Story(inkJSONAsset.text);
 		if (OnCreateStory != null) OnCreateStory(story);
 		RefreshView();
+
+		if (VN_Util.VN_Debug)
+		{
+			VN_Util.startUpTime = Time.realtimeSinceStartup;
+			VN_Util.VNDebugPrint("Start story: \"" + inkJSONAsset.name + "\"", this);
+		}
 	}
 
 	// Remove all VN text & buttons, then starts displaying the text
@@ -234,8 +242,13 @@ public class VN_Manager : MonoBehaviour
         //// Instantiate character name text
         nameTextObj = UIFactory.CreateNameTextView(speaker);
 
-        // Start displaying text content
-        yield return StartCoroutine(Co_SlowText(contentTextObj));
+		// Start displaying text content
+		if (VN_Util.VN_Debug)
+		{
+			VN_Util.storedDebugString = currentLine;
+			VN_Util.VNDebugPrint("Start display text: \"" + VN_Util.storedDebugString + "\"", this);
+		}
+		yield return StartCoroutine(Co_SlowText(contentTextObj));
 
 		// Once done with showing text content, show all choice buttons
 		UIFactory.CreateAllChoiceButtons();
@@ -260,6 +273,10 @@ public class VN_Manager : MonoBehaviour
 			// Convert to x char per second by inverting
 			yield return new WaitForSeconds(1 / TextSpeed);
 		}
+		if (VN_Util.VN_Debug)
+		{
+			VN_Util.VNDebugPrint("End display text: \"" + VN_Util.storedDebugString + "\"", this);
+		}
 	}
 
 	private string FormatText(string text)
@@ -281,7 +298,6 @@ public class VN_Manager : MonoBehaviour
 	}
 
 	// Makes the remaining text appear instantly, then creates the choice buttons
-	// TODO BUG: Trying to skip while function is running breaks VN
 	private void SkipSlowText()
 	{
 		if (!currentTextDone)
@@ -290,6 +306,11 @@ public class VN_Manager : MonoBehaviour
 			StopAllCoroutines();
 			contentTextObj.text = currentLine;
 			UIFactory.CreateAllChoiceButtons();
+
+			if (VN_Util.VN_Debug)
+			{
+				VN_Util.VNDebugPrint("Skip slow text: \"" + VN_Util.storedDebugString + "\"", this);
+			}
 		}
 	}
 	#endregion
@@ -306,6 +327,11 @@ public class VN_Manager : MonoBehaviour
 			// Get first tag in currentTags
 			string emotionTag = currentTags[0];
 			currentSpeaker.ChangeSprite(emotionTag);
+
+			if (VN_Util.VN_Debug)
+			{
+				VN_Util.VNDebugPrint("Tag change emotion: \"" + emotionTag + "\"", this);
+			}
 		}
 	}
 
@@ -405,6 +431,8 @@ public class VN_Manager : MonoBehaviour
 				charObj.data.transition = originalTransition;
 				charObj.ChangeSprite("");
 				charObj.SetData(null);
+
+				Destroy(tempTeleport);
 			}
 		}
 		yield return new WaitForSeconds(1);
@@ -415,6 +443,10 @@ public class VN_Manager : MonoBehaviour
 	// Determines which choice the character selected and plays the corresponding text
 	public void OnClickChoiceButton(Choice choice)
 	{
+		if (VN_Util.VN_Debug)
+		{
+			VN_Util.VNDebugPrint("Chose choice: \"" + choice.text + "\"", this);
+		}
 		story.ChooseChoiceIndex(choice.index);
 		RefreshView();
 	}

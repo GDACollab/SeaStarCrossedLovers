@@ -158,35 +158,4 @@ public class VN_Character : MonoBehaviour
         image.sprite = sprite;
         image.SetNativeSize();
     }
-
-    public IEnumerator Enter(CharacterData characterData, bool isImmediate)
-    {
-        if (data == null)
-        {
-            SetData(characterData);
-            ChangeSprite(characterData.defaultSprite);
-            if (isImmediate)
-            {
-                StartCoroutine(data.transition.Co_EnterScreen(this, this));
-            }
-            else
-            {
-                yield return StartCoroutine(data.transition.Co_EnterScreen(this, this));
-            }
-        }
-    }
-
-    public IEnumerator Exit(bool isImmediate)
-    {
-        if (isImmediate)
-        {
-            StartCoroutine(data.transition.Co_ExitScreen(this, this));
-        }
-        else
-        {
-            yield return StartCoroutine(data.transition.Co_ExitScreen(this, this));
-        }
-        ChangeSprite("");
-        SetData(null);
-    }
 }

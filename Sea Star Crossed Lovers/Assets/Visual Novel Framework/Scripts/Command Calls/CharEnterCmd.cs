@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharEnterCmd : MonoBehaviour, ICommandCall
 {
-	public IEnumerator Command(List<string> args, bool isImmediate)
+	public IEnumerator Command(List<string> args)
 	{
         foreach(string arg in args)
         {
@@ -13,14 +13,8 @@ public class CharEnterCmd : MonoBehaviour, ICommandCall
 
             charObj.SetData(data);
             charObj.ChangeSprite(data.defaultSprite);
-            if (isImmediate)
-            {
-                StartCoroutine(charObj.data.transition.Co_EnterScreen(charObj, charObj));
-            }
-            else
-            {
-                yield return StartCoroutine(charObj.data.transition.Co_EnterScreen(charObj, charObj));
-            }
+
+            yield return StartCoroutine(charObj.data.transition.Co_EnterScreen(charObj, charObj));
         }
     }
 }

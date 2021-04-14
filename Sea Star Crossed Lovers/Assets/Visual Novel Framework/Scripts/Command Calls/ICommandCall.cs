@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ICommandCall
 {
-    IEnumerator Command(List<string> args, bool isImmediate);
+    IEnumerator Command(List<string> args);
 }

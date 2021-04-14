@@ -58,7 +58,13 @@ public class VN_TextboxManager : MonoBehaviour
         {
             Debug.LogError("Cannot find sprite \"" + cornerDecor.name + "\" in TextboxData \"" + data.name + "\"");
         }
+    }
 
+    public void SetDefaultData()
+    {
+        TextboxData data = _manager.AllTextboxData[0];
+        Sprite sprite = data.cornerDecorList[0].sprite;
+        SetTextboxData(data, sprite);
     }
 
 }

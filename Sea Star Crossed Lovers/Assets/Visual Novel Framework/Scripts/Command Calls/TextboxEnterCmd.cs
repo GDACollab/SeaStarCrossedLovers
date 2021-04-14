@@ -4,26 +4,21 @@ using UnityEngine;
 
 public class TextboxEnterCmd : MonoBehaviour, ICommandCall
 {
-    public IEnumerator Command(List<string> args, bool isImmediate)
+    public IEnumerator Command(List<string> args)
     {
-        // TODO ? set /remove data similar to character transitions?
-        //charObj.SetData(data);
-        //charObj.ChangeSprite(data.defaultSprite);
-
+        if (args.Count != 2)
+        {
+            Debug.LogError("Argument number error: " + this);
+            yield break;
+        }
         VN_Manager manager = VN_Util.manager;
 
         TextboxData data = VN_Util.FindTextboxData(args[0]);
         Sprite decor = VN_Util.FindTextboxCornerDecor(data, args[1]);
 
+        manager.activeState = VN_Manager.ActiveState.active;
         manager.textboxManager.SetTextboxData(data, decor);
 
-        if (isImmediate)
-        {
-            StartCoroutine(manager.textboxTransition.Co_EnterScreen(manager, this));
-        }
-        else
-        {
-            yield return StartCoroutine(manager.textboxTransition.Co_EnterScreen(manager, this));
-        }
+        yield return StartCoroutine(data.textboxTransition.Co_EnterScreen(manager, this));
     }
 }

@@ -30,7 +30,7 @@ public class VN_CommandCall : MonoBehaviour
 		foreach (var command in commandCalls)
         {
 			string commandName = VN_Util.RemoveSubstring(command.GetType().ToString(), "Cmd");
-			Func<List<string>, bool, IEnumerator> newCommand = command.Command;
+			Func<List<string>, IEnumerator> newCommand = command.Command;
 
 			AllCommands.Add(commandName, newCommand);
 		}
@@ -38,10 +38,16 @@ public class VN_CommandCall : MonoBehaviour
 
 	public IEnumerator TryCommand(string line)
 	{
+		// Line needs to beging with exactly CommandCallStringNormal in the first 3 characters.
 		if (line.Length > 3 && line.Substring(0, 3) == CommandCallStringNormal)
 		{
+			// Get a list of all the identified commands in the line by splitting by MultiCommandChar and removing any results that are empty
 			List<string> commands = line.Substring(3).Split(MultiCommandChar, StringSplitOptions.RemoveEmptyEntries)
 				.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+			if(commands.Count > 0)
+            {
+				yield return true;
+            }
 
             // Try to run all commands
             foreach (string rawCommand in commands)
@@ -72,10 +78,24 @@ public class VN_CommandCall : MonoBehaviour
 
                 if (AllCommands.ContainsKey(function))
                 {
-                    Func<List<string>, bool, IEnumerator> Co_Command =
-                        (Func<List<string>, bool, IEnumerator>)AllCommands[function];
+                    Func<List<string>, IEnumerator> Co_Command =
+                        (Func<List<string>, IEnumerator>)AllCommands[function];
 
-					yield return StartCoroutine(Co_Command(arguments, isImmediate));
+					if(VN_Util.VN_Debug)
+                    {
+						string args = string.Join(" ", arguments);
+						VN_Util.VNDebugPrint("Calling command: " + " \"" +
+							function + "(" + args + ")\"", this);
+                    }
+
+					if(isImmediate)
+                    {
+						StartCoroutine(Co_Command(arguments));
+					}
+					else
+                    {
+						yield return StartCoroutine(Co_Command(arguments));
+					}
                 }
                 else
                 {

@@ -417,6 +417,10 @@ PrefabInstance:
       propertyPath: offScreenDistance
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7788690952332685026, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
+      propertyPath: textboxTransitionDuration
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7788690952332685027, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -460,6 +464,22 @@ PrefabInstance:
     - target: {fileID: 7788690952332685027, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7788690952790418129, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7788690952790418129, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7788690952790418129, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7788690952790418129, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
+      propertyPath: m_Color.b
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7788690952886083510, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: m_AnchorMin.y

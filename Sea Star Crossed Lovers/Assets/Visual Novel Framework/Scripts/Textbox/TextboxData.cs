@@ -11,8 +11,16 @@ public class TextboxData : ScriptableObject
     public Sprite settingsSprite;
     public Sprite skipSprite;
 
+    [Tooltip("Text box Y offset upwards from the bottom of the screen when active")]
     public float activeOffset;
+    [Tooltip("Text box Y offset downwards from the bottom of the screen when hidden")]
     public float hiddenOffset;
+
+    [Header("UI Settings")]
+    [Tooltip("Duration of text box enter/exit transition in seconds")]
+    public float textboxTransitionDuration = 1;
+    [Tooltip("TextboxTransition scriptable object doing the transition movement")]
+    public TextboxTransition textboxTransition;
 
     [System.Serializable]
     public struct CornerDecor

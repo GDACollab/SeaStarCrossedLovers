@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WaitCmd : MonoBehaviour, ICommandCall
 {
-	public IEnumerator Command(List<string> args, bool isImmediate)
+	public IEnumerator Command(List<string> args)
 	{
         float waitTime = float.Parse(args[0]);
         yield return new WaitForSeconds(waitTime);

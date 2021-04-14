@@ -17,7 +17,9 @@ MonoBehaviour:
   settingsSprite: {fileID: -181825988385964324, guid: 02837f84b991d4d7d9f2dfb95ebaacf8, type: 3}
   skipSprite: {fileID: -844208298926270715, guid: 02837f84b991d4d7d9f2dfb95ebaacf8, type: 3}
   activeOffset: 50
-  hiddenOffset: 50
+  hiddenOffset: 100
+  textboxTransitionDuration: 0.5
+  textboxTransition: {fileID: 11400000, guid: dfde89596b1b0484eb7b169ff770c736, type: 2}
   cornerDecorList:
   - sprite: {fileID: 2179885054669333904, guid: 02837f84b991d4d7d9f2dfb95ebaacf8, type: 3}
     positionOffset: {x: -100, y: -70}

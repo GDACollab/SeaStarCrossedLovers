@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharExitCmd : MonoBehaviour, ICommandCall
 {
-	public IEnumerator Command(List<string> args, bool isImmediate)
+	public IEnumerator Command(List<string> args)
 	{
         foreach (string arg in args)
         {
