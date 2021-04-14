@@ -30,8 +30,8 @@ public class ProgressBar : MonoBehaviour
     }
 
     /**
-     * Updates the value of the progress bar to the maximum height of the tower
-     * Doesn't update if the tower height isn't within the bounds of the slider
+     * Updates the value of the progress bar to the current height of the tower
+     * Updates only within the bounds of maxChange to give the progression a smooth look
      */
     public void updateProgress()
     {
@@ -66,6 +66,17 @@ public class ProgressBar : MonoBehaviour
                 progressValue = slider.value - maxChange;
             }
         }
+
+        // Safety checks to ensure that the slider doesn't try to update to a value out of its range
+        if(progressValue > slider.maxValue)
+        {
+            progressValue = slider.maxValue;
+        }
+        if(progressValue < slider.minValue)
+        {
+            progressValue = slider.minValue;
+        }
+        
         return progressValue;
     }
 }
