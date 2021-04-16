@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1cded47f5323e42e388e3e8a59d89ff8, type: 3}
-  m_Name: Medium_Block
+  m_Name: O_Block
   m_EditorClassIdentifier: 
   GRID_SIZE: 4
   blockPrefab: {fileID: 4887555501995039644, guid: 22bd5e006002641beb970da1538b8372, type: 3}

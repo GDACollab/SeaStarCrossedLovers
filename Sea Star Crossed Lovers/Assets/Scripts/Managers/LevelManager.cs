@@ -22,6 +22,7 @@ public class LevelManager : MonoBehaviour
     public TowerGoalpoint goalpoint;
     public SpawnBlock spawnBlock;
     public BlockController blockController;
+    public BlockQueue blockQueue;
 
     private void Awake()
     {
@@ -37,6 +38,9 @@ public class LevelManager : MonoBehaviour
 
         blockController = (BlockController)FindObjectOfType(typeof(BlockController));
         blockController.Construct(spawnBlock);
+
+        blockQueue = (BlockQueue)FindObjectOfType(typeof(BlockQueue));
+        blockQueue.Construct(this);
 
         winText.text = defualtWinTimerMessage;
     }

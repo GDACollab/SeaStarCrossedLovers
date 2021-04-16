@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using PrintExtensions;
+
 public class SpawnBlock : MonoBehaviour
 {
     public List<BlockData> SpawnBlockList;
@@ -9,7 +11,7 @@ public class SpawnBlock : MonoBehaviour
 
     public float blockHitVolume = 1;
     public float blockMass = 1;
-    public int spawnDelay = 1;
+    public float spawnDelay = 1;
 
     private bool waitingForBlock = false;
     private bool canSpawnBlock = false;
@@ -19,13 +21,16 @@ public class SpawnBlock : MonoBehaviour
     public Block activeBlock;
     public Rigidbody2D activeRB;
 
-    private LevelManager _levelManager;
-    private BlockManager _blockManager;
+    private LevelManager levelManager;
+    private BlockManager blockManager;
+    public BlockQueue blockQueue;
 
     public void Construct(LevelManager levelManager, BlockManager blockManager)
     {
-        _levelManager = levelManager;
-        _blockManager = blockManager;
+        this.levelManager = levelManager;
+        this.blockManager = blockManager;
+
+        blockQueue = GetComponent<BlockQueue>();
     }
 
     private void Awake()
@@ -51,17 +56,19 @@ public class SpawnBlock : MonoBehaviour
             (activeBlock.state == Block.BlockState.stable ||
             activeBlock.state == Block.BlockState.deleting))
         {
-            // Set true to ensure no additional block is spawned during the spawn delay
-            waitingForBlock = true;
-            // Reset activeBlock to original gravity and null activeBlock
-            activeBlock = null;
-
+            // Can only hold again when reach these conditions
+            this.levelManager.blockController.canHold = true;
             StartCoroutine(delaySpawnBlock());
         }
     }
 
-    IEnumerator delaySpawnBlock()
+    public IEnumerator delaySpawnBlock()
     {
+        // Set true to ensure no additional block is spawned during the spawn delay
+        waitingForBlock = true;
+        // Reset activeBlock to original gravity and null activeBlock
+        activeBlock = null;
+
         yield return new WaitForSeconds(spawnDelay);
         waitingForBlock = false;
         spawnNewBlock();
@@ -74,15 +81,16 @@ public class SpawnBlock : MonoBehaviour
         Vector3 spawnPosition = gameObject.transform.position;
         spawnPosition.z = 0;
 
-        // Random select BlockData from SpawnBlockList
-        BlockData selectedBlockData = SpawnBlockList[Random.Range(0, SpawnBlockList.Count)];
+        BlockData selectedBlockData = blockQueue.DequeueBlock();
+        blockQueue.EnqueueBlock();
+        blockQueue.UpdateBlockDisplay();
 
         if (!selectedBlockData.blockPrefab)
         {
             Debug.LogError("BlockData \"" + selectedBlockData.name + "\" has null blockPrefab");
         }
         Block newBlock = Instantiate(selectedBlockData.blockPrefab, spawnPosition, Quaternion.identity);
-        newBlock.Construct(_blockManager, _levelManager.blockController, selectedBlockData, spawnPosition);
+        newBlock.Construct(blockManager, levelManager.blockController, selectedBlockData, spawnPosition);
 
         // Set active block to be controlled
         activeBlock = newBlock;
@@ -96,8 +104,8 @@ public class SpawnBlock : MonoBehaviour
         activeRB.mass = blockMass;
 
         // Pass active block to level manager and block manager
-        _blockManager.activeBlock = activeBlock;
-        _blockManager.AddBlockFromList(activeBlock);
+        blockManager.activeBlock = activeBlock;
+        blockManager.AddBlockFromList(activeBlock);
 
         // Store original gravity
         blockGravity = activeRB.gravityScale;
@@ -114,13 +122,13 @@ public class SpawnBlock : MonoBehaviour
         
         if (canSpawnBlock)
         {
-            _levelManager.currentGameState =
+            levelManager.currentGameState =
                 LevelManager.GameState.paused;
             canSpawnBlock = false;
         }
         else
         {
-            _levelManager.currentGameState =
+            levelManager.currentGameState =
                 LevelManager.GameState.playing;
             spawnNewBlock();
             canSpawnBlock = true;

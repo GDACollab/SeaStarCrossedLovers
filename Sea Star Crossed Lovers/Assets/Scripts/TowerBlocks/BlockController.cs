@@ -14,13 +14,18 @@ public class BlockController : MonoBehaviour
     public float prestableControlMult;
 
     private float currentFallSpeed;
+    public bool canHold;
 
     private SpawnBlock spawnBlock;
+    private BlockQueue blockQueue;
 
     public void Construct(SpawnBlock spawnBlock)
     {
         currentFallSpeed = baseFallSpeed;
         this.spawnBlock = spawnBlock;
+
+        blockQueue = spawnBlock.blockQueue;
+        canHold = true;
     }
 
     private void FixedUpdate()
@@ -39,6 +44,7 @@ public class BlockController : MonoBehaviour
                 spawnBlock.activeRB.velocity = new Vector2(sidewaysVelocity, -currentFallSpeed);
             }
             // TODO Change friction to very low while active/preStable?
+
             // After being colliding, give limited control
             else if (spawnBlock.activeBlock.state == Block.BlockState.preStable)
             {
@@ -51,9 +57,9 @@ public class BlockController : MonoBehaviour
 
     private void Update()
     {
-        // detect rotation
         if (spawnBlock.activeBlock != null)
         {
+            // detect rotation
             if (Input.GetButtonDown("RotateCounterclockwise"))
             {
                 spawnBlock.activeRB.transform.Rotate(new Vector3(0, 0, 90));
@@ -72,6 +78,18 @@ public class BlockController : MonoBehaviour
             else
             {
                 currentFallSpeed = baseFallSpeed;
+            }
+
+            if (Input.GetButtonDown("Hold") && canHold)
+            {
+                // Cannot hold until new activeBlock passes spawnBlock update check for spawning new block
+                canHold = false;
+
+                blockQueue.HoldBlock(spawnBlock.activeBlock.data);
+                blockQueue.UpdateBlockDisplay();
+                // Destroy activeBlock and spawn the new block
+                Destroy(spawnBlock.activeBlock.gameObject);
+                StartCoroutine(spawnBlock.delaySpawnBlock());
             }
         }
     }
