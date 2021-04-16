@@ -35,6 +35,11 @@ public class VN_Util
         CharacterData.TransitionDirection direction)
     {
         CharacterData data = character.data;
+        if (!data)
+        {
+            Debug.LogError("Cannot call GetTransitionTarget on a VN_Character with null CharacterData");
+            return Vector2.zero;
+        }
         float targetY = character.rectTransform.anchoredPosition.y;
         float targetX = 0;
         switch (direction)
@@ -80,7 +85,8 @@ public class VN_Util
     public static CharacterData FindCharacterData(string characterName)
     {
         // Get currentSpeaker by finding speakerName in CharacterObjects
-        CharacterData character = manager.AllCharacterData.Find(x => x.name == characterName);
+        CharacterData character = manager.characterManager.AllCharacterData
+            .Find(x => x.name == characterName);
 
         // Catch character being null
         if (!character)
@@ -99,7 +105,8 @@ public class VN_Util
     /// <returns>If found, VN_Character that has data of param data; otherwise null</returns>
     public static VN_Character FindCharacterObj(CharacterData data)
     {
-        CharacterData characterData = manager.AllCharacterData.Find(x => x == data);
+        CharacterData characterData = manager.characterManager.AllCharacterData
+            .Find(x => x == data);
 
         if (!characterData)
         {
@@ -107,7 +114,7 @@ public class VN_Util
             return null;
         }
 
-        foreach (VN_Character charObj in manager.CharacterObjects)
+        foreach (VN_Character charObj in manager.characterManager.CharacterObjects)
         {
             if (charObj.data == characterData) return charObj;
         }
@@ -124,7 +131,7 @@ public class VN_Util
     /// <returns>If found, VN_Character that has data of param data; otherwise null</returns>
     public static VN_Character FindEmptyCharObj(CharacterData data)
     {
-        CharacterData characterData = manager.AllCharacterData.Find(x => x == data);
+        CharacterData characterData = manager.characterManager.AllCharacterData.Find(x => x == data);
 
         if (!characterData)
         {
@@ -132,7 +139,7 @@ public class VN_Util
             return null;
         }
 
-        foreach (VN_Character charObj in manager.CharacterObjects)
+        foreach (VN_Character charObj in manager.characterManager.CharacterObjects)
         {
             if (charObj.data == null &&
                 charObj.scenePosition.ToString() == data.scenePosition.ToString()) return charObj;
@@ -149,7 +156,7 @@ public class VN_Util
     /// <returns>If found, TextboxData that has name of target; otherwise null</returns>
     public static TextboxData FindTextboxData(string target)
     {
-        TextboxData textboxData = manager.AllTextboxData.Find(x => x.name == target);
+        TextboxData textboxData = manager.textboxManager.AllTextboxData.Find(x => x.name == target);
         if (!textboxData)
         {
             textboxData = null;

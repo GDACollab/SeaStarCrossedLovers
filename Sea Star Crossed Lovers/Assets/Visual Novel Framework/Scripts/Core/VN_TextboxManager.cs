@@ -5,10 +5,13 @@ using UnityEngine.UI;
 
 public class VN_TextboxManager : MonoBehaviour
 {
+    [Tooltip("List of textbox data to pull from")]
+    public List<TextboxData> AllTextboxData;
 
+    // Current active TextboxData
     public TextboxData data;
 
-    private VN_Manager _manager;
+    private VN_Manager manager;
     private Image textboxImage;
     private Image nameboxImage;
     private Image decorRTImage;
@@ -19,15 +22,15 @@ public class VN_TextboxManager : MonoBehaviour
 
     public void Construct(VN_Manager manager)
     {
-        _manager = manager;
+        this.manager = manager;
 
-        textboxImage = _manager.TextboxCanvas.GetComponent<Image>();
-        nameboxImage = _manager.NameCanvas.GetComponent<Image>();
-        decorRTImage = _manager.Decor_RTCanvas.GetComponent<Image>();
-        decorLBImage = _manager.Decor_LBCanvas.GetComponent<Image>();
+        textboxImage = manager.TextboxCanvas.GetComponent<Image>();
+        nameboxImage = manager.NameCanvas.GetComponent<Image>();
+        decorRTImage = manager.Decor_RTCanvas.GetComponent<Image>();
+        decorLBImage = manager.Decor_LBCanvas.GetComponent<Image>();
 
-        decorRTRectTransform = _manager.Decor_RTCanvas.GetComponent<RectTransform>();
-        decorLBRectTransform = _manager.Decor_LBCanvas.GetComponent<RectTransform>();
+        decorRTRectTransform = manager.Decor_RTCanvas.GetComponent<RectTransform>();
+        decorLBRectTransform = manager.Decor_LBCanvas.GetComponent<RectTransform>();
     }
 
     public void SetTextboxData(TextboxData data, Sprite cornerDecor)
@@ -62,7 +65,7 @@ public class VN_TextboxManager : MonoBehaviour
 
     public void SetDefaultData()
     {
-        TextboxData data = _manager.AllTextboxData[0];
+        TextboxData data = AllTextboxData[0];
         Sprite sprite = data.cornerDecorList[0].sprite;
         SetTextboxData(data, sprite);
     }

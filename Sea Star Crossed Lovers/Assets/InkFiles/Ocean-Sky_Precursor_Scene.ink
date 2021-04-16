@@ -88,3 +88,5 @@ Noelani: And I'd rather try and fail than live with the uncertainty. #Determined
 Ocean: *sigh* You’ve already set your mind to it, huh? #closed eyes, smile
 
 Ocean: Well then, give it your all. #content, smile
+
+>>> !CharExit(Noelani); CharExit(Ocean);

@@ -11,6 +11,9 @@ public class SlideCharacterTransition : CharacterTransition
         Vector2 endPosition = VN_Util.GetTransitionTarget(
             character, CharacterData.TransitionDirection.enter);
 
+        character.state = VN_Character.State.active;
+        character.VN_CharSprite.color = character.manager.characterManager.nonSpeakingColor;
+
         yield return caller.StartCoroutine(Co_Move(character, endPosition, Ease.OutSine));
     }
 
@@ -18,6 +21,9 @@ public class SlideCharacterTransition : CharacterTransition
     {
         Vector2 endPosition = VN_Util.GetTransitionTarget(
             character, CharacterData.TransitionDirection.exit);
+
+        character.state = VN_Character.State.hidden;
+        character.VN_CharSprite.color = character.manager.characterManager.nonSpeakingColor;
 
         yield return caller.StartCoroutine(Co_Move(character, endPosition, Ease.InSine));
     }

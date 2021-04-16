@@ -22,10 +22,9 @@ public class VN_Manager : MonoBehaviour
 	[Tooltip("ActiveState of VN. Set before play to make VN appear or be hidden on start")]
 	public ActiveState activeState = ActiveState.hidden;
 	public enum ActiveState { hidden, active }
-
 	public float characterBoxScale = 1;
-
 	public float characterSpriteScale = 1;
+
 	// The different speeds the text can go in characters per second
 	[Header("Text Speeds")]
 	[Tooltip("Normal speed of text in characters per second. Used in normal dialouge")]
@@ -43,14 +42,6 @@ public class VN_Manager : MonoBehaviour
 	public Story story;
 	[Tooltip("Intermediate file for Unity to work with Ink; Created when a .ink file is saved in Unity")]
 	[SerializeField] private TextAsset inkJSONAsset;
-	[Tooltip("CharacterData of the player in the VN")]
-	[SerializeField] private CharacterData PlayerCharacterData;
-	[Tooltip("Generic VN_Character GameObjects; There should be only 2 in a scene")]
-	public List<VN_Character> CharacterObjects;
-	[Tooltip("List of needed character data to pull from")]
-	public List<CharacterData> AllCharacterData;
-	[Tooltip("List of textbox data to pull from")]
-	public List<TextboxData> AllTextboxData;
 
 	[Header("Debugging")]
 	public bool DebugEnabled;
@@ -83,6 +74,7 @@ public class VN_Manager : MonoBehaviour
 	private VN_CommandCall CommandCall;
 	[HideInInspector] public VN_UIFactory UIFactory;
 	[HideInInspector] public VN_TextboxManager textboxManager;
+	[HideInInspector] public VN_CharacterManager characterManager;
 
 	// Flags/states
 	// Whether or not the current text is done from slow text
@@ -99,6 +91,13 @@ public class VN_Manager : MonoBehaviour
 	// Adds the AddCharacter and SubtractCharacter functions to the AllCommands Dictionary
 	void Awake()
     {
+		var VN_characters = GameObject.FindObjectsOfType<VN_Character>();
+
+		foreach (VN_Character character in VN_characters)
+		{
+			character.Construct(this);
+		}
+
 		VN_Util Helper = new VN_Util(this, DebugEnabled);
 		// Get CommandCall script in gameobject
 		CommandCall = GetComponent<VN_CommandCall>();
@@ -111,6 +110,9 @@ public class VN_Manager : MonoBehaviour
 		textboxManager = GetComponent<VN_TextboxManager>();
 		textboxManager.Construct(this);
 
+		characterManager = GetComponent<VN_CharacterManager>();
+		characterManager.Construct(this);
+
 		// Initialize the TextSpeeds Dictionary
 		TextSpeeds = new Dictionary<string, float>{
 			{"Normal", normalSpeed},
@@ -121,13 +123,6 @@ public class VN_Manager : MonoBehaviour
 		foreach(float value in TextSpeeds.Values)
 		{
 			if(value <= 0) Debug.LogError("At least one speed value is not greater than 0. Please fix this in the inspector");
-		}
-
-		var VN_characters = GameObject.FindObjectsOfType<VN_Character>();
-
-		foreach(VN_Character character in VN_characters)
-        {
-			character.Construct(this);
 		}
 	}
 
@@ -261,6 +256,8 @@ public class VN_Manager : MonoBehaviour
 		currentTextDone = false;
 		float TextSpeed;
 
+		yield return StartCoroutine(characterManager.UpdateSpeakerLight(currentSpeaker));
+
 		foreach (char character in currentLine.ToCharArray())
 		{
 			storyText.text += character;
@@ -380,11 +377,11 @@ public class VN_Manager : MonoBehaviour
 			}
 		}
 	}
-    #endregion
+	#endregion
 
 	// Methods to clear and/or reset objects on the Visual Novel
 	#region VN Clearing
-	
+
 	// Clears all text, buttons, and names from the Visul Novel
 	void ClearContent()
 	{
@@ -411,30 +408,11 @@ public class VN_Manager : MonoBehaviour
 		}
 	}
 
-	// Resets all characters in CharacterObjects
+	// Resets everything in VN
 	public IEnumerator ResetAll()
     {
 		ClearContent();
-		foreach (VN_Character charObj in CharacterObjects)
-		{
-			if (charObj.data != null)
-			{
-				// HACK Make new teleport to temp replace transition
-				CharacterTransition originalTransition = charObj.data.transition;
-				TeleportCharacterTransition tempTeleport =
-					(TeleportCharacterTransition)ScriptableObject.CreateInstance(typeof(TeleportCharacterTransition));
-				charObj.data.transition = tempTeleport;
-
-				// Do same thing as ExitPart
-				yield return StartCoroutine(charObj.data.transition
-					.Co_ExitScreen(charObj, this));
-				charObj.data.transition = originalTransition;
-				charObj.ChangeSprite("");
-				charObj.SetData(null);
-
-				Destroy(tempTeleport);
-			}
-		}
+		yield return StartCoroutine(characterManager.ResetCharacters());
 		yield return new WaitForSeconds(1);
 		StartStory();
 	}

@@ -3249,6 +3249,8 @@ MonoBehaviour:
   spawnBlock: {fileID: 0}
   blockController: {fileID: 0}
   blockQueue: {fileID: 0}
+  characterDataTest: {fileID: 11400000, guid: afbc7ae5e26e1405b8928e3c571c6050, type: 2}
+  testText: {fileID: 1642496081}
 --- !u!4 &1272424811
 Transform:
   m_ObjectHideFlags: 0

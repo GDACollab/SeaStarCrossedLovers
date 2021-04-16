@@ -1,30 +1,31 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class VN_Character : MonoBehaviour
 {
     public CharacterData data;
 
+    public enum State { hidden, active };
+    public State state = State.hidden;
+
     public enum ScenePosition { left, right };
     public ScenePosition scenePosition;
 
-    private Image VN_CharBox;
-    [SerializeField] private Image VN_CharSprite;
+    public Image VN_CharBox;
+    public Image VN_CharSprite;
 
     [HideInInspector] public RectTransform rectTransform;
     // Debug
     [SerializeField] private Text nameText;
 
-    private VN_Manager _manager;
+    public VN_Manager manager;
 
     public void Construct(VN_Manager manager)
     {
-        _manager = manager;
-    }
+        this.manager = manager;
 
-    void Awake()
-    {
         VN_CharBox = GetComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
     }
@@ -55,7 +56,7 @@ public class VN_Character : MonoBehaviour
                     break;
             }
             // Change character box
-            ScaleImageCanvas(VN_CharBox, data.characterBox, _manager.characterBoxScale);
+            ScaleImageCanvas(VN_CharBox, data.characterBox, manager.characterBoxScale);
         }
         else
         {
@@ -88,7 +89,7 @@ public class VN_Character : MonoBehaviour
             if (newSprite)
             {
                 VN_CharSprite.enabled = true;
-                ScaleImageCanvas(VN_CharSprite, newSprite, _manager.characterSpriteScale);
+                ScaleImageCanvas(VN_CharSprite, newSprite, manager.characterSpriteScale);
             }
             else
             {
@@ -121,7 +122,7 @@ public class VN_Character : MonoBehaviour
             if (foundSprite)
             {
                 VN_CharSprite.enabled = true;
-                ScaleImageCanvas(VN_CharSprite, foundSprite, _manager.characterSpriteScale);
+                ScaleImageCanvas(VN_CharSprite, foundSprite, manager.characterSpriteScale);
             }
             else
             {
@@ -157,5 +158,27 @@ public class VN_Character : MonoBehaviour
         image.rectTransform.sizeDelta = new Vector2(spriteSize.x * scale, spriteSize.y * scale);
         image.sprite = sprite;
         image.SetNativeSize();
+    }
+
+    public IEnumerator TweenColor(Image image, Color color, float duration, Ease ease)
+    {
+        bool waitingForComplete = true;
+
+        image.DOColor(color, duration)
+            .OnComplete(() => waitingForComplete = false)
+            .SetEase(ease);
+
+        yield return new WaitUntil(() => waitingForComplete == false);
+    }
+
+    public IEnumerator TweenPosition(RectTransform rectTransform, Vector2 endPosition, float duration, Ease ease)
+    {
+        bool waitingForComplete = true;
+
+        rectTransform.DOAnchorPos(endPosition, duration)
+            .OnComplete(() => waitingForComplete = false)
+            .SetEase(ease);
+
+        yield return new WaitUntil(() => waitingForComplete == false);
     }
 }
