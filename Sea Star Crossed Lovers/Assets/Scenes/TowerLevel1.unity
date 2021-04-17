@@ -636,7 +636,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6165143644612118523, guid: 030427581ee9d1943a12ffe03b0fb3e1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.52
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6165143644612118523, guid: 030427581ee9d1943a12ffe03b0fb3e1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3249,8 +3249,6 @@ MonoBehaviour:
   spawnBlock: {fileID: 0}
   blockController: {fileID: 0}
   blockQueue: {fileID: 0}
-  characterDataTest: {fileID: 11400000, guid: afbc7ae5e26e1405b8928e3c571c6050, type: 2}
-  testText: {fileID: 1642496081}
 --- !u!4 &1272424811
 Transform:
   m_ObjectHideFlags: 0
@@ -3987,7 +3985,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2672804603493449802, guid: e6df304c6bb96b94d95ac0434fb8d0c1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 2672804603493449802, guid: e6df304c6bb96b94d95ac0434fb8d0c1, type: 3}
       propertyPath: m_LocalPosition.z
