@@ -36,6 +36,13 @@ public class BlockController : MonoBehaviour
             // apply horizontal and vertical change
             float sidewaysVelocity = Input.GetAxis("Horizontal")
                 * Time.fixedDeltaTime * accelRate;
+
+            if (Input.GetButton("Focus"))
+            {
+                sidewaysVelocity = Input.GetAxis("Horizontal")
+                * Time.fixedDeltaTime * accelRate/3;
+            }
+
             // Prevent velocity going above maxSpeed
             sidewaysVelocity = Mathf.Min(sidewaysVelocity, maxSpeed);
             // Control block when in air
