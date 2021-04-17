@@ -46,6 +46,38 @@ public class SpawnBlock : MonoBehaviour
         {
             Debug.LogError("SpawnBlockList Error: empty list");
         }
+<<<<<<< Updated upstream
+=======
+        currentFallSpeed = baseFallSpeed;
+    }
+
+    private void FixedUpdate()
+    {
+        // control an active block
+        if (activeBlock != null)
+        {
+            // apply horizontal and vertical change
+            float xOffset = Input.GetAxisRaw("Horizontal") * Time.deltaTime * horizontalSpeed;
+
+            if (Input.GetButton("Focus"))
+            {
+                xOffset = Input.GetAxisRaw("Horizontal") * Time.deltaTime * (horizontalSpeed/2);
+            }
+
+            activeRB.velocity = new Vector3(xOffset, -currentFallSpeed, 0);
+
+            // detect if player has dropped block
+            if (Input.GetButton("Drop"))
+            {
+                //Implementation of block fall acceleration instead of activating physics
+                currentFallSpeed = baseFallSpeed * 4;
+            }
+            else
+            {
+                currentFallSpeed = baseFallSpeed;
+            }
+        }
+>>>>>>> Stashed changes
     }
 
     private void Update()
