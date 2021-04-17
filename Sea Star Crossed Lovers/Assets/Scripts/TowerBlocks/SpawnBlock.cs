@@ -46,8 +46,6 @@ public class SpawnBlock : MonoBehaviour
         {
             Debug.LogError("SpawnBlockList Error: empty list");
         }
-<<<<<<< Updated upstream
-=======
         currentFallSpeed = baseFallSpeed;
     }
 
@@ -77,7 +75,6 @@ public class SpawnBlock : MonoBehaviour
                 currentFallSpeed = baseFallSpeed;
             }
         }
->>>>>>> Stashed changes
     }
 
     private void Update()
