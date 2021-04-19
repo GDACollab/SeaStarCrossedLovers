@@ -2,14 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using DG.Tweening;
+
 public class AdjustPosition : MonoBehaviour
 {
     private List<Vector3> startPositions;
     public List<GameObject> objects;
     public bool gradual;
     public float maxDelta;
+    public float moveDuration;
+    public Ease moveEase;
     public int chunkSize;
     public int minHeightOnScreen;
+
+    private Tweener newAdjustment;
+
     void Start()
     {
         startPositions = new List<Vector3>();
@@ -35,6 +42,7 @@ public class AdjustPosition : MonoBehaviour
             adjustAmount = heightInRows;
         }
 
+        
         for (int i = 0; i < objects.Count; i++)
         {
             adjustAmount = Mathf.Max(0f, adjustAmount - minHeightOnScreen);
@@ -42,7 +50,12 @@ public class AdjustPosition : MonoBehaviour
             Vector3 newPos = new Vector3(objects[i].transform.position.x, newY, objects[i].transform.position.z);
             if (gradual)
             {
-                objects[i].transform.position = Vector3.MoveTowards(objects[i].transform.position, newPos, maxDelta);
+                // MoveTowards method
+                //objects[i].transform.position = Vector3.MoveTowards(objects[i].transform.position, newPos, maxDelta);
+
+                // Tweening method
+                newAdjustment = objects[i].transform.DOMove(newPos, moveDuration, false)
+                    .SetEase(moveEase);
             }
             else
             {

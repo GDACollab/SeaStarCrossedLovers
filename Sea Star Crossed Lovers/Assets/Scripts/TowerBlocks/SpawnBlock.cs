@@ -16,10 +16,10 @@ public class SpawnBlock : MonoBehaviour
     private bool waitingForBlock = false;
     private bool canSpawnBlock = false;
 
-    public float blockGravity;
+    [HideInInspector] public float blockGravity;
 
-    public Block activeBlock;
-    public Rigidbody2D activeRB;
+    [HideInInspector] public Block activeBlock;
+    [HideInInspector] public Rigidbody2D activeRB;
 
     private LevelManager levelManager;
     private BlockManager blockManager;
