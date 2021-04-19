@@ -24,6 +24,9 @@ public class LevelManager : MonoBehaviour
     public SpawnBlock spawnBlock;
     public BlockController blockController;
     public BlockQueue blockQueue;
+    [SerializeField] private ProgressBar _progressBar;
+
+    public Block activeBlock { get; set; }
 
     private void Awake()
     {
@@ -44,12 +47,14 @@ public class LevelManager : MonoBehaviour
 
         blockQueue = (BlockQueue)FindObjectOfType(typeof(BlockQueue));
         blockQueue.Construct(this);
+        _progressBar.Construct(_blockManager, _goalpoint.getGoalHeight());
 
         winText.text = defualtWinTimerMessage;
     }
 
     private void Update()
     {
+        _progressBar.updateProgress();
         if(currentGameState == GameState.playing &&
             goalpoint.CheckWin() && !WinTimerOnCooldown)
         {
