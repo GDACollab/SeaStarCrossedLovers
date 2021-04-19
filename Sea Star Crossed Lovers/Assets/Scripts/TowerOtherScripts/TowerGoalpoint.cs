@@ -58,7 +58,8 @@ public class TowerGoalpoint : MonoBehaviour
         // If blocklet is found, remove block from winningBlocks
         Block block = blockletCheck.blockParent;
         if (block) winningBlocks.Remove(block);
-    
+    }
+
     // Returns the goal height of the tower
     public float getGoalHeight()
     {
