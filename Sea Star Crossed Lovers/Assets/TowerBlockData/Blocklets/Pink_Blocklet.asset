@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Pink_Blocklet
   m_EditorClassIdentifier: 
   texture: {fileID: 10309, guid: 0000000000000000f000000000000000, type: 0}
-  color: {r: 0.9528302, g: 0.48989856, b: 0.851993, a: 1}
+  color: {r: 1, g: 0, b: 0.8624263, a: 1}
   blockletPrefab: {fileID: 2757253596951623951, guid: ba3c1c17d2c9b4048a63de86e48bfe36, type: 3}

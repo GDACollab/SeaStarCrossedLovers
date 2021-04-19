@@ -28,10 +28,12 @@ public class Blocklet : MonoBehaviour
     [HideInInspector] public Block blockParent;
 
     private SpriteShapeRenderer spriteShapeRenderer;
+    private SpriteShapeController spriteShapeController;
 
     private void Awake()
     {
         spriteShapeRenderer = GetComponent<SpriteShapeRenderer>();
+        spriteShapeController = GetComponent<SpriteShapeController>();
     }
 
     void Start()
@@ -94,7 +96,6 @@ public class Blocklet : MonoBehaviour
 
         // TODO Set blocklet's texture, etc based on given BlockletData
         spriteShapeRenderer.color = blockletData.color;
-
         return this;
     }
 }
