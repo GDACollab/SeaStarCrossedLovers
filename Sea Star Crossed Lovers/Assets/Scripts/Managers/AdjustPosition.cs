@@ -4,11 +4,21 @@ using UnityEngine;
 
 public class AdjustPosition : MonoBehaviour
 {
-    public Vector3 startPos;
+    private List<Vector3> startPositions;
+    public List<GameObject> objects;
     public bool gradual;
     public float maxDelta;
     public int chunkSize;
     public int minHeightOnScreen;
+    void Start()
+    {
+        startPositions = new List<Vector3>();
+        foreach (GameObject obj in objects)
+        {
+            startPositions.Add(obj.transform.position);
+        }
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -25,16 +35,19 @@ public class AdjustPosition : MonoBehaviour
             adjustAmount = heightInRows;
         }
 
-        adjustAmount = Mathf.Max(0f, adjustAmount - minHeightOnScreen);
-        newY = startPos.y + adjustAmount;
-        Vector3 newPos = new Vector3(transform.position.x, newY, transform.position.z);
-        if (gradual)
+        for (int i = 0; i < objects.Count; i++)
         {
-            transform.position = Vector3.MoveTowards(transform.position, newPos, maxDelta);
-        }
-        else
-        {
-            transform.position = newPos;
+            adjustAmount = Mathf.Max(0f, adjustAmount - minHeightOnScreen);
+            newY = startPositions[i].y + adjustAmount;
+            Vector3 newPos = new Vector3(objects[i].transform.position.x, newY, objects[i].transform.position.z);
+            if (gradual)
+            {
+                objects[i].transform.position = Vector3.MoveTowards(objects[i].transform.position, newPos, maxDelta);
+            }
+            else
+            {
+                objects[i].transform.position = newPos;
+            }
         }
     }
 
@@ -55,7 +68,7 @@ public class AdjustPosition : MonoBehaviour
     int GetHeight(List<Blocklet> blocklets)
     {
         int rowHeight = 0;
-        foreach(Blocklet blocklet in blocklets)
+        foreach (Blocklet blocklet in blocklets)
         {
             rowHeight = Mathf.Max(blocklet.row, rowHeight);
         }
