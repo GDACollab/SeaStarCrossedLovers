@@ -16,6 +16,7 @@ public class LevelManager : MonoBehaviour
     public enum GameState { paused, playing, winTimer, won }
     public GameState currentGameState = GameState.paused;
 
+    public Canvas winCanvas;
     public Text winText;
 
     public BlockManager blockManager;
@@ -26,6 +27,8 @@ public class LevelManager : MonoBehaviour
 
     private void Awake()
     {
+        winCanvas.enabled = false;
+
         // Getting all necessary references
         blockManager = gameObject.GetComponent<BlockManager>();
         blockManager.Construct(this);
@@ -61,8 +64,10 @@ public class LevelManager : MonoBehaviour
     private IEnumerator winTimer()
     {
         winText.text = "Win timer: " + timeToWin;
-
         float currWaitTime = 0;
+
+        winCanvas.enabled = true;
+
         // Continuously check if the goalpoint detects the player
         // is still elligible to win until the win timer reaches timeToWin
         while (currWaitTime < timeToWin)
@@ -79,8 +84,9 @@ public class LevelManager : MonoBehaviour
             }
             else
             {
-                // If ever the player loses elligibility to win during
-                // the timer, reset text, exit win timer, and start cooldown
+                // If ever the player loses elligibility to win during the timer,
+                // reset text, exit win timer, hide canvas and start cooldown
+                winCanvas.enabled = false;
                 winText.text = defualtWinTimerMessage;
                 StartCoroutine(WinTimerCooldown());
                 currentGameState = GameState.playing;
@@ -92,6 +98,10 @@ public class LevelManager : MonoBehaviour
         Debug.Log("You win");
         winText.text = "YOU WIN! You may continue playing.";
         currentGameState = GameState.won;
+
+        // Wait for a couple seconds before message disappears
+        yield return new WaitForSeconds(5);
+        winCanvas.enabled = false;
     }
 
     // Used to stop Update function from starting winTimer in finicky situations

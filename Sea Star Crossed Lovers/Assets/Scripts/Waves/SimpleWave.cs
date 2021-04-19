@@ -56,8 +56,8 @@ public class SimpleWave : MonoBehaviour
         waveTimerText.GetComponent<UnityEngine.UI.Text>().text =
             "Wave Timer: " + wTimer.ToString("0") + " / " + waveCooldown.ToString("0");
         // Update difficulty text
-        difficultyText.GetComponent<UnityEngine.UI.Text>().text =
-            "Difficulty: " + difficulty.ToString() + " / " + maxDifficulty.ToString();
+        //difficultyText.GetComponent<UnityEngine.UI.Text>().text =
+        //    "Difficulty: " + difficulty.ToString() + " / " + maxDifficulty.ToString();
     }
 
     void OnParticleCollision(GameObject other)
