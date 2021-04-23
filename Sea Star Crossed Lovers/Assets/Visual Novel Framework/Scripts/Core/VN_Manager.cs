@@ -22,6 +22,7 @@ public class VN_Manager : MonoBehaviour
 	[Tooltip("ActiveState of VN. Set before play to make VN appear or be hidden on start")]
 	public ActiveState activeState = ActiveState.hidden;
 	public enum ActiveState { hidden, active }
+	public bool beginOnStart;
 	public float characterBoxScale = 1;
 	public float characterSpriteScale = 1;
 
@@ -75,6 +76,7 @@ public class VN_Manager : MonoBehaviour
 	[HideInInspector] public VN_UIFactory UIFactory;
 	[HideInInspector] public VN_TextboxManager textboxManager;
 	[HideInInspector] public VN_CharacterManager characterManager;
+	[HideInInspector] public VN_AudioManager audioManager;
 
 	// Flags/states
 	// Whether or not the current text is done from slow text
@@ -91,6 +93,9 @@ public class VN_Manager : MonoBehaviour
 	// Adds the AddCharacter and SubtractCharacter functions to the AllCommands Dictionary
 	void Awake()
     {
+		audioManager = GetComponent<VN_AudioManager>();
+		audioManager.Construct(this);
+
 		var VN_characters = GameObject.FindObjectsOfType<VN_Character>();
 
 		foreach (VN_Character character in VN_characters)
@@ -126,11 +131,9 @@ public class VN_Manager : MonoBehaviour
 		}
 	}
 
-	// Removes the default message and begins the text
 	void Start()
-	{
+    {
 		ClearContent();
-		//UIFactory.CreateStartStoryButton();
 
 		textboxManager.SetDefaultData();
 
@@ -149,8 +152,9 @@ public class VN_Manager : MonoBehaviour
 				break;
 		}
 
-		StartStory();
+		if (beginOnStart) StartStory();
 	}
+
 	void Update()
     {
 		// Skips the animation of text appearing if the spacebar or primary mouse button is pressed
@@ -184,9 +188,12 @@ public class VN_Manager : MonoBehaviour
 	// Remove all VN text & buttons, then starts displaying the text
 	public void RefreshView()
 	{
-		ClearContent();
+		if(story.canContinue)
+        {
+			ClearContent();
 
-		StartCoroutine(Co_DisplaySlowText());
+			StartCoroutine(Co_DisplaySlowText());
+		}
 	}
 	#endregion
 
@@ -224,7 +231,7 @@ public class VN_Manager : MonoBehaviour
 			}
             else
             {
-				UIFactory.CreateRestartStoryButton();
+				UIFactory.CreateEndStoryButton();
             }
 			yield break;
         }
@@ -407,25 +414,28 @@ public class VN_Manager : MonoBehaviour
 			Destroy(child.gameObject);
 		}
 	}
-
-	// Resets everything in VN
-	public IEnumerator ResetAll()
-    {
-		ClearContent();
-		yield return StartCoroutine(characterManager.ResetCharacters());
-		yield return new WaitForSeconds(1);
-		StartStory();
-	}
 	#endregion
 
-	// Determines which choice the character selected and plays the corresponding text
-	public void OnClickChoiceButton(Choice choice)
-	{
-		if (VN_Util.VN_Debug)
-		{
-			VN_Util.VNDebugPrint("Chose choice: \"" + choice.text + "\"", this);
-		}
-		story.ChooseChoiceIndex(choice.index);
-		RefreshView();
+    #region VN Control
+
+	public void ForceExitVN()
+    {
+		TextboxData data = textboxManager.data;
+		StartCoroutine(textboxManager.HideTextbox(data));
+		StartCoroutine(characterManager.ResetCharacters());
 	}
+
+	public void StartVN(TextboxData data)
+	{
+		StartCoroutine(Co_StartVN(data));
+	}
+
+	private IEnumerator Co_StartVN(TextboxData data)
+    {
+		activeState = ActiveState.active;
+		yield return StartCoroutine(data.textboxTransition.Co_EnterScreen(this, this));
+		StartStory();
+	}
+
+	#endregion
 }
