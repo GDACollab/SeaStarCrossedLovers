@@ -1883,6 +1883,11 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!198 &541989838 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2672804603493449801, guid: e6df304c6bb96b94d95ac0434fb8d0c1, type: 3}
+  m_PrefabInstance: {fileID: 1872948545}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &556648678
 GameObject:
   m_ObjectHideFlags: 0
@@ -1971,6 +1976,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 988c340c7cec0401eb90e3c6bf97e765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waves: {fileID: 541989838}
 --- !u!1 &620819746
 GameObject:
   m_ObjectHideFlags: 0
@@ -5747,18 +5753,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 348458703}
-        m_TargetAssemblyTypeName: SpawnBlock, Assembly-CSharp
-        m_MethodName: toggleBlockSpawn
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 0
       - m_Target: {fileID: 620271811}
         m_TargetAssemblyTypeName: SettingsMenu, Assembly-CSharp
         m_MethodName: toggleSettingsMenu

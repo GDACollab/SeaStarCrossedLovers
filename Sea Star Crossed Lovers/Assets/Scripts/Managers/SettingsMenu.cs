@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SettingsMenu : MonoBehaviour
 {
+    [SerializeField] private ParticleSystem waves;
+
     public void toggleSettingsMenu() 
     {
         bool paused = gameObject.activeSelf;
@@ -13,8 +15,14 @@ public class SettingsMenu : MonoBehaviour
 
         // Pause/Unpause physics
         if (paused)
+        {
             Time.timeScale = 1;
+            waves.Play(true);
+        }
         else
+        {
             Time.timeScale = 0;
+            waves.Pause(true);
+        }
     }
 }
