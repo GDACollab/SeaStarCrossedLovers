@@ -19,6 +19,7 @@ public class LevelManager : MonoBehaviour
     public Canvas winCanvas;
     public Text winText;
 
+    public ObstacleManager obstacleManager;
     public BlockManager blockManager;
     public TowerGoalpoint goalpoint;
     public SpawnBlock spawnBlock;
@@ -36,6 +37,9 @@ public class LevelManager : MonoBehaviour
         blockManager = gameObject.GetComponent<BlockManager>();
         blockManager.Construct(this);
 
+        obstacleManager = gameObject.GetComponent<ObstacleManager>();
+        obstacleManager.Construct(this);
+
         goalpoint = (TowerGoalpoint)FindObjectOfType(typeof(TowerGoalpoint));
         goalpoint.Construct(blockManager);
 
@@ -43,7 +47,7 @@ public class LevelManager : MonoBehaviour
         spawnBlock.Construct(this, blockManager);
 
         blockController = (BlockController)FindObjectOfType(typeof(BlockController));
-        blockController.Construct(spawnBlock);
+        blockController.Construct(spawnBlock, obstacleManager);
 
         blockQueue = (BlockQueue)FindObjectOfType(typeof(BlockQueue));
         blockQueue.Construct(this);

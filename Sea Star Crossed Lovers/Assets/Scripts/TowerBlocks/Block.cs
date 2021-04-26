@@ -11,11 +11,9 @@ public class Block : MonoBehaviour
     [HideInInspector] public SimpleWave wave;
     [HideInInspector] public List<GameObject> blockletChildren = new List<GameObject>();
 
-    public LayerMask layerMask;
-
     public AudioSource audioSource;
 
-    private BlockManager blockManager;
+    public BlockManager blockManager;
     private BlockController blockController;
 
     public GameObject debugObj;
@@ -120,7 +118,6 @@ public class Block : MonoBehaviour
                     child.GetComponent<Blocklet>().MarkDelete(rowsToDelete);
             }
         }
-
     }
 
     public void CheckFullyDeleted()
@@ -147,7 +144,6 @@ public class Block : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         state = BlockState.stable;
-    }
-
-    
+        blockManager.activeBlock = null;
+    } 
 }

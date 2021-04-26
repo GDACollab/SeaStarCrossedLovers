@@ -16,15 +16,19 @@ public class BlockController : MonoBehaviour
     private float currentFallSpeed;
     public bool canHold;
 
+    public float gravity;
+
     private SpawnBlock spawnBlock;
     private BlockQueue blockQueue;
+    private ObstacleManager obstacleManager;
 
-    public void Construct(SpawnBlock spawnBlock)
+    public void Construct(SpawnBlock spawnBlock, ObstacleManager obstacleManager)
     {
-        currentFallSpeed = baseFallSpeed;
+        this.obstacleManager = obstacleManager;
         this.spawnBlock = spawnBlock;
-
         blockQueue = spawnBlock.blockQueue;
+
+        currentFallSpeed = baseFallSpeed;
         canHold = true;
     }
 
@@ -45,10 +49,19 @@ public class BlockController : MonoBehaviour
 
             // Prevent velocity going above maxSpeed
             sidewaysVelocity = Mathf.Min(sidewaysVelocity, maxSpeed);
+
             // Control block when in air
             if (spawnBlock.activeBlock.state == Block.BlockState.active)
             {
-                spawnBlock.activeRB.velocity = new Vector2(sidewaysVelocity, -currentFallSpeed);
+                Vector2 playerMovement = new Vector2(sidewaysVelocity, -currentFallSpeed);
+                if (obstacleManager.windIsActive)
+                {
+                    spawnBlock.activeRB.velocity = playerMovement + obstacleManager.windForce;
+                }
+                else
+                {
+                    spawnBlock.activeRB.velocity = playerMovement;
+                }
             }
             // TODO Change friction to very low while active/preStable?
 
