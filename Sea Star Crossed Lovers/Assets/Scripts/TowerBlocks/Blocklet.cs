@@ -27,13 +27,12 @@ public class Blocklet : MonoBehaviour
     private TextMesh rowDebugText;
     [HideInInspector] public Block blockParent;
 
-    private SpriteShapeRenderer spriteShapeRenderer;
-    private SpriteShapeController spriteShapeController;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    private BoxCollider2D blockletCollider;
 
     private void Awake()
     {
-        spriteShapeRenderer = GetComponent<SpriteShapeRenderer>();
-        spriteShapeController = GetComponent<SpriteShapeController>();
+        blockletCollider = GetComponent<BoxCollider2D>();
     }
 
     void Start()
@@ -94,8 +93,8 @@ public class Blocklet : MonoBehaviour
         blockParent = block;
         data = blockletData;
 
-        // TODO Set blocklet's texture, etc based on given BlockletData
-        spriteShapeRenderer.color = blockletData.color;
+        spriteRenderer.color = blockletData.color;
+        spriteRenderer.sprite = blockletData.sprite;
         return this;
     }
 }

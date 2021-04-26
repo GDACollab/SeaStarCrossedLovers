@@ -30,7 +30,7 @@ public class BlockDataEditor : Editor {
                 texture = null;
                 if (blockData.cell_03 != null)
                 {
-                    texture = blockData.cell_03.texture;
+                    texture = blockData.cell_03.sprite.texture;
                 }
                 GUILayout.Box(texture, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("cell_03"),
@@ -41,7 +41,7 @@ public class BlockDataEditor : Editor {
                 texture = null;
                 if (blockData.cell_13 != null)
                 {
-                    texture = blockData.cell_13.texture;
+                    texture = blockData.cell_13.sprite.texture;
                 }
                 GUILayout.Box(texture, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("cell_13"),
@@ -52,7 +52,7 @@ public class BlockDataEditor : Editor {
                 texture = null;
                 if (blockData.cell_23 != null)
                 {
-                    texture = blockData.cell_23.texture;
+                    texture = blockData.cell_23.sprite.texture;
                 }
                 GUILayout.Box(texture, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("cell_23"),
@@ -63,7 +63,7 @@ public class BlockDataEditor : Editor {
                 texture = null;
                 if (blockData.cell_33 != null)
                 {
-                    texture = blockData.cell_33.texture;
+                    texture = blockData.cell_33.sprite.texture;
                 }
                 GUILayout.Box(texture, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("cell_33"),
@@ -77,7 +77,7 @@ public class BlockDataEditor : Editor {
             EditorGUILayout.BeginVertical();
                 texture = null;
                 if (blockData.cell_02 != null) {
-                    texture = blockData.cell_02.texture;
+                    texture = blockData.cell_02.sprite.texture;
                 }
                 GUILayout.Box(texture, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("cell_02"),
@@ -87,7 +87,7 @@ public class BlockDataEditor : Editor {
             EditorGUILayout.BeginVertical();
                 texture = null;
                 if (blockData.cell_12 != null) {
-                    texture = blockData.cell_12.texture;
+                    texture = blockData.cell_12.sprite.texture;
                 }
                 GUILayout.Box(texture, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("cell_12"),
@@ -97,7 +97,7 @@ public class BlockDataEditor : Editor {
             EditorGUILayout.BeginVertical();
                 texture = null;
                 if (blockData.cell_22 != null) {
-                    texture = blockData.cell_22.texture;
+                    texture = blockData.cell_22.sprite.texture;
                 }
                 GUILayout.Box(texture, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("cell_22"),
@@ -108,7 +108,7 @@ public class BlockDataEditor : Editor {
                 texture = null;
                 if (blockData.cell_32 != null)
                 {
-                    texture = blockData.cell_32.texture;
+                    texture = blockData.cell_32.sprite.texture;
                 }
                 GUILayout.Box(texture, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("cell_32"),
@@ -123,7 +123,7 @@ public class BlockDataEditor : Editor {
             EditorGUILayout.BeginVertical();
                 texture = null;
                 if (blockData.cell_01 != null) {
-                    texture = blockData.cell_01.texture;
+                    texture = blockData.cell_01.sprite.texture;
                 }
                 GUILayout.Box(texture, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("cell_01"),
@@ -133,7 +133,7 @@ public class BlockDataEditor : Editor {
             EditorGUILayout.BeginVertical();
                 texture = null;
                 if (blockData.cell_11 != null) {
-                    texture = blockData.cell_11.texture;
+                    texture = blockData.cell_11.sprite.texture;
                 }
                 GUILayout.Box(texture, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("cell_11"),
@@ -143,7 +143,7 @@ public class BlockDataEditor : Editor {
             EditorGUILayout.BeginVertical();
                 texture = null;
                 if (blockData.cell_21 != null) {
-                    texture = blockData.cell_21.texture;
+                    texture = blockData.cell_21.sprite.texture;
                 }
                 GUILayout.Box(texture, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("cell_21"),
@@ -154,7 +154,7 @@ public class BlockDataEditor : Editor {
                 texture = null;
                 if (blockData.cell_31 != null)
                 {
-                    texture = blockData.cell_31.texture;
+                    texture = blockData.cell_31.sprite.texture;
                 }
                 GUILayout.Box(texture, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("cell_31"),
@@ -169,7 +169,7 @@ public class BlockDataEditor : Editor {
             EditorGUILayout.BeginVertical();
                 texture = null;
                 if (blockData.cell_00 != null) {
-                    texture = blockData.cell_00.texture;
+                    texture = blockData.cell_00.sprite.texture;
                 }
                 GUILayout.Box(texture, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("cell_00"),
@@ -179,7 +179,7 @@ public class BlockDataEditor : Editor {
             EditorGUILayout.BeginVertical();
                 texture = null;
                 if (blockData.cell_10 != null) {
-                    texture = blockData.cell_10.texture;
+                    texture = blockData.cell_10.sprite.texture;
                 }
                 GUILayout.Box(texture, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("cell_10"),
@@ -189,7 +189,7 @@ public class BlockDataEditor : Editor {
             EditorGUILayout.BeginVertical();
                 texture = null;
                 if (blockData.cell_20 != null) {
-                    texture = blockData.cell_20.texture;
+                    texture = blockData.cell_20.sprite.texture;
                 }
                 GUILayout.Box(texture, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("cell_20"),
@@ -200,7 +200,7 @@ public class BlockDataEditor : Editor {
                 texture = null;
                 if (blockData.cell_30 != null)
                 {
-                    texture = blockData.cell_30.texture;
+                    texture = blockData.cell_30.sprite.texture;
                 }
                 GUILayout.Box(texture, GUILayout.Width(CELL_SIZE), GUILayout.Height(CELL_SIZE));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("cell_30"),

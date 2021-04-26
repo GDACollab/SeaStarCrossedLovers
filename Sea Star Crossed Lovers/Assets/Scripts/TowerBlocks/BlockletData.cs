@@ -3,7 +3,7 @@
 [CreateAssetMenu(fileName = "BlockletData", menuName = "ScriptableObjects/BlockletData")]
 public class BlockletData : ScriptableObject
 {
-    public Texture texture;
+    public Sprite sprite;
     public Color color;
 
     public Blocklet blockletPrefab;
