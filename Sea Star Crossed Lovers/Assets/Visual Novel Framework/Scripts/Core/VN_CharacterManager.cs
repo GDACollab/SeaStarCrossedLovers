@@ -54,20 +54,11 @@ public class VN_CharacterManager : MonoBehaviour
 		{
 			if (charObj.data != null)
 			{
-				// HACK Make new teleport to temp replace transition
-				CharacterTransition originalTransition = charObj.data.transition;
-				TeleportCharacterTransition tempTeleport =
-					(TeleportCharacterTransition)ScriptableObject.CreateInstance(typeof(TeleportCharacterTransition));
-				charObj.data.transition = tempTeleport;
-
-				// Do same thing as ExitPart
+				// Do same thing as CharExit
 				yield return StartCoroutine(charObj.data.transition
 					.Co_ExitScreen(charObj, this));
-				charObj.data.transition = originalTransition;
 				charObj.ChangeSprite("");
 				charObj.SetData(null);
-
-				Destroy(tempTeleport);
 			}
 		}
 	}

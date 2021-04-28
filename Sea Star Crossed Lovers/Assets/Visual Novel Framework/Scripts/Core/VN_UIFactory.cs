@@ -15,11 +15,11 @@ public class VN_UIFactory : MonoBehaviour
 	[Tooltip("Used for VN choice buttons")]
 	private Button buttonPrefab = null;
 
-	private VN_Manager _manager;
+	private VN_Manager manager;
 
 	public void Construct(VN_Manager VN_Manager)
     {
-		_manager = VN_Manager;
+		manager = VN_Manager;
 	}
 
 	/**
@@ -32,7 +32,7 @@ public class VN_UIFactory : MonoBehaviour
 	{
 		Text contentText = Instantiate(contentTextPrefab);
 		contentText.text = text;
-		contentText.transform.SetParent(_manager.TextCanvas.transform, false);
+		contentText.transform.SetParent(manager.TextCanvas.transform, false);
 		return contentText;
 	}
 
@@ -45,12 +45,12 @@ public class VN_UIFactory : MonoBehaviour
 	public Text CreateNameTextView(string name)
 	{
 		Text nameText = Instantiate(nameTextPrefab);
-		nameText.transform.SetParent(_manager.NameCanvas.transform, false);
+		nameText.transform.SetParent(manager.NameCanvas.transform, false);
 		// Update NameText
 		if (name == "Narrator")
 		{
 			nameText.text = "";
-			_manager.contentTextObj.fontStyle = FontStyle.Italic;
+			manager.contentTextObj.fontStyle = FontStyle.Italic;
 		}
 		else
 		{
@@ -70,7 +70,7 @@ public class VN_UIFactory : MonoBehaviour
 	{
 		// Creates the button from a prefab
 		Button choice = Instantiate(buttonPrefab) as Button;
-		choice.transform.SetParent(_manager.ButtonCanvas.transform, false);
+		choice.transform.SetParent(manager.ButtonCanvas.transform, false);
 
 		// Gets the text from the button prefab
 		Text choiceText = choice.GetComponentInChildren<Text>();
@@ -80,14 +80,15 @@ public class VN_UIFactory : MonoBehaviour
 	}
 
 	// Creates a button to restart the story and resets the story if the button is clicked
-	public void CreateRestartStoryButton()
+	public void CreateEndStoryButton()
 	{
 		//Very quick hack.
 		//Hopefully you'll replace this with actual data, but here's a quick hack to get you back to the start screen:
 		Button choice = CreateChoiceView("End story");
 		choice.onClick.AddListener(delegate
 		{
-			_manager.activeLoader.QuickFadeOutLoad("TowerLevel1");
+			manager.audioManager.buttonClick.Play();
+			manager.activeLoader.QuickFadeOutLoad("TowerLevel1");
 		});
 	}
 
@@ -97,7 +98,8 @@ public class VN_UIFactory : MonoBehaviour
 		Button choice = CreateChoiceView("Start story");
 		choice.onClick.AddListener(delegate
 		{
-			_manager.StartStory();
+			manager.audioManager.buttonClick.Play();
+			manager.StartStory();
 		});
 	}
 
@@ -105,32 +107,46 @@ public class VN_UIFactory : MonoBehaviour
 	public void CreateAllChoiceButtons()
 	{
 		// Display all the choices, if there are any!
-		if (_manager.story.currentChoices.Count > 0)
+		if (manager.story.currentChoices.Count > 0)
 		{
-			for (int i = 0; i < _manager.story.currentChoices.Count; i++)
+			for (int i = 0; i < manager.story.currentChoices.Count; i++)
 			{
-				Choice choice = _manager.story.currentChoices[i];
+				Choice choice = manager.story.currentChoices[i];
 				Button button = CreateChoiceView(choice.text.Trim());
 				// Tell the button what to do when we press it
 				button.onClick.AddListener(delegate
 				{
-					_manager.OnClickChoiceButton(choice);
+					OnClickChoiceButton(choice);
 				});
 			}
 		}
 		// If there are no choices on this line of text
 		// And add a button to continue
-		else if (_manager.story.canContinue)
+		else if (manager.story.canContinue)
 		{
 			Button button = CreateChoiceView("Continue");
 			button.onClick.AddListener(delegate {
-				_manager.RefreshView();
+				manager.audioManager.buttonClick.Play();
+				manager.RefreshView();
 			});
 		}
 		// If there is no more content, prompt to restart
 		else
 		{
-			CreateRestartStoryButton();
+			CreateEndStoryButton();
 		}
+	}
+
+	// Determines which choice the character selected and plays the corresponding text
+	public void OnClickChoiceButton(Choice choice)
+	{
+		if (VN_Util.VN_Debug)
+		{
+			VN_Util.VNDebugPrint("Chose choice: \"" + choice.text + "\"", this);
+		}
+		manager.story.ChooseChoiceIndex(choice.index);
+		manager.RefreshView();
+
+		manager.audioManager.buttonClick.Play();
 	}
 }
