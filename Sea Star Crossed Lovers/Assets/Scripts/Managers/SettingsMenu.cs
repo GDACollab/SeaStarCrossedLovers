@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class SettingsMenu : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem waves;
+    [SerializeField] private Waves waves;
+
+    // Remember wave stats when paused
+    private float resumeWaveSpeed = 0.01f;
+    private float resumeSizeModifier = 0.9996f;
 
     public void toggleSettingsMenu() 
     {
@@ -16,13 +20,30 @@ public class SettingsMenu : MonoBehaviour
         // Pause/Unpause physics
         if (paused)
         {
+            // Unpause
             Time.timeScale = 1;
-            waves.Play(true);
+            // Restart waves
+            foreach (DisruptiveWave wave in waves.activeWaveList)
+            {
+                // Restart wave
+                wave.speed = resumeWaveSpeed;
+                wave.sizeModifier = resumeSizeModifier;
+            }
         }
         else
         {
+            // Pause
             Time.timeScale = 0;
-            waves.Pause(true);
+            // Stop waves
+            foreach (DisruptiveWave wave in waves.activeWaveList)
+            {
+                // Remember wave stats
+                resumeWaveSpeed = wave.speed;
+                resumeSizeModifier = wave.sizeModifier;
+                // Stop wave
+                wave.speed = 0;
+                wave.sizeModifier = 1;
+            }
         }
     }
 }
