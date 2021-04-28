@@ -37,7 +37,7 @@ public class ProgressBar : MonoBehaviour
     {
         float towerHeight = _blockManager.highestBlockHeight;
         float currentHeight = slider.value;
-        if(towerHeight != currentHeight && towerHeight >= slider.minValue)
+        if(towerHeight != currentHeight)
         {
             slider.value = getProgressValue(towerHeight);
         }
