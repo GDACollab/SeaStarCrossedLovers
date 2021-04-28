@@ -123,6 +123,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &19790732 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2672804603493449803, guid: e6df304c6bb96b94d95ac0434fb8d0c1, type: 3}
+  m_PrefabInstance: {fileID: 1872948545}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7016c104410bfeb46a462b5895582a7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &44859009
 GameObject:
   m_ObjectHideFlags: 0
@@ -1522,6 +1533,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 0684cdb36036f41bba0b55cb9ee709e1, type: 3}
   - {fileID: 8300000, guid: e44c606d1ca3d4ae4b4be1951753f541, type: 3}
   - {fileID: 8300000, guid: 2cf584519604b4ac682a2a4134a31aee, type: 3}
+  audioMixerGroup: {fileID: 24300002, guid: e0cb200f8641c4304b428a5f77596cbb, type: 2}
   blockHitVolume: 0.1
   blockMass: 1000
   spawnDelay: 0
@@ -1883,11 +1895,6 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!198 &541989838 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2672804603493449801, guid: e6df304c6bb96b94d95ac0434fb8d0c1, type: 3}
-  m_PrefabInstance: {fileID: 1872948545}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &556648678
 GameObject:
   m_ObjectHideFlags: 0
@@ -1976,7 +1983,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 988c340c7cec0401eb90e3c6bf97e765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waves: {fileID: 541989838}
+  waves: {fileID: 19790732}
+  audioMixer: {fileID: 24100000, guid: e0cb200f8641c4304b428a5f77596cbb, type: 2}
 --- !u!1 &620819746
 GameObject:
   m_ObjectHideFlags: 0
@@ -2157,7 +2165,7 @@ AudioSource:
   m_GameObject: {fileID: 685792339}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: e0cb200f8641c4304b428a5f77596cbb, type: 2}
   m_audioClip: {fileID: 8300000, guid: 9859d98c9a9f241ee9a84d151cbba5c3, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.5
@@ -5108,10 +5116,22 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.641
+  m_Value: 0.5
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 620271811}
+        m_TargetAssemblyTypeName: SettingsMenu, Assembly-CSharp
+        m_MethodName: SetVolume
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1529840181
 GameObject:
   m_ObjectHideFlags: 0
@@ -5755,7 +5775,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 620271811}
         m_TargetAssemblyTypeName: SettingsMenu, Assembly-CSharp
-        m_MethodName: toggleSettingsMenu
+        m_MethodName: ToggleSettingsMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

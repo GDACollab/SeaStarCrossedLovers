@@ -1,16 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SettingsMenu : MonoBehaviour
 {
     [SerializeField] private Waves waves;
+    [SerializeField] private AudioMixer audioMixer;
 
     // Remember wave stats when paused
     private float resumeWaveSpeed = 0.01f;
     private float resumeSizeModifier = 0.9996f;
 
-    public void toggleSettingsMenu() 
+    public void SetVolume(float volume)
+    {
+        audioMixer.SetFloat("masterVolume", Mathf.Log10(volume) * 20);
+    }
+
+    public void ToggleSettingsMenu() 
     {
         bool paused = gameObject.activeSelf;
 
