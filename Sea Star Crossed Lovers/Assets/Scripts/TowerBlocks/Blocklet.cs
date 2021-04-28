@@ -61,14 +61,14 @@ public class Blocklet : MonoBehaviour
 
         if (markForDeletion)
         {
-            Color blockColor = this.GetComponent<Renderer>().material.color;
+            Color blockColor = spriteRenderer.material.color;
             //Debug.Log("before fading");
             if (blockColor.a > fadeFinal)
             {
                 //Debug.Log("inside fading");
                 float fadeAmount = blockColor.a - (fadeSpeed * Time.deltaTime);
 
-                this.GetComponent<Renderer>().material.color = new Color(blockColor.r, blockColor.b, blockColor.g, fadeAmount);
+                spriteRenderer.material.color = new Color(blockColor.r, blockColor.b, blockColor.g, fadeAmount);
             }
             else if (blockColor.a <= fadeFinal && waves.GetComponent<SimpleWave>().waveIsOver)
             {

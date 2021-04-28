@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b358ba9c2b44345529ec8b8e1e4ed91f, type: 3}
   m_Name: BlueBlocklet
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: 3508f1573909af1428b1c44c1ec34c3c, type: 3}
+  sprite: {fileID: 21300000, guid: 4d6463e0e91004da7a5bb69a9aefd426, type: 3}
   color: {r: 0, g: 0.39607844, b: 1, a: 1}
   blockletPrefab: {fileID: 2757253596951623951, guid: ba3c1c17d2c9b4048a63de86e48bfe36, type: 3}
