@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class ObstacleManager : MonoBehaviour
 {
-    public Vector2 windForce;
+    public Vector2 windVelocity;
     public float windCooldown;
     public float windDuration;
     public bool windEnabled = true;

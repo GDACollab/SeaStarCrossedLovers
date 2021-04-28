@@ -56,7 +56,7 @@ public class BlockController : MonoBehaviour
                 Vector2 playerMovement = new Vector2(sidewaysVelocity, -currentFallSpeed);
                 if (obstacleManager.windIsActive)
                 {
-                    spawnBlock.activeRB.velocity = playerMovement + obstacleManager.windForce;
+                    spawnBlock.activeRB.velocity = playerMovement + obstacleManager.windVelocity;
                 }
                 else
                 {

@@ -1227,7 +1227,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 450, y: 100}
+  m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &333393465
 MonoBehaviour:
@@ -3476,7 +3476,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 4
     m_MaxSize: 40
-    m_Alignment: 3
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -3791,10 +3791,15 @@ MonoBehaviour:
   timeToWin: 3
   winTimerIncrement: 0.1
   winTimerCooldown: 1
+  winDelay: 0
   defualtWinTimerMessage: Tower must reach goal line to win
+  defualtWinMessage: You win!
+  transitionSceneOnWin: 1
+  nextScene: TowerLevel1
   currentGameState: 0
   winCanvas: {fileID: 333393469}
   winText: {fileID: 1080702309}
+  activeLoader: {fileID: 1021828307}
   obstacleManager: {fileID: 0}
   blockManager: {fileID: 0}
   goalpoint: {fileID: 0}
@@ -3844,13 +3849,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54f8e654665a343aa9f200070445a599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  windForce: {x: -2, y: 0}
+  windVelocity: {x: -2, y: 0}
   windCooldown: 30
   windDuration: 5
-  windEnabled: 1
+  windEnabled: 0
   windIsActive: 0
-  asteroidCooldown: 2
-  asteroidEnabled: 1
+  asteroidCooldown: 45
+  asteroidEnabled: 0
   OnAsteroidSpawn:
     m_PersistentCalls:
       m_Calls: []

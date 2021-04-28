@@ -21,10 +21,12 @@ public class VN_Character : MonoBehaviour
     [SerializeField] private Text nameText;
 
     public VN_Manager manager;
+    private VN_CharacterManager characterManager;
 
-    public void Construct(VN_Manager manager)
+    public void Construct(VN_Manager manager, VN_CharacterManager characterManager)
     {
         this.manager = manager;
+        this.characterManager = characterManager;
 
         VN_CharBox = GetComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
@@ -56,7 +58,7 @@ public class VN_Character : MonoBehaviour
                     break;
             }
             // Change character box
-            ScaleImageCanvas(VN_CharBox, data.characterBox, manager.characterBoxScale);
+            ScaleImageCanvas(VN_CharBox, data.characterBox, characterManager.characterBoxScale);
         }
         else
         {
@@ -89,7 +91,7 @@ public class VN_Character : MonoBehaviour
             if (newSprite)
             {
                 VN_CharSprite.enabled = true;
-                ScaleImageCanvas(VN_CharSprite, newSprite, manager.characterSpriteScale);
+                ScaleImageCanvas(VN_CharSprite, newSprite, characterManager.characterSpriteScale);
             }
             else
             {
@@ -122,7 +124,7 @@ public class VN_Character : MonoBehaviour
             if (foundSprite)
             {
                 VN_CharSprite.enabled = true;
-                ScaleImageCanvas(VN_CharSprite, foundSprite, manager.characterSpriteScale);
+                ScaleImageCanvas(VN_CharSprite, foundSprite, characterManager.characterSpriteScale);
             }
             else
             {

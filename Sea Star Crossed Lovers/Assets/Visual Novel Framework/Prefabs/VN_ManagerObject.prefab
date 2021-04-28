@@ -911,7 +911,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activeLoader: {fileID: 0}
   activeState: 0
-  beginOnStart: 0
+  beginOnStart: 1
   characterBoxScale: 1
   characterSpriteScale: 1
   normalSpeed: 30
@@ -955,7 +955,6 @@ MonoBehaviour:
   nonSpeakingColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   speakerLightDuration: 1
   speakerLightEase: 4
-  speakingOffset: {x: 0, y: -200}
 --- !u!114 &3024939599575824783
 MonoBehaviour:
   m_ObjectHideFlags: 0

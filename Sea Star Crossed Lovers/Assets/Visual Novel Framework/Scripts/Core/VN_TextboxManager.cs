@@ -8,7 +8,7 @@ public class VN_TextboxManager : MonoBehaviour
     [Tooltip("List of textbox data to pull from")]
     public List<TextboxData> AllTextboxData;
 
-    // Current active TextboxData
+    [Tooltip("Current active TextboxData")]
     public TextboxData data;
 
     public Button skipButton;

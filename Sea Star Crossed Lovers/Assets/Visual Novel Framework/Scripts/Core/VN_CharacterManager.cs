@@ -12,12 +12,17 @@ public class VN_CharacterManager : MonoBehaviour
 	[Tooltip("List of needed character data to pull from")]
 	public List<CharacterData> AllCharacterData;
 
+	[Tooltip("Color of characters when speaking")]
 	public Color speakingColor;
+	[Tooltip("Color of characters when not speaking")]
 	public Color nonSpeakingColor;
+	[Tooltip("How long it takes to transition to speaking/nonspeaking color")]
 	public float speakerLightDuration;
+	[Tooltip("Ease of transition to speaking/nonspeaking color")]
 	public Ease speakerLightEase;
 
-	public Vector2 speakingOffset;
+	public float characterBoxScale = 1;
+	public float characterSpriteScale = 1;
 
 	private VN_Manager manager;
 

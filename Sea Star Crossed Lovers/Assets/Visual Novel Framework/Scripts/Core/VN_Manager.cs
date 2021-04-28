@@ -23,8 +23,8 @@ public class VN_Manager : MonoBehaviour
 	public ActiveState activeState = ActiveState.hidden;
 	public enum ActiveState { hidden, active }
 	public bool beginOnStart;
-	public float characterBoxScale = 1;
-	public float characterSpriteScale = 1;
+	public bool transitionSceneOnEnd = true;
+	public string nextScene;
 
 	// The different speeds the text can go in characters per second
 	[Header("Text Speeds")]
@@ -96,12 +96,7 @@ public class VN_Manager : MonoBehaviour
 		audioManager = GetComponent<VN_AudioManager>();
 		audioManager.Construct(this);
 
-		var VN_characters = GameObject.FindObjectsOfType<VN_Character>();
-
-		foreach (VN_Character character in VN_characters)
-		{
-			character.Construct(this);
-		}
+		
 
 		VN_Util Helper = new VN_Util(this, DebugEnabled);
 		// Get CommandCall script in gameobject
@@ -117,6 +112,13 @@ public class VN_Manager : MonoBehaviour
 
 		characterManager = GetComponent<VN_CharacterManager>();
 		characterManager.Construct(this);
+
+		var VN_characters = GameObject.FindObjectsOfType<VN_Character>();
+
+		foreach (VN_Character character in VN_characters)
+		{
+			character.Construct(this, characterManager);
+		}
 
 		// Initialize the TextSpeeds Dictionary
 		TextSpeeds = new Dictionary<string, float>{
@@ -163,7 +165,7 @@ public class VN_Manager : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.F))
 		{
-			activeLoader.QuickFadeOutLoad("TowerLevel1");
+			activeLoader.QuickFadeOutLoad(nextScene);
 		}
 	}
 	#endregion

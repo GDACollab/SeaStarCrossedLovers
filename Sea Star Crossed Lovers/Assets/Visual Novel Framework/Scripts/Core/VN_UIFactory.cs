@@ -82,13 +82,20 @@ public class VN_UIFactory : MonoBehaviour
 	// Creates a button to restart the story and resets the story if the button is clicked
 	public void CreateEndStoryButton()
 	{
-		//Very quick hack.
-		//Hopefully you'll replace this with actual data, but here's a quick hack to get you back to the start screen:
-		Button choice = CreateChoiceView("End story");
+		Button choice = CreateChoiceView("End");
 		choice.onClick.AddListener(delegate
 		{
-			manager.audioManager.buttonClick.Play();
-			manager.activeLoader.QuickFadeOutLoad("TowerLevel1");
+			if (manager.transitionSceneOnEnd)
+			{
+				manager.audioManager.buttonClick.Play();
+				manager.activeLoader.QuickFadeOutLoad(manager.nextScene);
+			}
+			else
+            {
+				manager.audioManager.buttonClick.Play();
+				manager.ForceExitVN();
+			}
+			
 		});
 	}
 

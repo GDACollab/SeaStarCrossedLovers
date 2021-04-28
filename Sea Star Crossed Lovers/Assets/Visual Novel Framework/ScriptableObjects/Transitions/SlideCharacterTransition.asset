@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23eb6feedcec74f19976e27637ddfbe7, type: 3}
   m_Name: SlideCharacterTransition
   m_EditorClassIdentifier: 
+  enterEase: 2
+  exitEase: 3

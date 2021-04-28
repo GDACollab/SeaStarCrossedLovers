@@ -8,10 +8,13 @@ public class LevelManager : MonoBehaviour
     public float timeToWin;
     public float winTimerIncrement;
     public float winTimerCooldown;
-
-    private bool WinTimerOnCooldown = false;
+    public float winDelay;
 
     public string defualtWinTimerMessage;
+    public string defualtWinMessage;
+
+    public bool transitionSceneOnWin = true;
+    public string nextScene;
 
     public enum GameState { paused, playing, winTimer, won }
     public GameState currentGameState = GameState.paused;
@@ -19,6 +22,7 @@ public class LevelManager : MonoBehaviour
     public Canvas winCanvas;
     public Text winText;
 
+    public SceneLoader activeLoader;
     public ObstacleManager obstacleManager;
     public BlockManager blockManager;
     public TowerGoalpoint goalpoint;
@@ -29,11 +33,15 @@ public class LevelManager : MonoBehaviour
 
     public Block activeBlock { get; set; }
 
+    private bool WinTimerOnCooldown = false;
+
     private void Awake()
     {
         winCanvas.enabled = false;
 
         // Getting all necessary references
+        activeLoader = (SceneLoader)FindObjectOfType(typeof(SceneLoader));
+
         blockManager = gameObject.GetComponent<BlockManager>();
         blockManager.Construct(this);
 
@@ -51,6 +59,7 @@ public class LevelManager : MonoBehaviour
 
         blockQueue = (BlockQueue)FindObjectOfType(typeof(BlockQueue));
         blockQueue.Construct(this);
+
         progressBar.Construct(blockManager, goalpoint.getGoalHeight());
 
         winText.text = defualtWinTimerMessage;
@@ -59,6 +68,7 @@ public class LevelManager : MonoBehaviour
     private void Update()
     {
         progressBar.updateProgress();
+
         if(currentGameState == GameState.playing &&
             goalpoint.CheckWin() && !WinTimerOnCooldown)
         {
@@ -105,12 +115,19 @@ public class LevelManager : MonoBehaviour
 
         // If remain elligibile for win the whole time, play wins
         Debug.Log("You win");
-        winText.text = "YOU WIN! You may continue playing.";
+        winText.text = defualtWinMessage;
         currentGameState = GameState.won;
 
         // Wait for a couple seconds before message disappears
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(winDelay);
         winCanvas.enabled = false;
+
+        // TODO need to use unity events more; should have one here
+
+        if (transitionSceneOnWin)
+        {
+            activeLoader.QuickFadeOutLoad(nextScene);
+        }
     }
 
     // Used to stop Update function from starting winTimer in finicky situations
