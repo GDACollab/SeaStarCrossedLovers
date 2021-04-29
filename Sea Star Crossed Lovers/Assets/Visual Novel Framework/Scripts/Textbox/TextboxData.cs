@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New TextboxData", menuName = "ScriptableObjects/TextboxData")]
+[CreateAssetMenu(fileName = "New TextboxData", menuName = "VN Framework/Data/TextboxData")]
 public class TextboxData : ScriptableObject
 {
     [Header("Art Assets")]

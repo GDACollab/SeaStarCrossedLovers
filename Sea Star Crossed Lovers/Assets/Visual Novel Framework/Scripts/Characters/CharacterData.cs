@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Character", menuName = "ScriptableObjects/CharacterData")]
+[CreateAssetMenu(fileName = "New Character", menuName = "VN Framework/Data/CharacterData")]
 public class CharacterData : ScriptableObject
 {
     public enum ScenePosition { left, right };

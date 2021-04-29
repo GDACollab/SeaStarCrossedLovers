@@ -2,7 +2,7 @@
 using UnityEngine;
 using DG.Tweening;
 
-[CreateAssetMenu(fileName = "SlideTextboxTransition", menuName = "ScriptableObjects/SlideTextboxTransition")]
+[CreateAssetMenu(fileName = "SlideTextboxTransition", menuName = "VN Framework/Textbox Transitions/SlideTextboxTransition")]
 public class SlideTextboxTransition : TextboxTransition
 {
     public Ease enterEase;

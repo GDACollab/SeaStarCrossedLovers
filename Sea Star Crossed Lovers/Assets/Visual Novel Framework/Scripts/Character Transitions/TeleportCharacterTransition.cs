@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TeleportCharacterTransition", menuName = "ScriptableObjects/TeleportCharacterTransition")]
+[CreateAssetMenu(fileName = "TeleportCharacterTransition", menuName = "VN Framework/Character Transitions/TeleportCharacterTransition")]
 public class TeleportCharacterTransition : CharacterTransition
 {
     public override IEnumerator Co_ExitScreen(VN_Character character, MonoBehaviour caller)

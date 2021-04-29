@@ -192,6 +192,7 @@ public class VN_Manager : MonoBehaviour
 	{
 		if(story.canContinue)
         {
+			StopCoroutine(Co_DisplaySlowText());
 			ClearContent();
 
 			StartCoroutine(Co_DisplaySlowText());

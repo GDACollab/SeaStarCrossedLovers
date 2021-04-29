@@ -912,12 +912,12 @@ MonoBehaviour:
   activeLoader: {fileID: 0}
   activeState: 0
   beginOnStart: 1
-  characterBoxScale: 1
-  characterSpriteScale: 1
+  transitionSceneOnEnd: 0
+  nextScene: 
   normalSpeed: 30
   pauseSpeed: 5
   inkJSONAsset: {fileID: 4900000, guid: 2f68fdeb1d95648fa922883f9a23c7a2, type: 3}
-  DebugEnabled: 0
+  DebugEnabled: 1
   TextboxCanvas: {fileID: 7788690952007004722}
   textboxRectTransform: {fileID: 7788690952007004735}
   TextCanvas: {fileID: 7788690952764756129}
@@ -955,6 +955,8 @@ MonoBehaviour:
   nonSpeakingColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   speakerLightDuration: 1
   speakerLightEase: 4
+  characterBoxScale: 1
+  characterSpriteScale: 1
 --- !u!114 &3024939599575824783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1571,7 +1573,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7013672390896578203, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 200
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7013672390896578203, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
       propertyPath: m_SizeDelta.x
@@ -2140,6 +2142,10 @@ PrefabInstance:
       propertyPath: data
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 215021642760188442, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
+      propertyPath: scenePosition
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7013672390896578203, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2190,7 +2196,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7013672390896578203, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 200
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7013672390896578203, guid: 69d1cd1c3d8184672bbba0a0dd03b875, type: 3}
       propertyPath: m_SizeDelta.x

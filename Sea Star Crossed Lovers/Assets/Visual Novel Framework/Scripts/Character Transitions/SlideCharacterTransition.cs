@@ -2,7 +2,7 @@
 using UnityEngine;
 using DG.Tweening;
 
-[CreateAssetMenu(fileName = "SlideCharacterTransition", menuName = "ScriptableObjects/SlideCharacterTransition")]
+[CreateAssetMenu(fileName = "SlideCharacterTransition", menuName = "VN Framework/Character Transitions/SlideCharacterTransition")]
 public class SlideCharacterTransition : CharacterTransition
 {
     public Ease enterEase;

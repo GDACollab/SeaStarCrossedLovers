@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-using PrintExtensions;
-
 public class VN_CommandCall : MonoBehaviour
 {
 	private VN_Manager _manager;
@@ -25,8 +23,7 @@ public class VN_CommandCall : MonoBehaviour
 
 		List<ICommandCall> commandCalls = FindObjectsOfType<MonoBehaviour>()
 			.OfType<ICommandCall>().ToList();
-
-		// TODO Make a class for initializing everything for command calls
+		// Populate AllCommands
 		foreach (var command in commandCalls)
         {
 			string commandName = VN_Util.RemoveSubstring(command.GetType().ToString(), "Cmd");
@@ -54,11 +51,10 @@ public class VN_CommandCall : MonoBehaviour
 			{
 				var command = rawCommand.Trim(VN_Util.toTrim);
 				bool isImmediate = false;
-				// Assumes command is in form [function][ArgumentDelimiter][argument]
-				// with only 1 argument
-				//string[] commandArray = command.Split(ArgumentDelimiter);
-				string[] commandArray = command.Split(CommandDelimeters, StringSplitOptions.RemoveEmptyEntries);
 
+				// Split function name and args
+				string[] commandArray = command.Split(CommandDelimeters, StringSplitOptions.RemoveEmptyEntries);
+				// Convert to list
 				List<string> commandList = new List<string>();
 				foreach (string s in commandArray)
                 {
@@ -66,19 +62,19 @@ public class VN_CommandCall : MonoBehaviour
 				}
 				
 				string function = commandList[0];
+				// Check if first char in function is ImmediateMarker
 				if (function[0] == ImmediateMarker)
                 {
 					function = function.Trim(ImmediateMarker);
 					isImmediate = true;
 				}
-				// Assume all other strings after first (the function) are arguments
+				// Assume rest of contents are args
 				List<string> arguments = commandList.GetRange(1, commandList.Count - 1);
-
-                //print("args: " + commandList.ToFString());
 
                 if (AllCommands.ContainsKey(function))
                 {
-                    Func<List<string>, IEnumerator> Co_Command =
+					// Get reference to the function from AllCommands
+					Func<List<string>, IEnumerator> Co_Command =
                         (Func<List<string>, IEnumerator>)AllCommands[function];
 
 					if(VN_Util.VN_Debug)
@@ -88,7 +84,9 @@ public class VN_CommandCall : MonoBehaviour
 							function + "(" + args + ")\"", this);
                     }
 
-					if(isImmediate)
+					// isImmediate false yields the coroutine thereby waiting for it to finish
+					// while true doesn't wait
+					if (isImmediate)
                     {
 						StartCoroutine(Co_Command(arguments));
 					}

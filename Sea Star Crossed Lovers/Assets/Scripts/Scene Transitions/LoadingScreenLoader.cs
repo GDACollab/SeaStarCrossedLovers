@@ -25,6 +25,9 @@ public class LoadingScreenLoader : MonoBehaviour
 
     private void Update()
     {
-        progressBar.fillAmount = loadNextScene.progress;
+        if(loadNextScene != null)
+        {
+            progressBar.fillAmount = loadNextScene.progress;
+        }
     }
 }
