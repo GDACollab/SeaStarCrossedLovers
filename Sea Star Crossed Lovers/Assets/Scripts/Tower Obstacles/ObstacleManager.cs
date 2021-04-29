@@ -17,14 +17,13 @@ public class ObstacleManager : MonoBehaviour
     public UnityEvent OnAsteroidSpawn;
 
     private LevelManager levelManager;
-    private AsteroidSpawner asteroidSpawner;
+    [SerializeField] private AsteroidSpawner asteroidSpawner;
 
     public void Construct(LevelManager manager)
     {
         levelManager = manager;
         OnAsteroidSpawn = new UnityEvent();
 
-        asteroidSpawner = GameObject.Find("AsteroidSpawnerObj").GetComponent<AsteroidSpawner>();
         asteroidSpawner.Construct(levelManager, this);
     }
 
