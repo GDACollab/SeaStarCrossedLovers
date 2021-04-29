@@ -23,7 +23,7 @@ public class BlockManager : MonoBehaviour
         highestBlock = GetHighestTowerBlock();
         if(highestBlock)
         {
-            highestBlockHeight = highestBlock.transform.position.y;
+            highestBlockHeight = getBlockHeight(highestBlock);
         }
     }
 
@@ -46,12 +46,18 @@ public class BlockManager : MonoBehaviour
         {
             if (block != activeBlock &&
                 block.state == Block.BlockState.stable &&
-                block.transform.position.y > highestBlockHeight)
+                getBlockHeight(block) > highestBlockHeight)
             {
                 resultBlock = block;
             }
         });
 
         return resultBlock;
+    }
+
+    // Returns the maximum height of the block parameter, as defined by the bounds of the collider.
+    private float getBlockHeight(Block block)
+    {
+        return block.GetComponent<Collider2D>().bounds.max.y;
     }
 }

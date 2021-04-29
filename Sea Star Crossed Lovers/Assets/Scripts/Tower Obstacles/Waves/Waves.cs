@@ -99,7 +99,7 @@ public class Waves : MonoBehaviour
 	/// <summary>
 	/// The list of all the DisruptiveWaves that are currently travelling along this here ocean.
 	/// </summary>
-	List<DisruptiveWave> activeWaveList = new List<DisruptiveWave>();
+	[HideInInspector] public List<DisruptiveWave> activeWaveList = new List<DisruptiveWave>();
 
 	// Stuff for the Ocean Mesh. You don't need to care about this.
 	MeshFilter meshFilter; //Mesh filter renders the mesh we create for the ocean.

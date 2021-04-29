@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SpawnBlock : MonoBehaviour
 {
     public List<BlockData> SpawnBlockList;
     public List<AudioClip> BlockHitSounds;
+    public AudioMixerGroup audioMixerGroup;
 
     public float blockHitVolume = 1;
     public float blockMass = 1;
@@ -96,6 +98,7 @@ public class SpawnBlock : MonoBehaviour
         activeBlock = activeBlock.GetComponent<Block>();
 
         // Give random collision sound
+        activeBlock.audioSource.outputAudioMixerGroup = audioMixerGroup;
         activeBlock.audioSource.clip = BlockHitSounds[Random.Range(0, BlockHitSounds.Count)];
         activeBlock.audioSource.volume = blockHitVolume;
 
