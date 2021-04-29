@@ -5,8 +5,14 @@ using UnityEngine.Audio;
 
 public class SettingsMenu : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] private Waves waves;
     [SerializeField] private AudioMixer audioMixer;
+    [SerializeField] private AudioMixerGroup audioMixerGroup;
+
+    [Header("Sound Effects")]
+    [SerializeField] private AudioSource pauseSound;
+    [SerializeField] private AudioSource unpauseSound;
 
     // Remember wave stats when paused
     private float resumeWaveSpeed = 0.01f;
@@ -21,7 +27,7 @@ public class SettingsMenu : MonoBehaviour
     {
         bool paused = gameObject.activeSelf;
 
-        // Reverse the active setting
+        // Show or hide the menu
         gameObject.SetActive(!paused);
 
         // Pause/Unpause physics
@@ -52,5 +58,16 @@ public class SettingsMenu : MonoBehaviour
                 wave.sizeModifier = 1;
             }
         }
+
+    }
+
+    private void OnEnable() {
+        // Sound Effect
+        pauseSound.Play();
+    }
+
+    private void OnDisable() {
+        // Sound Effect
+        unpauseSound.Play();
     }
 }
