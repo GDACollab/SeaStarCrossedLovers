@@ -11,6 +11,9 @@ public class VN_TextboxManager : MonoBehaviour
     // Current active TextboxData
     public TextboxData data;
 
+    public Button skipButton;
+    public Button settingsButton;
+
     private VN_Manager manager;
     private Image textboxImage;
     private Image nameboxImage;
@@ -42,6 +45,11 @@ public class VN_TextboxManager : MonoBehaviour
         nameboxImage.sprite = data.nameboxSprite;
         nameboxImage.SetNativeSize();
 
+        skipButton.image.sprite = data.skipSprite;
+        skipButton.image.SetNativeSize();
+        settingsButton.image.sprite = data.settingsSprite;
+        settingsButton.image.SetNativeSize();
+
         if (data.FindCornerDecorSprite(cornerDecor))
         {
             var offsetPair = data.GetCornerDecorOffsets(cornerDecor);
@@ -70,4 +78,18 @@ public class VN_TextboxManager : MonoBehaviour
         SetTextboxData(data, sprite);
     }
 
+    public IEnumerator ShowTextbox(TextboxData data, Sprite decor)
+    {
+        manager.activeState = VN_Manager.ActiveState.active;
+        SetTextboxData(data, decor);
+
+        yield return StartCoroutine(data.textboxTransition.Co_EnterScreen(manager, this));
+    }
+
+    public IEnumerator HideTextbox(TextboxData data)
+    {
+        yield return StartCoroutine(data.textboxTransition.Co_ExitScreen(manager, this));
+        manager.activeState = VN_Manager.ActiveState.hidden;
+        SetDefaultData();
+    }
 }

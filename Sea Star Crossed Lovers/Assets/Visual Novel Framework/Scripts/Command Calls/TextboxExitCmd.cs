@@ -9,8 +9,6 @@ public class TextboxExitCmd : MonoBehaviour, ICommandCall
         VN_Manager manager = VN_Util.manager;
         TextboxData data = manager.textboxManager.data;
 
-        yield return StartCoroutine(data.textboxTransition.Co_ExitScreen(manager, manager));
-        manager.activeState = VN_Manager.ActiveState.hidden;
-        manager.textboxManager.SetDefaultData();
+        yield return StartCoroutine(manager.textboxManager.HideTextbox(data));
     }
 }
