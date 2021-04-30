@@ -76,7 +76,7 @@ public class Blocklet : MonoBehaviour
                 blockParent.blockletChildren.Remove(gameObject);
                 blockParent.CheckFullyDeleted();
                 Destroy(gameObject);
-                blockParent.state = Block.BlockState.active;
+                blockParent.state = Block.BlockState.stable;
             }
         }
     }

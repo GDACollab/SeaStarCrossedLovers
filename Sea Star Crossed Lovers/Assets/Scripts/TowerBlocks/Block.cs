@@ -108,7 +108,7 @@ public class Block : MonoBehaviour
 
     public void Delete(int rowsToDelete)
     {
-        if (state == BlockState.stable)
+        if (state != BlockState.deleting)
         {
             state = BlockState.deleting;
             if (!wave.waveIsOver)
