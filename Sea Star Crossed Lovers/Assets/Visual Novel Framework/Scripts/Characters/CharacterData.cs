@@ -18,6 +18,8 @@ public class CharacterData : ScriptableObject
     public CharacterTransition transition;
     [Tooltip("Duration in seconds of Character enter/exit transition")]
     public float transitionDuration;
+    public float characterSpriteScale = 1;
+    public float characterBoxScale = 1;
 
     [Header("Character's Art Assets")]
     [Tooltip("Starting sprite; make sure it exists in the sprites list")]

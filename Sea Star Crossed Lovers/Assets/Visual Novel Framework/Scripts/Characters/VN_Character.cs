@@ -58,7 +58,7 @@ public class VN_Character : MonoBehaviour
                     break;
             }
             // Change character box
-            ScaleImageCanvas(VN_CharBox, data.characterBox, characterManager.characterBoxScale);
+            ScaleImageCanvas(VN_CharBox, data.characterBox, data.characterBoxScale);
         }
         else
         {
@@ -79,19 +79,19 @@ public class VN_Character : MonoBehaviour
             Sprite newSprite = data.characterSprites.Find(x =>
             {
                 string emotionName = x.name;
-                var trimmed = emotionName.Split('_');
-                if(trimmed.Length > 1)
-                {
-                    emotionName = trimmed[1];
-                }
-                
+                //var trimmed = emotionName.Split('_');
+                //if (trimmed.Length > 1)
+                //{
+                //    emotionName = trimmed[1];
+                //}
+
                 return emotionName == newSpriteName;
             });
             // If found, change image to newSprite
             if (newSprite)
             {
                 VN_CharSprite.enabled = true;
-                ScaleImageCanvas(VN_CharSprite, newSprite, characterManager.characterSpriteScale);
+                ScaleImageCanvas(VN_CharSprite, newSprite, data.characterSpriteScale);
             }
             else
             {
@@ -124,7 +124,7 @@ public class VN_Character : MonoBehaviour
             if (foundSprite)
             {
                 VN_CharSprite.enabled = true;
-                ScaleImageCanvas(VN_CharSprite, foundSprite, characterManager.characterSpriteScale);
+                ScaleImageCanvas(VN_CharSprite, foundSprite, data.characterSpriteScale);
             }
             else
             {
@@ -156,10 +156,10 @@ public class VN_Character : MonoBehaviour
             return;
         }
 
+        image.SetNativeSize();
         Vector2 spriteSize = sprite.rect.size;
         image.rectTransform.sizeDelta = new Vector2(spriteSize.x * scale, spriteSize.y * scale);
         image.sprite = sprite;
-        image.SetNativeSize();
     }
 
     public IEnumerator TweenColor(Image image, Color color, float duration, Ease ease)

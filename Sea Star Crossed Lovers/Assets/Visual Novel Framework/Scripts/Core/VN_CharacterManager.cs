@@ -21,9 +21,6 @@ public class VN_CharacterManager : MonoBehaviour
 	[Tooltip("Ease of transition to speaking/nonspeaking color")]
 	public Ease speakerLightEase;
 
-	public float characterBoxScale = 1;
-	public float characterSpriteScale = 1;
-
 	private VN_Manager manager;
 
     public void Construct(VN_Manager manager)

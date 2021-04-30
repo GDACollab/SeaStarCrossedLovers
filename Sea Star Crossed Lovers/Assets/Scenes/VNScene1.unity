@@ -360,6 +360,10 @@ PrefabInstance:
       propertyPath: speakerLightEase
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 442092617823953456, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
+      propertyPath: AllCharacterData.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: afbc7ae5e26e1405b8928e3c571c6050, type: 2}
     - target: {fileID: 955727146844791478, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 100
