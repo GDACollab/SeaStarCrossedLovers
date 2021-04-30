@@ -26,7 +26,7 @@ public class SimpleWave : MonoBehaviour
         dTimer = 0f;
         waveIsOver = true;
 
-        waveTimerText = GameObject.Find("WaveTimer");
+        waveTimerText = GameObject.Find("WaveTimerText");
         difficultyText = GameObject.Find("DifficultyLevel");
     }
 
@@ -63,7 +63,7 @@ public class SimpleWave : MonoBehaviour
     void OnParticleCollision(GameObject other)
     {
         if (other.tag == "Tetronimo")
-        {         
+        {
             Block b = other.GetComponent<Block>();
             b.Delete(difficulty);
         }

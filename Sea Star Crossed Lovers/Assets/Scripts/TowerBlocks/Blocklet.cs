@@ -52,7 +52,7 @@ public class Blocklet : MonoBehaviour
         relativePos = platform.transform.InverseTransformPoint(this.transform.position);
         //calculate row #
         //row = (int)(relativePos.y / size.y);
-        row = (int)(relativePos.y);
+        row = (int)(relativePos.y) - 2;
 
         // Freeze rowDebugObj rotation
         rowDebugObj.transform.rotation = Quaternion.identity;

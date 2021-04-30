@@ -19,9 +19,14 @@ public class LevelManager : MonoBehaviour
     public enum GameState { paused, playing, winTimer, won }
     public GameState currentGameState = GameState.paused;
 
+    public Block activeBlock { get; set; }
+
+    [Header("Need to be filled via inspector")]
     public Canvas winCanvas;
     public Text winText;
+    [SerializeField] private ProgressBar progressBar;
 
+    [Header("Retrieved on awake")]
     public SceneLoader activeLoader;
     public ObstacleManager obstacleManager;
     public BlockManager blockManager;
@@ -29,9 +34,6 @@ public class LevelManager : MonoBehaviour
     public SpawnBlock spawnBlock;
     public BlockController blockController;
     public BlockQueue blockQueue;
-    [SerializeField] private ProgressBar progressBar;
-
-    public Block activeBlock { get; set; }
 
     private bool WinTimerOnCooldown = false;
 

@@ -113,6 +113,7 @@ public class Block : MonoBehaviour
             state = BlockState.deleting;
             if (!wave.waveIsOver)
             {
+                print("Delete");
                 //Find all blocklets that make up the tetronimo, mark them for deletion
                 foreach (GameObject child in blockletChildren)
                     child.GetComponent<Blocklet>().MarkDelete(rowsToDelete);
