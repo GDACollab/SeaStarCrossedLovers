@@ -5,6 +5,9 @@ using UnityEngine.Audio;
 
 public class SettingsMenu : MonoBehaviour
 {
+    [Header("Settings")]
+    [SerializeField] private bool wavesExist = true;
+
     [Header("References")]
     [SerializeField] private Waves waves;
     [SerializeField] private AudioMixer audioMixer;
@@ -36,11 +39,14 @@ public class SettingsMenu : MonoBehaviour
             // Unpause
             Time.timeScale = 1;
             // Restart waves
-            foreach (DisruptiveWave wave in waves.activeWaveList)
+            if (wavesExist)
             {
-                // Restart wave
-                wave.speed = resumeWaveSpeed;
-                wave.sizeModifier = resumeSizeModifier;
+                foreach (DisruptiveWave wave in waves.activeWaveList)
+                {
+                    // Restart wave
+                    wave.speed = resumeWaveSpeed;
+                    wave.sizeModifier = resumeSizeModifier;
+                }
             }
         }
         else
@@ -48,14 +54,17 @@ public class SettingsMenu : MonoBehaviour
             // Pause
             Time.timeScale = 0;
             // Stop waves
-            foreach (DisruptiveWave wave in waves.activeWaveList)
+            if (wavesExist)
             {
-                // Remember wave stats
-                resumeWaveSpeed = wave.speed;
-                resumeSizeModifier = wave.sizeModifier;
-                // Stop wave
-                wave.speed = 0;
-                wave.sizeModifier = 1;
+                foreach (DisruptiveWave wave in waves.activeWaveList)
+                {
+                    // Remember wave stats
+                    resumeWaveSpeed = wave.speed;
+                    resumeSizeModifier = wave.sizeModifier;
+                    // Stop wave
+                    wave.speed = 0;
+                    wave.sizeModifier = 1;
+                }
             }
         }
 

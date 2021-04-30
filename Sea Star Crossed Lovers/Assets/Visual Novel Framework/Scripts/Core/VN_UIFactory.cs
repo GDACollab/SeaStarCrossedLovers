@@ -16,10 +16,12 @@ public class VN_UIFactory : MonoBehaviour
 	private Button buttonPrefab = null;
 
 	private VN_Manager manager;
+	private VN_AudioManager audioManager;
 
-	public void Construct(VN_Manager VN_Manager)
+	public void Construct(VN_Manager VN_Manager, VN_AudioManager audioManager)
     {
 		manager = VN_Manager;
+		this.audioManager = audioManager;
 	}
 
 	/**
@@ -85,14 +87,14 @@ public class VN_UIFactory : MonoBehaviour
 		Button choice = CreateChoiceView("End");
 		choice.onClick.AddListener(delegate
 		{
+			audioManager.buttonClick.Play();
+
 			if (manager.transitionSceneOnEnd)
 			{
-				manager.audioManager.buttonClick.Play();
 				manager.activeLoader.QuickFadeOutLoad(manager.nextScene);
 			}
 			else
             {
-				manager.audioManager.buttonClick.Play();
 				manager.ForceExitVN();
 			}
 			
@@ -105,7 +107,7 @@ public class VN_UIFactory : MonoBehaviour
 		Button choice = CreateChoiceView("Start story");
 		choice.onClick.AddListener(delegate
 		{
-			manager.audioManager.buttonClick.Play();
+			audioManager.buttonClick.Play();
 			manager.StartStory();
 		});
 	}
@@ -123,6 +125,7 @@ public class VN_UIFactory : MonoBehaviour
 				// Tell the button what to do when we press it
 				button.onClick.AddListener(delegate
 				{
+					audioManager.buttonClick.Play();
 					OnClickChoiceButton(choice);
 				});
 			}
@@ -133,7 +136,7 @@ public class VN_UIFactory : MonoBehaviour
 		{
 			Button button = CreateChoiceView("Continue");
 			button.onClick.AddListener(delegate {
-				manager.audioManager.buttonClick.Play();
+				audioManager.buttonClick.Play();
 				manager.RefreshView();
 			});
 		}
@@ -153,7 +156,5 @@ public class VN_UIFactory : MonoBehaviour
 		}
 		manager.story.ChooseChoiceIndex(choice.index);
 		manager.RefreshView();
-
-		manager.audioManager.buttonClick.Play();
 	}
 }

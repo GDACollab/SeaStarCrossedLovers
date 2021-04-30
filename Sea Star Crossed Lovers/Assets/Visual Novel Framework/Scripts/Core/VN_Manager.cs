@@ -96,15 +96,13 @@ public class VN_Manager : MonoBehaviour
 		audioManager = GetComponent<VN_AudioManager>();
 		audioManager.Construct(this);
 
-		
-
 		VN_Util Helper = new VN_Util(this, DebugEnabled);
 		// Get CommandCall script in gameobject
 		CommandCall = GetComponent<VN_CommandCall>();
 		CommandCall.Construct(this);
 
 		UIFactory = GetComponent<VN_UIFactory>();
-		UIFactory.Construct(this);
+		UIFactory.Construct(this, audioManager);
 		textboxRectTransform = TextboxCanvas.GetComponent<RectTransform>();
 
 		textboxManager = GetComponent<VN_TextboxManager>();

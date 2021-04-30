@@ -100,13 +100,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 0}
-  currentState: 0
+  state: 0
   wave: {fileID: 0}
   blockletChildren: []
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
   audioSource: {fileID: -933650590680093398}
+  blockManager: {fileID: 0}
   debugObj: {fileID: 2905432965501178375}
 --- !u!82 &-933650590680093398
 AudioSource:
