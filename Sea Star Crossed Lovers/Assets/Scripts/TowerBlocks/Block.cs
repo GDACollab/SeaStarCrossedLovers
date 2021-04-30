@@ -7,7 +7,7 @@ public class Block : MonoBehaviour
     [HideInInspector] public BlockData data;
 
     [HideInInspector] public enum BlockState { active, preStable, falling, stable, deleting };
-    [HideInInspector] public BlockState state = BlockState.active;
+    public BlockState state = BlockState.active;
     [HideInInspector] public SimpleWave wave;
     [HideInInspector] public List<GameObject> blockletChildren = new List<GameObject>();
 
@@ -108,7 +108,7 @@ public class Block : MonoBehaviour
 
     public void Delete(int rowsToDelete)
     {
-        if (state != BlockState.deleting)
+        if (state == BlockState.stable)
         {
             state = BlockState.deleting;
             if (!wave.waveIsOver)
@@ -133,7 +133,7 @@ public class Block : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision != null && collision.gameObject.layer == default &&
-            state == BlockState.active)
+            (state == BlockState.active))
         {
             state = BlockState.preStable;
             audioSource.Play();

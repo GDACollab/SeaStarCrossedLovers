@@ -339,7 +339,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4692510215658932520, guid: e6df304c6bb96b94d95ac0434fb8d0c1, type: 3}
       propertyPath: waveHeight
-      value: 6
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4692510215658932520, guid: e6df304c6bb96b94d95ac0434fb8d0c1, type: 3}
       propertyPath: waveCooldown
@@ -383,7 +383,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6165143644612118523, guid: 030427581ee9d1943a12ffe03b0fb3e1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 21.75
+      value: 17.37
       objectReference: {fileID: 0}
     - target: {fileID: 6165143644612118523, guid: 030427581ee9d1943a12ffe03b0fb3e1, type: 3}
       propertyPath: m_LocalPosition.y
@@ -458,6 +458,10 @@ PrefabInstance:
     - target: {fileID: 2747798204672196436, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: m_Name
       value: LevelManagerObj
+      objectReference: {fileID: 0}
+    - target: {fileID: 2747798204672196436, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2747798204672196438, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: m_LocalPosition.x
