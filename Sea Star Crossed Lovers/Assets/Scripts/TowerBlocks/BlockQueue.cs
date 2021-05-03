@@ -57,6 +57,7 @@ public class BlockQueue : MonoBehaviour
     public void EnqueueBlock()
     {
         BlockData newBlock = SpawnBlockList[Random.Range(0, SpawnBlockList.Count)];
+        newBlock.InitializeDict();
         blockQueueList.Add(newBlock);
     }
 

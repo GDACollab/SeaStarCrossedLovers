@@ -35,6 +35,10 @@ public class BlockData : ScriptableObject
 
     private void OnValidate()
     {
+        InitializeDict();
+    }
+
+    public void InitializeDict() {
         GridCellDictionary.Clear();
         GridCellDictionary.Add((0, 0), cell_00);
         GridCellDictionary.Add((1, 0), cell_10);

@@ -242,6 +242,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a04cccda15b341c499cca2282fade6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &315934642 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4399153296025511168, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+  m_PrefabInstance: {fileID: 758076863}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &339285598
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -608,12 +613,44 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4399153296025511166, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4399153296025511166, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 315934642}
+    - target: {fileID: 4399153296025511166, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 4399153296025511166, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4399153296025511166, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4399153296025511166, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 45138654}
     - target: {fileID: 4399153296025511166, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: toggleBlockSpawn
+      objectReference: {fileID: 0}
+    - target: {fileID: 4399153296025511166, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4399153296025511166, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4399153296025511166, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: SpawnBlock, Assembly-CSharp
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2291407302094192110, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
