@@ -65,10 +65,9 @@ public class BlockController : MonoBehaviour
             }
             // TODO Change friction to very low while active/preStable?
 
-            // After being colliding, give limited control
+            // After colliding, give limited control
             else if (spawnBlock.activeBlock.state == Block.BlockState.preStable)
             {
-                spawnBlock.activeRB.gravityScale = spawnBlock.blockGravity;
                 Vector2 force = new Vector2(sidewaysVelocity * prestableControlMult, 0);
                 spawnBlock.activeRB.AddForce(force);
             }

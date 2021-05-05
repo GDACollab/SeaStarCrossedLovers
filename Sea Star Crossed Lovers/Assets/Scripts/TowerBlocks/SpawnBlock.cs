@@ -90,7 +90,7 @@ public class SpawnBlock : MonoBehaviour
             Debug.LogError("BlockData \"" + selectedBlockData.name + "\" has null blockPrefab");
         }
         Block newBlock = Instantiate(selectedBlockData.blockPrefab, spawnPosition, Quaternion.identity);
-        newBlock.Construct(blockManager, levelManager.blockController, selectedBlockData, spawnPosition);
+        newBlock.Construct(blockManager, levelManager.blockController, this, selectedBlockData, spawnPosition);
 
         // Set active block to be controlled
         activeBlock = newBlock;
