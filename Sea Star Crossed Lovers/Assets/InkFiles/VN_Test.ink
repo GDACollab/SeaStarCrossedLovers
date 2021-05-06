@@ -1,10 +1,18 @@
-// >>> Wait(2); !CharEnter(Noelani); CharEnter(Ocean); Wait(1); !CharExit(Noelani); CharExit(Ocean);
+VAR testNumber = 1
+VAR name = "Default"
 
-// >>> CharEnter(Noelani); CharEnter(Ocean); Wait(1); !CharExit(Noelani); CharExit(Ocean);
+
+>>> SetUnityVar(testInt, {testNumber});
+
+>>> UpdateInkVar(name, testString);
+
+>>> !CharEnter(Noelani); CharEnter(Ocean); Wait(1); !CharExit(Noelani); CharExit(Ocean);
+
+>>> CharEnter(Noelani); CharEnter(Ocean); Wait(1); !CharExit(Noelani); CharExit(Ocean);
 
 >>> TextboxEnter(Default, WavesDecorationSprite);
 
-// Narrator: I am the narrator. Test text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text 
+Narrator: I am {name}. Test text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text 
 
 >>> !CharEnter(Noelani);
 
