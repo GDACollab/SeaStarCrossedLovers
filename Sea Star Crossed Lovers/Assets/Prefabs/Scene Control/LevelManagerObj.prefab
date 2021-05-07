@@ -44,6 +44,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   asteroidPrefab: {fileID: 5954524111691990017, guid: ff3800b1dc55e424598f599fa8715936, type: 3}
+  asteroidVelocity: {x: 5, y: 0}
+  asteroidForce: {x: 10000, y: 0}
+  minSpawnYOffset: 10
+  lowestSpawn: 2
 --- !u!1 &2747798204672196436
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,12 +144,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54f8e654665a343aa9f200070445a599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  windVelocity: {x: -2, y: 0}
-  windCooldown: 3
-  windDuration: 1
+  windVelocity: 3
+  windCooldown: 30
+  minWindDuration: 5
+  maxWindDuration: 10
   windEnabled: 1
   windIsActive: 0
-  asteroidCooldown: 1
+  windDirection: 0
+  asteroidCooldown: 45
   asteroidEnabled: 1
   OnAsteroidSpawn:
     m_PersistentCalls:

@@ -12,15 +12,14 @@ public class Block : MonoBehaviour
     [HideInInspector] public List<GameObject> blockletChildren = new List<GameObject>();
 
     public AudioSource audioSource;
+    [HideInInspector] public Rigidbody2D rigidBody;
 
-    public BlockManager blockManager;
+    [HideInInspector] public BlockManager blockManager;
     private BlockController blockController;
     private SpawnBlock spawnBlock;
 
-    public GameObject debugObj;
+    [HideInInspector] public GameObject debugObj;
     private TextMesh debugObjText;
-
-    private Rigidbody2D rigidBody;
 
     void Awake()
     {
@@ -106,7 +105,8 @@ public class Block : MonoBehaviour
         // Freeze rowDebugObj rotation
         debugObj.transform.rotation = Quaternion.identity;
         // Update rowDebugObj text
-        debugObjText.text = gameObject.GetComponent<Rigidbody2D>().gravityScale.ToString("F1");
+        debugObjText.text = state.ToString();
+        //debugObjText.text = gameObject.GetComponent<Rigidbody2D>().gravityScale.ToString("F1");
         //debugObjText.text = gameObject.transform.position.x.ToString("F0");
 
         // Delete Block GameObject if go far below wave

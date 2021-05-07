@@ -359,7 +359,7 @@ MonoBehaviour:
   baseFallSpeed: 2
   fastFallSpeed: 20
   prestableControlTime: 1
-  prestableControlMult: 1000
+  prestableControlMult: 100
   canHold: 0
   gravity: 0
 --- !u!1 &8108696803225350216
@@ -452,7 +452,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: fedc00185523f47e38a78ea6dead2a8b, type: 3}
   audioMixerGroup: {fileID: 24300002, guid: e0cb200f8641c4304b428a5f77596cbb, type: 2}
   blockHitVolume: 1
-  blockMass: 1000
+  blockMass: 100
   spawnDelay: 0
   blockGravity: 0
   activeBlock: {fileID: 0}

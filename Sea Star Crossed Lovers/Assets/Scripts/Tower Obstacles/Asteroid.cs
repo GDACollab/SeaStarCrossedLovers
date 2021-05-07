@@ -5,13 +5,16 @@ using UnityEngine;
 public class Asteroid : MonoBehaviour
 {
     public Rigidbody2D rigidbody2D;
-    public Vector2 shotVelocity;
+    private Vector2 shotVelocity;
+    private Vector2 asteroidForce;
 
     private BlockManager blockManager;
 
-    public void Construct(BlockManager blockManager)
+    public void Construct(BlockManager blockManager, Vector2 shotVelocity, Vector2 asteroidForce)
     {
         this.blockManager = blockManager;
+        this.shotVelocity = shotVelocity;
+        this.asteroidForce = asteroidForce;
     }
 
     private void Start()
@@ -19,17 +22,28 @@ public class Asteroid : MonoBehaviour
         rigidbody2D.velocity = shotVelocity; 
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private void Update()
     {
-        if (collision != null && collision.gameObject.layer == default)
+        if(gameObject.transform.position.x > 25)
         {
-            Block hitBlock = collision.gameObject.GetComponent<Block>();
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other != null && other.gameObject.layer == default)
+        {
+            
+            Block hitBlock = other.gameObject.GetComponent<Block>();
             if (hitBlock)
             {
-                if (blockManager.activeBlock != hitBlock)
-                {
-                    blockManager.RemoveBlockFromList(hitBlock);
-                }
+                hitBlock.rigidBody.AddForce(asteroidForce, ForceMode2D.Force);
+                // Destroy non active block
+                //if (blockManager.activeBlock != hitBlock)
+                //{
+                //    blockManager.RemoveBlockFromList(hitBlock);
+                //}
             }
             Destroy(gameObject);
         }

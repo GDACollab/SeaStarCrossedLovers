@@ -544,17 +544,37 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2747798204523688656, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: asteroidVelocity.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2747798204523688656, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: asteroidForce.x
+      value: 50000
+      objectReference: {fileID: 0}
+    - target: {fileID: 2747798204523688659, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2747798204672196432, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: windCooldown
-      value: 10
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2747798204672196432, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: windDuration
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2747798204672196432, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: asteroidCooldown
-      value: 20
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2747798204672196432, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: windEnabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2747798204672196432, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: windVelocity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2747798204672196436, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: m_Name
