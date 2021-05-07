@@ -1,16 +1,17 @@
 VAR testNumber = 1
 VAR name = "Default"
 
+VAR player_character = "bob"
 
->>> SetUnityVar(testInt, {testNumber});
+// >>> SetUnityVar(testInt, {testNumber});
 
->>> UpdateInkVar(name, testString);
+// >>> UpdateInkVar(name, testString);
 
->>> !CharEnter(Noelani); CharEnter(Ocean); Wait(1); !CharExit(Noelani); CharExit(Ocean);
+// >>> !CharEnter(Noelani); CharEnter(Ocean); Wait(1); !CharExit(Noelani); CharExit(Ocean);
 
->>> CharEnter(Noelani); CharEnter(Ocean); Wait(1); !CharExit(Noelani); CharExit(Ocean);
+// >>> CharEnter(Noelani); CharEnter(Ocean); Wait(1); !CharExit(Noelani); CharExit(Ocean);
 
->>> TextboxEnter(Default, WavesDecorationSprite);
+>>> TextboxEnter(Default);
 
 Narrator: I am {name}. Test text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text 
 

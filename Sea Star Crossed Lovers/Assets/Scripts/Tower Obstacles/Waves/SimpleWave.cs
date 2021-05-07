@@ -33,7 +33,6 @@ public class SimpleWave : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // TODO continues wave timer on win just for infinite playtesting purposes
         if (_levelManager.currentGameState == LevelManager.GameState.playing ||
             _levelManager.currentGameState == LevelManager.GameState.won)
         {

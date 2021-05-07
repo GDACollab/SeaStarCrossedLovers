@@ -25,6 +25,6 @@ public class CharacterData : ScriptableObject
     [Tooltip("Starting sprite; make sure it exists in the sprites list")]
     public Sprite defaultSprite;
     public Sprite characterBox;
-    [Tooltip("List of character's sprites and their names")]
+    [Tooltip("List of character's sprites")]
     public List<Sprite> characterSprites;
 }
