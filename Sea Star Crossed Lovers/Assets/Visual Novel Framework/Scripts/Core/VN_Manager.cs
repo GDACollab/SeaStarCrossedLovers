@@ -439,4 +439,20 @@ public class VN_Manager : MonoBehaviour
 	}
 
 	#endregion
+
+	#region Other
+
+	/**
+	 * Sets the speed of the text.
+	 * Pause speed will be 1/6 normal speed
+	 * 
+	 * @Param speed: the speed of normal text
+	 */
+	public void SetTextSpeed(float speed)
+	{
+		TextSpeeds["Normal"] = speed;
+		TextSpeeds["Pause"] = speed/6;
+	}
+
+	#endregion
 }
