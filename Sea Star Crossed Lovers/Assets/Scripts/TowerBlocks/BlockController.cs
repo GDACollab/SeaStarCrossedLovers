@@ -72,6 +72,7 @@ public class BlockController : MonoBehaviour
                 Vector2 force = new Vector2(sidewaysVelocity * prestableControlMult, 0);
                 spawnBlock.activeRB.AddForce(force);
             }
+
         }
     }
 
@@ -111,6 +112,7 @@ public class BlockController : MonoBehaviour
                 Destroy(spawnBlock.activeBlock.gameObject);
                 StartCoroutine(spawnBlock.delaySpawnBlock());
             }
+            
         }
     }
 }
