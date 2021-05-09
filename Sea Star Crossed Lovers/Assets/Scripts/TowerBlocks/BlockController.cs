@@ -73,6 +73,8 @@ public class BlockController : MonoBehaviour
                 spawnBlock.activeRB.AddForce(force);
             }
 
+            // Clamp horizontal movement
+            spawnBlock.activeBlock.transform.position = new Vector2(Mathf.Clamp(spawnBlock.activeBlock.transform.position.x, -8f, 8f), spawnBlock.activeBlock.transform.position.y);
         }
     }
 

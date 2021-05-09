@@ -105,9 +105,6 @@ public class Block : MonoBehaviour
             blockManager.RemoveBlockFromList(this);
         }
 
-        // Clamp horizontal movement
-        gameObject.transform.position = new Vector2(Mathf.Clamp(gameObject.transform.position.x, -8f, 8f), gameObject.transform.position.y);
-        Debug.Log(gameObject.transform.position.x);
     }
 
     public void Delete(int rowsToDelete)
