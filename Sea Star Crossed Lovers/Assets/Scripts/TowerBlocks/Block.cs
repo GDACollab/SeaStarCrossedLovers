@@ -106,7 +106,7 @@ public class Block : MonoBehaviour
         }
 
         // Clamp horizontal movement
-        gameObject.transform.position = new Vector2(Mathf.Clamp(gameObject.transform.position.x, -8, 8), gameObject.transform.position.y);
+        gameObject.transform.position = new Vector2(Mathf.Clamp(gameObject.transform.position.x, -8f, 8f), gameObject.transform.position.y);
         Debug.Log(gameObject.transform.position.x);
     }
 
