@@ -11,7 +11,10 @@ public class Block : MonoBehaviour
     [HideInInspector] public SimpleWave wave;
     [HideInInspector] public List<GameObject> blockletChildren = new List<GameObject>();
 
-    public AudioSource audioSource;
+    public AudioSource hitSource;
+    public AudioSource dissolveSource;
+    public AudioSource splashSource;
+
     [HideInInspector] public Rigidbody2D rigidBody;
 
     [HideInInspector] public BlockManager blockManager;
@@ -120,6 +123,8 @@ public class Block : MonoBehaviour
     {
         if (state != BlockState.deleting)
         {
+            print("Delete");
+            dissolveSource.Play();
             state = BlockState.deleting;
             if (!wave.waveIsOver)
             {
@@ -145,7 +150,7 @@ public class Block : MonoBehaviour
             (state == BlockState.active))
         {
             state = BlockState.preStable;
-            audioSource.Play();
+            hitSource.Play();
             StartCoroutine(PreStableControlTimer(blockController.prestableControlTime));
         }
     }

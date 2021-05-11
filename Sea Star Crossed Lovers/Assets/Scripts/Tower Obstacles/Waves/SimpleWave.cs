@@ -64,6 +64,7 @@ public class SimpleWave : MonoBehaviour
         if (other.tag == "Tetronimo")
         {
             Block b = other.GetComponent<Block>();
+            b.splashSource.Play();
             b.Delete(difficulty);
         }
         else if (other.name == "Endpoint")

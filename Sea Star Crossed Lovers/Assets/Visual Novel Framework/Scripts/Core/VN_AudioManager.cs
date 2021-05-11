@@ -5,7 +5,6 @@ using UnityEngine;
 public class VN_AudioManager : MonoBehaviour
 {
     public AudioSource buttonClick;
-    public AudioSource buttonHover;
 
     private VN_Manager manager;
 
