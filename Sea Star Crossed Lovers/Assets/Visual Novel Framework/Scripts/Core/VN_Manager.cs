@@ -40,7 +40,7 @@ public class VN_Manager : MonoBehaviour
 
 	// Objects needed to create story from JSON
 	[Header("Required Objects")]
-	public Story story;
+	public Story Story;
 	[Tooltip("Intermediate file for Unity to work with Ink; Created when a .ink file is saved in Unity")]
 	[SerializeField] private TextAsset inkJSONAsset;
 
@@ -77,6 +77,7 @@ public class VN_Manager : MonoBehaviour
 	[HideInInspector] public VN_TextboxManager textboxManager;
 	[HideInInspector] public VN_CharacterManager characterManager;
 	[HideInInspector] public VN_AudioManager audioManager;
+	[HideInInspector] public VN_SharedVariables sharedVariables; 
 
 	// Flags/states
 	// Whether or not the current text is done from slow text
@@ -93,6 +94,9 @@ public class VN_Manager : MonoBehaviour
 	// Adds the AddCharacter and SubtractCharacter functions to the AllCommands Dictionary
 	void Awake()
     {
+		sharedVariables = GetComponent<VN_SharedVariables>();
+		sharedVariables.Construct(this);
+
 		audioManager = GetComponent<VN_AudioManager>();
 		audioManager.Construct(this);
 
@@ -174,8 +178,8 @@ public class VN_Manager : MonoBehaviour
 	// Initializes a story based on the imported JSON file
 	public void StartStory()
 	{
-		story = new Story(inkJSONAsset.text);
-		if (OnCreateStory != null) OnCreateStory(story);
+		Story = new Story(inkJSONAsset.text);
+		if (OnCreateStory != null) OnCreateStory(Story);
 		RefreshView();
 
 		if (VN_Util.VN_Debug)
@@ -188,7 +192,7 @@ public class VN_Manager : MonoBehaviour
 	// Remove all VN text & buttons, then starts displaying the text
 	public void RefreshView()
 	{
-		if(story.canContinue)
+		if(Story.canContinue)
         {
 			StopCoroutine(Co_DisplaySlowText());
 			ClearContent();
@@ -204,10 +208,10 @@ public class VN_Manager : MonoBehaviour
 	private IEnumerator Co_DisplaySlowText()
     {
 		// Get the next line of text
-		string nextLine = story.Continue();
+		string nextLine = Story.Continue();
 
 		// Get tags
-		currentTags = story.currentTags;
+		currentTags = Story.currentTags;
 
 		// Parses the line for speakerName and sets currentLine to content
 		yield return StartCoroutine(Co_ParseLine(nextLine));
@@ -226,7 +230,7 @@ public class VN_Manager : MonoBehaviour
 		// If content is blank, skip making content
 		if (currentLine == "")
 		{
-			if (story.canContinue)
+			if (Story.canContinue)
             {
 				StartCoroutine(Co_DisplaySlowText());
 			}

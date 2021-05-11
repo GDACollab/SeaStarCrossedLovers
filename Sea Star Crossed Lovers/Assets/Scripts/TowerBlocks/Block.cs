@@ -11,24 +11,31 @@ public class Block : MonoBehaviour
     [HideInInspector] public SimpleWave wave;
     [HideInInspector] public List<GameObject> blockletChildren = new List<GameObject>();
 
-    public AudioSource audioSource;
+    public AudioSource hitSource;
+    public AudioSource dissolveSource;
+    public AudioSource splashSource;
 
-    public BlockManager blockManager;
+    [HideInInspector] public Rigidbody2D rigidBody;
+
+    [HideInInspector] public BlockManager blockManager;
     private BlockController blockController;
+    private SpawnBlock spawnBlock;
 
-    public GameObject debugObj;
+    [HideInInspector] public GameObject debugObj;
     private TextMesh debugObjText;
 
     void Awake()
     {
         wave = GameObject.Find("Waves").GetComponent<SimpleWave>();
         debugObjText = debugObj.GetComponent<TextMesh>();
+        rigidBody = GetComponent<Rigidbody2D>();
     }
 
-    public Block Construct(BlockManager blockManager, BlockController blockController, BlockData data, Vector2 origin)
+    public Block Construct(BlockManager blockManager, BlockController blockController, SpawnBlock spawnBlock, BlockData data, Vector2 origin)
     {
         this.blockManager = blockManager;
         this.blockController = blockController;
+        this.spawnBlock = spawnBlock;
         this.data = data;
         // Construct the block out of the filled cell grid
         for (int cell_x = 0; cell_x < data.GRID_SIZE; cell_x++)
@@ -93,11 +100,17 @@ public class Block : MonoBehaviour
 
     void Update()
     {
+        if(state != BlockState.active)
+        {
+            rigidBody.gravityScale = spawnBlock.blockGravity;
+        }
+
         // Freeze rowDebugObj rotation
         debugObj.transform.rotation = Quaternion.identity;
         // Update rowDebugObj text
-        //debugObjText.text = currentState.ToString();
-        debugObjText.text = gameObject.transform.position.x.ToString("F0");
+        debugObjText.text = state.ToString();
+        //debugObjText.text = gameObject.GetComponent<Rigidbody2D>().gravityScale.ToString("F1");
+        //debugObjText.text = gameObject.transform.position.x.ToString("F0");
 
         // Delete Block GameObject if go far below wave
         if (gameObject.transform.position.y < wave.transform.position.y - 10)
@@ -111,10 +124,11 @@ public class Block : MonoBehaviour
     {
         if (state != BlockState.deleting)
         {
+            print("Delete");
+            dissolveSource.Play();
             state = BlockState.deleting;
             if (!wave.waveIsOver)
             {
-                print("Delete");
                 //Find all blocklets that make up the tetronimo, mark them for deletion
                 foreach (GameObject child in blockletChildren)
                     child.GetComponent<Blocklet>().MarkDelete(rowsToDelete);
@@ -137,7 +151,7 @@ public class Block : MonoBehaviour
             (state == BlockState.active))
         {
             state = BlockState.preStable;
-            audioSource.Play();
+            hitSource.Play();
             StartCoroutine(PreStableControlTimer(blockController.prestableControlTime));
         }
     }

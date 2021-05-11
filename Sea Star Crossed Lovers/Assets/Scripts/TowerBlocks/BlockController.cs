@@ -54,9 +54,12 @@ public class BlockController : MonoBehaviour
             if (spawnBlock.activeBlock.state == Block.BlockState.active)
             {
                 Vector2 playerMovement = new Vector2(sidewaysVelocity, -currentFallSpeed);
+
+                // Add wind velocity if active
                 if (obstacleManager.windIsActive)
                 {
-                    spawnBlock.activeRB.velocity = playerMovement + obstacleManager.windVelocity;
+                    spawnBlock.activeRB.velocity = playerMovement +
+                        new Vector2(obstacleManager.windDirection * obstacleManager.windVelocity, 0);
                 }
                 else
                 {
@@ -65,10 +68,9 @@ public class BlockController : MonoBehaviour
             }
             // TODO Change friction to very low while active/preStable?
 
-            // After being colliding, give limited control
+            // After colliding, give limited control
             else if (spawnBlock.activeBlock.state == Block.BlockState.preStable)
             {
-                spawnBlock.activeRB.gravityScale = spawnBlock.blockGravity;
                 Vector2 force = new Vector2(sidewaysVelocity * prestableControlMult, 0);
                 spawnBlock.activeRB.AddForce(force);
             }

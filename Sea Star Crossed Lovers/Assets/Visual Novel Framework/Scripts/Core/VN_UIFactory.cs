@@ -116,11 +116,11 @@ public class VN_UIFactory : MonoBehaviour
 	public void CreateAllChoiceButtons()
 	{
 		// Display all the choices, if there are any!
-		if (manager.story.currentChoices.Count > 0)
+		if (manager.Story.currentChoices.Count > 0)
 		{
-			for (int i = 0; i < manager.story.currentChoices.Count; i++)
+			for (int i = 0; i < manager.Story.currentChoices.Count; i++)
 			{
-				Choice choice = manager.story.currentChoices[i];
+				Choice choice = manager.Story.currentChoices[i];
 				Button button = CreateChoiceView(choice.text.Trim());
 				// Tell the button what to do when we press it
 				button.onClick.AddListener(delegate
@@ -132,7 +132,7 @@ public class VN_UIFactory : MonoBehaviour
 		}
 		// If there are no choices on this line of text
 		// And add a button to continue
-		else if (manager.story.canContinue)
+		else if (manager.Story.canContinue)
 		{
 			Button button = CreateChoiceView("Continue");
 			button.onClick.AddListener(delegate {
@@ -154,7 +154,7 @@ public class VN_UIFactory : MonoBehaviour
 		{
 			VN_Util.VNDebugPrint("Chose choice: \"" + choice.text + "\"", this);
 		}
-		manager.story.ChooseChoiceIndex(choice.index);
+		manager.Story.ChooseChoiceIndex(choice.index);
 		manager.RefreshView();
 	}
 }

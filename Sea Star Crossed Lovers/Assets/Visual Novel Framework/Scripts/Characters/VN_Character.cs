@@ -66,8 +66,10 @@ public class VN_Character : MonoBehaviour
         }
     }
 
+    // Changes this character's sprite based on its CharacterData
     public void ChangeSprite(string newSpriteName)
     {
+        // Make character invisible if newSpriteName is null
         if (newSpriteName == null || newSpriteName == "")
         {
             VN_CharSprite.sprite = null;
@@ -76,15 +78,10 @@ public class VN_Character : MonoBehaviour
         }
         if(data)
         {
+            // Lambda expression to find the sprite that matches newSpriteName 
             Sprite newSprite = data.characterSprites.Find(x =>
             {
                 string emotionName = x.name;
-                //var trimmed = emotionName.Split('_');
-                //if (trimmed.Length > 1)
-                //{
-                //    emotionName = trimmed[1];
-                //}
-
                 return emotionName == newSpriteName;
             });
             // If found, change image to newSprite
@@ -106,6 +103,7 @@ public class VN_Character : MonoBehaviour
         }
     }
 
+    // Overload for above ChangeSprite that takes a Sprite instead of a string
     public void ChangeSprite(Sprite newSprite)
     {
         if (newSprite == null)
@@ -139,10 +137,6 @@ public class VN_Character : MonoBehaviour
         }
     }
 
-    /* TODO replace this somehow, very jank since forces the image canvas to the size of
-     * the image in pixels. Pixel size varies so every character and character box looks
-     * different.
-    */
     private void ScaleImageCanvas(Image image, Sprite sprite, float scale)
     {
         if(!image)
@@ -152,14 +146,16 @@ public class VN_Character : MonoBehaviour
         }
         if (!sprite)
         {
-            Debug.LogError("Cannot ScaleImageCanvas of null sprite");
-            return;
+            image.enabled = false;
         }
-
-        image.SetNativeSize();
-        Vector2 spriteSize = sprite.rect.size;
-        image.rectTransform.sizeDelta = new Vector2(spriteSize.x * scale, spriteSize.y * scale);
-        image.sprite = sprite;
+        else
+        {
+            image.enabled = true;
+            image.sprite = sprite;
+            image.SetNativeSize();
+            Vector2 spriteSize = sprite.rect.size;
+            image.rectTransform.sizeDelta = new Vector2(spriteSize.x * scale, spriteSize.y * scale);
+        }
     }
 
     public IEnumerator TweenColor(Image image, Color color, float duration, Ease ease)
