@@ -79,7 +79,6 @@ public class SimpleWave : MonoBehaviour
     public void MakeWave(int height)
     {
         waveIsOver = false;
-        for (int i = 0; i < height; i++)
-            GetComponent<Waves>().GenerateWave(new DisruptiveWave());
+        GetComponent<Waves>().GenerateWave(new DisruptiveWave(1, 5, height));
     }
 }

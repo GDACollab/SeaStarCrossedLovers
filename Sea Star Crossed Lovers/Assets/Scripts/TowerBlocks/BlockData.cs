@@ -33,8 +33,7 @@ public class BlockData : ScriptableObject
     public Dictionary<(int, int), BlockletData> GridCellDictionary =
         new Dictionary<(int, int), BlockletData>();
 
-    private void OnValidate()
-    {
+    public void InitializeDict() {
         GridCellDictionary.Clear();
         GridCellDictionary.Add((0, 0), cell_00);
         GridCellDictionary.Add((1, 0), cell_10);
@@ -55,5 +54,10 @@ public class BlockData : ScriptableObject
         GridCellDictionary.Add((1, 3), cell_13);
         GridCellDictionary.Add((2, 3), cell_23);
         GridCellDictionary.Add((3, 3), cell_33);
+    }
+
+    private void OnValidate()
+    {
+        InitializeDict();
     }
 }
