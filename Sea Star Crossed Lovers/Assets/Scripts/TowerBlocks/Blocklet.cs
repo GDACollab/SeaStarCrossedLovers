@@ -23,6 +23,8 @@ public class Blocklet : MonoBehaviour
     [HideInInspector] public GameObject platform;
     [HideInInspector] public GameObject waves;
 
+    private GameObject comparisonBlocklet;
+
     public GameObject rowDebugObj;
     private TextMesh rowDebugText;
     [HideInInspector] public Block blockParent;
@@ -40,6 +42,7 @@ public class Blocklet : MonoBehaviour
         row = -1;
         size = this.GetComponent<BoxCollider2D>().size;
         platform = GameObject.FindWithTag("Platform");
+        comparisonBlocklet = GameObject.FindWithTag("BlockletPosition");
         waves = GameObject.FindWithTag("Wave");
 
         rowDebugText = rowDebugObj.GetComponent<TextMesh>();
@@ -52,8 +55,7 @@ public class Blocklet : MonoBehaviour
         relativePos = platform.transform.InverseTransformPoint(this.transform.position);
         //calculate row #
         //row = (int)(relativePos.y / size.y);
-        row = (int)(relativePos.y) - 2;
-
+        row = (int)(relativePos.y - (comparisonBlocklet.transform.position.y - platform.transform.position.y));
         // Freeze rowDebugObj rotation
         rowDebugObj.transform.rotation = Quaternion.identity;
         // Update rowDebugObj text
