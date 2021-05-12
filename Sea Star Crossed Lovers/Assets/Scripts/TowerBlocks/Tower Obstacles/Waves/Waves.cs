@@ -43,7 +43,7 @@ public class DisruptiveWave : Object
 	/// <param name="waveHeight">How high the wave should be.</param>
 	/// <param name="waveSpeed">How fast the wave should be.</param>
 	/// <param name="waveSizeOverTime">% of how much the wave should grow over time.</param>
-	public DisruptiveWave(float waveDirection = 1, float waveWidth = 5f, float waveHeight = 1.1f, float waveSpeed = 0.01f, float waveSizeOverTime = 0.9996f)
+	public DisruptiveWave(float waveDirection = 1, float waveWidth = 5f, float waveHeight = 1.1f, float waveSpeed = 0.1f, float waveSizeOverTime = 0.9996f)
 	{
 		this.direction = waveDirection;
 		this.width = waveWidth;

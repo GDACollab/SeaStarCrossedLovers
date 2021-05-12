@@ -14,7 +14,7 @@ public class Blocklet : MonoBehaviour
 
     [HideInInspector] public int row;
     //blocklet position relative to platform
-    private Vector3 relativePos;
+    //private Vector3 relativePos;
     //size of blocklet
     private Vector2 size;
     private bool canFade;
@@ -22,6 +22,8 @@ public class Blocklet : MonoBehaviour
 
     [HideInInspector] public GameObject platform;
     [HideInInspector] public GameObject waves;
+
+    private GameObject comparisonBlocklet;
 
     public GameObject rowDebugObj;
     private TextMesh rowDebugText;
@@ -40,6 +42,7 @@ public class Blocklet : MonoBehaviour
         row = -1;
         size = this.GetComponent<BoxCollider2D>().size;
         platform = GameObject.FindWithTag("Platform");
+        comparisonBlocklet = GameObject.FindWithTag("BlockletPosition");
         waves = GameObject.FindWithTag("Wave");
 
         rowDebugText = rowDebugObj.GetComponent<TextMesh>();
@@ -49,11 +52,13 @@ public class Blocklet : MonoBehaviour
     void Update()
     {
         //get position of blocklet relative to position of platform
-        relativePos = platform.transform.InverseTransformPoint(this.transform.position);
+        //relativePos = platform.transform.InverseTransformPoint(this.transform.position);
         //calculate row #
         //row = (int)(relativePos.y / size.y);
-        row = (int)(relativePos.y) - 2;
-
+        // Our comparisonBlocklet is a blocklet at ground level. We use this to get our relative row.
+        // (relativePos breaks the WebGL build)
+        float newPos = this.transform.position.y - comparisonBlocklet.transform.position.y;
+        row = (int)(newPos);
         // Freeze rowDebugObj rotation
         rowDebugObj.transform.rotation = Quaternion.identity;
         // Update rowDebugObj text

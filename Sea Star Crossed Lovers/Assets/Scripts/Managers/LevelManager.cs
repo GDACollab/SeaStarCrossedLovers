@@ -39,6 +39,8 @@ public class LevelManager : MonoBehaviour
 
     private void Awake()
     {
+        // Set target frame rate so that nothing weird is going on.
+        Application.targetFrameRate = 60;
         winCanvas.enabled = false;
 
         // Getting all necessary references
