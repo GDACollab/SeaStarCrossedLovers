@@ -14,8 +14,7 @@ public class Blocklet : MonoBehaviour
 
     [HideInInspector] public int row;
     //blocklet position relative to platform
-    private Vector3 relativePos;
-    private Vector3 groundBlockPos;
+    //private Vector3 relativePos;
     //size of blocklet
     private Vector2 size;
     private bool canFade;
@@ -47,20 +46,19 @@ public class Blocklet : MonoBehaviour
         waves = GameObject.FindWithTag("Wave");
 
         rowDebugText = rowDebugObj.GetComponent<TextMesh>();
-        groundBlockPos = platform.transform.InverseTransformPoint(comparisonBlocklet.transform.position);
     }
 
     // Update is called once per frame
     void Update()
     {
         //get position of blocklet relative to position of platform
-        relativePos = platform.transform.InverseTransformPoint(this.transform.position);
+        //relativePos = platform.transform.InverseTransformPoint(this.transform.position);
         //calculate row #
         //row = (int)(relativePos.y / size.y);
-        float newPos = relativePos.y - groundBlockPos.y;
+        // Our comparisonBlocklet is a blocklet at ground level. We use this to get our relative row.
+        // (relativePos breaks the WebGL build)
+        float newPos = this.transform.position.y - comparisonBlocklet.transform.position.y;
         row = (int)(newPos);
-        Debug.Log(newPos);
-        Debug.Log(groundBlockPos.y);
         // Freeze rowDebugObj rotation
         rowDebugObj.transform.rotation = Quaternion.identity;
         // Update rowDebugObj text
