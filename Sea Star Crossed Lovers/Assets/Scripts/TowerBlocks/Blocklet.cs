@@ -57,8 +57,10 @@ public class Blocklet : MonoBehaviour
         relativePos = platform.transform.InverseTransformPoint(this.transform.position);
         //calculate row #
         //row = (int)(relativePos.y / size.y);
-        row = (int)(relativePos.y - groundBlockPos.y);
-        Debug.Log(row);
+        float newPos = relativePos.y - groundBlockPos.y;
+        row = (int)(newPos);
+        Debug.Log(newPos);
+        Debug.Log(groundBlockPos.y);
         // Freeze rowDebugObj rotation
         rowDebugObj.transform.rotation = Quaternion.identity;
         // Update rowDebugObj text
