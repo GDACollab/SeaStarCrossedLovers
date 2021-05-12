@@ -32,6 +32,16 @@ public class VN_Manager : MonoBehaviour
 	public float normalSpeed = 60;
 	[Tooltip("Speed of the text (in characters per second) during a pause. Used at punctuation marks")]
 	public float pauseSpeed = 10;
+
+	// The Options Menu slider used to edit text speed during runtime
+	[Header("Text Speed Slider")]
+	[Tooltip("The Slider object itself")]
+	public Slider textSpeedSlider;
+	[Tooltip("Minumum speed for normal text")]
+	public float minValue;
+	[Tooltip("Maximum speed for normal text")]
+	public float maxValue;
+
 	// Dictionary of the different speeds (Dictionaries are not serializable).
 	private Dictionary<string, float> TextSpeeds;
 	// List of characters the the text will pause at
@@ -127,6 +137,11 @@ public class VN_Manager : MonoBehaviour
 			{"Normal", normalSpeed},
 			{"Pause", pauseSpeed}
 		};
+
+		// Setup for the slider
+		textSpeedSlider.value = TextSpeeds["Normal"];
+		textSpeedSlider.minValue = this.minValue;
+		textSpeedSlider.maxValue = this.maxValue;
 
 		//Check to make sure all assigned text speeds are valid (i.e. speed > 0)
 		foreach(float value in TextSpeeds.Values)
