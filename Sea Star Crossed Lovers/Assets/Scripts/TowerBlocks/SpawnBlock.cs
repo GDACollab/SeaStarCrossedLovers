@@ -7,7 +7,8 @@ public class SpawnBlock : MonoBehaviour
 {
     public List<BlockData> SpawnBlockList;
     public List<AudioClip> BlockHitSounds;
-    public AudioMixerGroup audioMixerGroup;
+    public List<AudioClip> BlockSplashSounds;
+    public List<AudioClip> BlockDissolveSounds;
 
     public float blockHitVolume = 1;
     public float blockMass = 1;
@@ -97,10 +98,10 @@ public class SpawnBlock : MonoBehaviour
         activeRB = activeBlock.GetComponent<Rigidbody2D>();
         activeBlock = activeBlock.GetComponent<Block>();
 
-        // Give random collision sound
-        activeBlock.audioSource.outputAudioMixerGroup = audioMixerGroup;
-        activeBlock.audioSource.clip = BlockHitSounds[Random.Range(0, BlockHitSounds.Count)];
-        activeBlock.audioSource.volume = blockHitVolume;
+        // Give block random sounds
+        activeBlock.hitSource.clip = BlockHitSounds[Random.Range(0, BlockHitSounds.Count)];
+        activeBlock.splashSource.clip = BlockSplashSounds[Random.Range(0, BlockSplashSounds.Count)];
+        activeBlock.dissolveSource.clip = BlockDissolveSounds[Random.Range(0, BlockDissolveSounds.Count)];
 
         activeRB.mass = blockMass;
 

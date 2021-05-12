@@ -11,16 +11,18 @@ public class Block : MonoBehaviour
     [HideInInspector] public SimpleWave wave;
     [HideInInspector] public List<GameObject> blockletChildren = new List<GameObject>();
 
-    public AudioSource audioSource;
+    public AudioSource hitSource;
+    public AudioSource dissolveSource;
+    public AudioSource splashSource;
 
-    public BlockManager blockManager;
+    [HideInInspector] public Rigidbody2D rigidBody;
+
+    [HideInInspector] public BlockManager blockManager;
     private BlockController blockController;
     private SpawnBlock spawnBlock;
 
-    public GameObject debugObj;
+    [HideInInspector] public GameObject debugObj;
     private TextMesh debugObjText;
-
-    private Rigidbody2D rigidBody;
 
     void Awake()
     {
@@ -106,7 +108,8 @@ public class Block : MonoBehaviour
         // Freeze rowDebugObj rotation
         debugObj.transform.rotation = Quaternion.identity;
         // Update rowDebugObj text
-        debugObjText.text = gameObject.GetComponent<Rigidbody2D>().gravityScale.ToString("F1");
+        debugObjText.text = state.ToString();
+        //debugObjText.text = gameObject.GetComponent<Rigidbody2D>().gravityScale.ToString("F1");
         //debugObjText.text = gameObject.transform.position.x.ToString("F0");
 
         // Delete Block GameObject if go far below wave
@@ -114,12 +117,15 @@ public class Block : MonoBehaviour
         {
             blockManager.RemoveBlockFromList(this);
         }
+
     }
 
     public void Delete(int rowsToDelete)
     {
         if (state != BlockState.deleting)
         {
+            print("Delete");
+            dissolveSource.Play();
             state = BlockState.deleting;
             if (!wave.waveIsOver)
             {
@@ -145,7 +151,7 @@ public class Block : MonoBehaviour
             (state == BlockState.active))
         {
             state = BlockState.preStable;
-            audioSource.Play();
+            hitSource.Play();
             StartCoroutine(PreStableControlTimer(blockController.prestableControlTime));
         }
     }

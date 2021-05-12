@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Noelani
   m_EditorClassIdentifier: 
   scenePosition: 0
-  screenEdgeDistance: 50
+  screenEdgeDistance: 0
   transition: {fileID: 11400000, guid: 3b8c7edcf2ae945a48152c552d124440, type: 2}
   transitionDuration: 0.5
   characterSpriteScale: 0.3

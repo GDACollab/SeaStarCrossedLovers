@@ -52,6 +52,9 @@ public class VN_TextboxManager : MonoBehaviour
 
         if (data.FindCornerDecorSprite(cornerDecor))
         {
+            decorLBImage.enabled = true;
+            decorRTImage.enabled = true;
+
             var offsetPair = data.GetCornerDecorOffsets(cornerDecor);
             decorRTRectTransform.anchoredPosition = offsetPair.Item1;
             decorRTRectTransform.rotation = offsetPair.Item2;
@@ -65,6 +68,11 @@ public class VN_TextboxManager : MonoBehaviour
             decorLBImage.sprite = cornerDecor;
             decorLBImage.SetNativeSize();
         }
+        else if(cornerDecor == null)
+        {
+            decorLBImage.enabled = false;
+            decorRTImage.enabled = false;
+        }
         else
         {
             Debug.LogError("Cannot find sprite \"" + cornerDecor.name + "\" in TextboxData \"" + data.name + "\"");
@@ -74,8 +82,15 @@ public class VN_TextboxManager : MonoBehaviour
     public void SetDefaultData()
     {
         TextboxData data = AllTextboxData[0];
-        Sprite sprite = data.cornerDecorList[0].sprite;
-        SetTextboxData(data, sprite);
+        if(data.cornerDecorList.Count == 0)
+        {
+            SetTextboxData(data, null);
+        }
+        else
+        {
+            Sprite decor = data.cornerDecorList[0].sprite;
+            SetTextboxData(data, decor);
+        }
     }
 
     public IEnumerator ShowTextbox(TextboxData data, Sprite decor)

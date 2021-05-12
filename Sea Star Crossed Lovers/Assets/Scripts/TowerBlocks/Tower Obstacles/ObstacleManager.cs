@@ -5,16 +5,20 @@ using UnityEngine.Events;
 
 public class ObstacleManager : MonoBehaviour
 {
-    public Vector2 windVelocity;
+    public float windVelocity;
     public float windCooldown;
-    public float windDuration;
+    public float minWindDuration;
+    public float maxWindDuration;
     public bool windEnabled = true;
     public bool windIsActive;
+    public int windDirection;
 
     public float asteroidCooldown;
     public bool asteroidEnabled = true;
 
     public UnityEvent OnAsteroidSpawn;
+
+    private int[] windDirections = new int[2] { -1, 1 };
 
     private LevelManager levelManager;
     [SerializeField] private AsteroidSpawner asteroidSpawner;
@@ -29,21 +33,24 @@ public class ObstacleManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(WindLoop(windCooldown, windDuration));
+        StartCoroutine(WindLoop(windCooldown));
         StartCoroutine(AsteroidLoop(asteroidCooldown));
     }
 
-    private IEnumerator WindLoop(float cooldown, float duration)
+    private IEnumerator WindLoop(float cooldown)
     {
         while (windEnabled)
         {
             yield return new WaitForSeconds(cooldown);
-            yield return StartCoroutine(WindDuration(duration));
+            float randomDuration = Random.Range(minWindDuration, maxWindDuration);
+            yield return StartCoroutine(WindDuration(randomDuration));
         }
     }
 
     private IEnumerator WindDuration(float duration)
     {
+        int index = Random.Range(0, windDirections.Length);
+        windDirection = windDirections[index];
         windIsActive = true;
         yield return new WaitForSeconds(duration);
         windIsActive = false;
