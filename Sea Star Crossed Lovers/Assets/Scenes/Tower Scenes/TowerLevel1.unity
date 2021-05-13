@@ -518,7 +518,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2747798204672196439, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: nextScene
-      value: TowerLevel2
+      value: VNMoonAstra1
       objectReference: {fileID: 0}
     - target: {fileID: 4399153295232709797, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: m_AnchorMin.y

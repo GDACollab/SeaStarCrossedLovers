@@ -574,15 +574,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2747798204672196439, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: transitionSceneOnWin
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2747798204672196439, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: nextScene
-      value: 
+      value: VNEnd
       objectReference: {fileID: 0}
     - target: {fileID: 2747798204672196439, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: defualtWinMessage
-      value: You win! That's all for now!
+      value: You win!
       objectReference: {fileID: 0}
     - target: {fileID: 4399153294535300192, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: m_Color.a
