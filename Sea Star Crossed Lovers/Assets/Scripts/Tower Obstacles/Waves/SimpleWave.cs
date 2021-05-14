@@ -13,6 +13,8 @@ public class SimpleWave : MonoBehaviour
     private float dTimer; //difficulty timer
     public bool waveIsOver; //true if wave has passed, false if wave is currently passing through
 
+    [SerializeField] private AudioSource WaveIncomingSource;
+
     private GameObject waveTimerText;
     private GameObject difficultyText;
 
@@ -80,5 +82,7 @@ public class SimpleWave : MonoBehaviour
     {
         waveIsOver = false;
         GetComponent<Waves>().GenerateWave(new DisruptiveWave(1, 5, height));
+
+        WaveIncomingSource.Play();
     }
 }
