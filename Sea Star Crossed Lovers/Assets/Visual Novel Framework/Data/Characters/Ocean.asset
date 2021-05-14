@@ -18,7 +18,10 @@ MonoBehaviour:
   transitionDuration: 0.5
   characterSpriteScale: 1
   characterBoxScale: 1
-  defaultSprite: {fileID: 21300000, guid: 335eb3d2f7f3d42648392edbe02fb005, type: 3}
+  defaultSprite: {fileID: 21300000, guid: 79576fde3045c42b685d03c421e8791d, type: 3}
   characterBox: {fileID: 21300000, guid: 305fb836c1bc34534b1482f1e03837c3, type: 3}
   characterSprites:
-  - {fileID: 21300000, guid: 335eb3d2f7f3d42648392edbe02fb005, type: 3}
+  - {fileID: 21300000, guid: 79576fde3045c42b685d03c421e8791d, type: 3}
+  - {fileID: 21300000, guid: 2fe993514c412481ea9849253a897494, type: 3}
+  - {fileID: 21300000, guid: c6f4c5f4f63af411ca9e3db48c7531f0, type: 3}
+  - {fileID: 21300000, guid: 7214ef56c90ef4754badd8aa1817e569, type: 3}

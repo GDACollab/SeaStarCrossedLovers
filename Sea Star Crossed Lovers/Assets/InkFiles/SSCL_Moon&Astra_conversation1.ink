@@ -1,3 +1,6 @@
+>>> !CharEnter(Moon); CharEnter(Astra);
+>>> TextboxEnter(Default, StarsDecorationSprite);
+
 Moon: What's the problem, Astra? 
 
 Moon: You seem down. Not shining as bright as usual.

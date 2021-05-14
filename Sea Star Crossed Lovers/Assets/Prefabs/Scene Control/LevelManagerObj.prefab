@@ -471,6 +471,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 525615910178429089, guid: 6494199763a3a43d1bf38d0d18c33a4c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d0418815e66fd4d61949a8e67f9f28a8, type: 3}
+    - target: {fileID: 525615910178429089, guid: 6494199763a3a43d1bf38d0d18c33a4c, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 525615910178429090, guid: 6494199763a3a43d1bf38d0d18c33a4c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

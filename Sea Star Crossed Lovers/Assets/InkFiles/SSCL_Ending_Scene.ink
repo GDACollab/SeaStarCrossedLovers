@@ -1,8 +1,13 @@
+>>> !CharEnter(Noelani); 
+>>> TextboxEnter(Default, WavesDecorationSprite);
+
 Noelani: *huff huff* I..*wheeze* I did it. 
 
 Noelani: I made it to the Moon! 
 
 Noelani: haah.. Haaah. Okay. okay gotta find… gotta find.
+
+>>> CharEnter(Astra);
 
 Astra: Noelani?!
 

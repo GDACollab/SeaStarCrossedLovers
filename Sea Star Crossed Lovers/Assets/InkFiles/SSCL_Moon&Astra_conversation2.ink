@@ -1,3 +1,6 @@
+>>> !CharEnter(Moon); CharEnter(Astra);
+>>> TextboxEnter(Default, StarsDecorationSprite);
+
 Moon: why are you so focused on what love means? 
 
 Moon: Yet only limiting it as something you give to others?
