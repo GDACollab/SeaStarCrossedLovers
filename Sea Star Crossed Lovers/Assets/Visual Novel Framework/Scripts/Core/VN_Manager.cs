@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Ink.Runtime;
+using UnityEngine.Events;
 
 /// <summary>
 /// Creates and manages VN components and flow
@@ -71,7 +72,7 @@ public class VN_Manager : MonoBehaviour
 	public Canvas Decor_RTCanvas;
 	public Canvas Decor_LBCanvas;
 
-	// Internal References
+	// Internal References & variables
 	// Keep track of story creation event
 	public static event Action<Story> OnCreateStory;
 	// The content to be displayed
@@ -81,6 +82,16 @@ public class VN_Manager : MonoBehaviour
 	// The tags in effect on the current text
 	private List<string> currentTags;
 
+	// State of text displaying
+	// Typing: content text is typing out char by char
+	// Idle: text is done displaying and nothing is happening
+	// Busy: VN is processing line, running commands
+	// End: Ink Story has reached an end
+	public enum VN_State { typing, idle, busy, end }
+	public VN_State state = VN_State.idle;
+	private UnityEvent OnTextTypeEnd = new UnityEvent();
+	private IEnumerator currentTypingCoroutine;
+
 	// Subordinate classes
 	private VN_CommandCall CommandCall;
 	[HideInInspector] public VN_UIFactory UIFactory;
@@ -88,10 +99,6 @@ public class VN_Manager : MonoBehaviour
 	[HideInInspector] public VN_CharacterManager characterManager;
 	[HideInInspector] public VN_AudioManager audioManager;
 	[HideInInspector] public VN_SharedVariables sharedVariables; 
-
-	// Flags/states
-	// Whether or not the current text is done from slow text
-	private bool currentTextDone = true;
 
 	// Get parse results from corountine
 	private string speaker;
@@ -104,6 +111,11 @@ public class VN_Manager : MonoBehaviour
 	// Adds the AddCharacter and SubtractCharacter functions to the AllCommands Dictionary
 	void Awake()
     {
+		OnTextTypeEnd.AddListener(() =>
+		{
+			state = VN_State.idle;
+		});
+
 		sharedVariables = GetComponent<VN_SharedVariables>();
 		sharedVariables.Construct(this);
 
@@ -178,10 +190,30 @@ public class VN_Manager : MonoBehaviour
     {
 		// Skips the animation of text appearing if the spacebar or primary mouse button is pressed
 		// TODO replace with input system to not hard code input bindings
-		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0)) SkipSlowText();
+
+		if (state == VN_State.idle)
+		{
+
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0))
+            {
+				Debug.Log("idle");
+                audioManager.buttonClick.Play();
+                RefreshView();
+            }
+        }
+
+		if (state == VN_State.typing)
+		{
+			if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0))
+			{
+				Debug.Log("typing");
+				SkipSlowText();
+			}
+		}
 
 		if (Input.GetKeyDown(KeyCode.F))
 		{
+			StopAllCoroutines();
 			activeLoader.QuickFadeOutLoad(nextScene);
 		}
 	}
@@ -222,6 +254,7 @@ public class VN_Manager : MonoBehaviour
 
 	private IEnumerator Co_DisplaySlowText()
     {
+		state = VN_State.busy;
 		// Get the next line of text
 		string nextLine = Story.Continue();
 
@@ -251,6 +284,7 @@ public class VN_Manager : MonoBehaviour
 			}
             else
             {
+				state = VN_State.end;
 				UIFactory.CreateEndStoryButton();
             }
 			yield break;
@@ -270,17 +304,17 @@ public class VN_Manager : MonoBehaviour
 			VN_Util.storedDebugString = currentLine;
 			VN_Util.VNDebugPrint("Start display text: \"" + VN_Util.storedDebugString + "\"", this);
 		}
-		yield return StartCoroutine(Co_SlowText(contentTextObj));
+		currentTypingCoroutine = Co_SlowText(contentTextObj);
+		yield return StartCoroutine(currentTypingCoroutine);
 
 		// Once done with showing text content, show all choice buttons
 		UIFactory.CreateAllChoiceButtons();
-		currentTextDone = true;
 	}
 
 	// Displays the current text on screen, one char at a time, then creates the choice buttons when it's done
 	private IEnumerator Co_SlowText(Text storyText)
 	{
-		currentTextDone = false;
+		state = VN_State.typing;
 		float TextSpeed;
 
 		yield return StartCoroutine(characterManager.UpdateSpeakerLight(currentSpeaker));
@@ -301,6 +335,7 @@ public class VN_Manager : MonoBehaviour
 		{
 			VN_Util.VNDebugPrint("End display text: \"" + VN_Util.storedDebugString + "\"", this);
 		}
+		OnTextTypeEnd.Invoke();
 	}
 
 	private string FormatText(string text)
@@ -324,10 +359,9 @@ public class VN_Manager : MonoBehaviour
 	// Makes the remaining text appear instantly, then creates the choice buttons
 	private void SkipSlowText()
 	{
-		if (!currentTextDone)
+		if (state == VN_State.typing)
 		{
-			currentTextDone = true;
-			StopAllCoroutines();
+			StopCoroutine(currentTypingCoroutine);
 			contentTextObj.text = currentLine;
 			UIFactory.CreateAllChoiceButtons();
 
@@ -335,6 +369,7 @@ public class VN_Manager : MonoBehaviour
 			{
 				VN_Util.VNDebugPrint("Skip slow text: \"" + VN_Util.storedDebugString + "\"", this);
 			}
+			OnTextTypeEnd.Invoke();
 		}
 	}
 	#endregion

@@ -62,7 +62,7 @@ public class Blocklet : MonoBehaviour
         // Freeze rowDebugObj rotation
         rowDebugObj.transform.rotation = Quaternion.identity;
         // Update rowDebugObj text
-        rowDebugText.text = row.ToString();
+        rowDebugText.text = markForDeletion.ToString();
 
         if (markForDeletion)
         {
@@ -78,20 +78,24 @@ public class Blocklet : MonoBehaviour
             else if (blockColor.a <= fadeFinal && waves.GetComponent<SimpleWave>().waveIsOver)
             {
                 // Delete Blocklets
+                blockParent.state = Block.BlockState.stable;
+                blockParent.dissolveSource.Play();
+
                 blockParent.blockletChildren.Remove(gameObject);
                 blockParent.CheckFullyDeleted();
                 Destroy(gameObject);
-                blockParent.state = Block.BlockState.stable;
             }
         }
     }
 
-    public void MarkDelete(int rowsToDelete)
+    public bool MarkDelete(int rowsToDelete)
     {
         if (row <= rowsToDelete)
         {
             markForDeletion = true;
+            
         }
+        return markForDeletion;
     }
 
     public Blocklet Construct(BlockletData blockletData, Block block)

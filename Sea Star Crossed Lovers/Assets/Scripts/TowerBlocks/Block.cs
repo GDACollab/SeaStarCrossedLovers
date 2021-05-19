@@ -124,14 +124,23 @@ public class Block : MonoBehaviour
     {
         if (state != BlockState.deleting)
         {
-            print("Delete");
-            dissolveSource.Play();
-            state = BlockState.deleting;
+            bool blockletChildBeingDeleted = false;
             if (!wave.waveIsOver)
             {
                 //Find all blocklets that make up the tetronimo, mark them for deletion
                 foreach (GameObject child in blockletChildren)
-                    child.GetComponent<Blocklet>().MarkDelete(rowsToDelete);
+                {
+                    Blocklet thisBlocklet = child.GetComponent<Blocklet>();
+                    if(thisBlocklet.MarkDelete(rowsToDelete))
+                    {
+                        blockletChildBeingDeleted = true;
+                    }
+                }
+            }
+
+            if(blockletChildBeingDeleted)
+            {
+                state = BlockState.deleting;
             }
         }
     }
@@ -159,7 +168,10 @@ public class Block : MonoBehaviour
     private IEnumerator PreStableControlTimer(float time)
     {
         yield return new WaitForSeconds(time);
-        state = BlockState.stable;
+        if(state == BlockState.preStable)
+        {
+            state = BlockState.stable;
+        }
         blockManager.activeBlock = null;
     } 
 }
