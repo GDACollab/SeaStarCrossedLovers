@@ -453,7 +453,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2747798204672196432, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: warningIndicatorInterval
-      value: 0.5
+      value: 0.33
       objectReference: {fileID: 0}
     - target: {fileID: 2747798204672196436, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: m_Name
@@ -610,6 +610,18 @@ PrefabInstance:
     - target: {fileID: 4399153296025511166, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: toggleBlockSpawn
+      objectReference: {fileID: 0}
+    - target: {fileID: 5799140195094974189, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778355862074913140, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 342
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778355862074913140, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 301
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2291407302094192110, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}

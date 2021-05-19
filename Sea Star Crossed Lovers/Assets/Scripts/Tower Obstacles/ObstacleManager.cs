@@ -12,7 +12,7 @@ public class ObstacleManager : MonoBehaviour
     public bool windEnabled = true;
     public bool windIsActive;
     public int windDirection;
-    public float warningIndicatorInterval = 0.5f;
+    public float warningIndicatorInterval = 0.33f;
     public bool flashWarning;
 
     public float asteroidCooldown;
@@ -37,7 +37,8 @@ public class ObstacleManager : MonoBehaviour
     private void Start()
     {
         flashWarning = false;
-        warningIndicator = this.transform.Find("PlayUICanvas").transform.Find("Warning Indicator").gameObject;
+        warningIndicator = GameObject.Find("TowerObjects").transform.Find("Warning Indicator").gameObject;
+        warningIndicator.SetActive(false);
         StartCoroutine(WindLoop(windCooldown));
         StartCoroutine(AsteroidLoop(asteroidCooldown));
     }
@@ -47,6 +48,7 @@ public class ObstacleManager : MonoBehaviour
         while (windEnabled)
         {
             yield return new WaitForSeconds(cooldown - 1f);
+            warningIndicator.transform.position = new Vector2(10, 18);
             StartCoroutine(Blink(warningIndicatorInterval));
             flashWarning = true;
             yield return new WaitForSeconds(1f);
@@ -71,6 +73,8 @@ public class ObstacleManager : MonoBehaviour
         while (asteroidEnabled)
         {
             yield return new WaitForSeconds(cooldown - 3f);
+            asteroidSpawner.ChooseSpawnLocation();
+            warningIndicator.transform.position = new Vector2(-10, asteroidSpawner.transform.position.y);
             StartCoroutine(Blink(warningIndicatorInterval));
             flashWarning = true;
             yield return new WaitForSeconds(3f);
