@@ -105,7 +105,6 @@ public class CreditsManager : MonoBehaviour
     // Iterates through the creditsMap Dictionary and initiates 
     private void writeCredits()
     {
-        Vector3 position = new Vector3(startingPosition.x, startingPosition.y, startingPosition.z);
         foreach(KeyValuePair<string, Dictionary<string, string>> headerRolePair in creditsMap)
         {
             Canvas textCanvas = Instantiate(textBoxTemplate);
@@ -116,23 +115,51 @@ public class CreditsManager : MonoBehaviour
             {
                 Debug.LogError("Incorrect number of text boxes in copy of template");
             }
+            
             // Sets the 3 text boxes to their default values
             TextBoxes[0].text = headerRolePair.Key;
             TextBoxes[1].text = "";
             TextBoxes[2].text = "";
-            CreditsSection section = new CreditsSection(TextBoxes, position);
+            // Creates a new CreditsSection object to manage the position of the 3 text boxes
+            CreditsSection section = new CreditsSection(TextBoxes);
+            credits.Add(headerRolePair.Key, section);
 
             // Adds each line of credits to the credits
             foreach(KeyValuePair<string, string> personRolePair in headerRolePair.Value)
             {
-                section.addCredit(personRolePair.Key, personRolePair.Value);
+                // Only credits someone if they contributed something
+                if(personRolePair.Value.Length > 1)
+                {
+                    section.addCredit(personRolePair.Key, personRolePair.Value);
+                }
             }
+
+            // Disables the content size fitter for each text box after text is added
+            foreach(Text textBox in TextBoxes)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(textBox.rectTransform);
+                textBox.GetComponent<ContentSizeFitter>().enabled = false;
+            }
+        }
+    }
+
+    void Start()
+    {
+        Vector3 position = new Vector3(startingPosition.x, startingPosition.y, startingPosition.z);
+        foreach(KeyValuePair<string, CreditsSection> creditsSection in credits)
+        {
+            //Debug.Log(creditsSection.Key);
+            CreditsSection section = creditsSection.Value;
+            section.setPosition(position, textBoxMargin);
+            float change = section.getHeight();
+            //Debug.Log(change);
+            position.y -= change;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //
     }
 }
