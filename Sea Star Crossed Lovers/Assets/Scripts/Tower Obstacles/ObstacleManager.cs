@@ -12,6 +12,8 @@ public class ObstacleManager : MonoBehaviour
     public bool windEnabled = true;
     public bool windIsActive;
     public int windDirection;
+    public float warningIndicatorInterval = 0.5f;
+    public bool flashWarning;
 
     public float asteroidCooldown;
     public bool asteroidEnabled = true;
@@ -21,6 +23,7 @@ public class ObstacleManager : MonoBehaviour
     private int[] windDirections = new int[2] { -1, 1 };
 
     private LevelManager levelManager;
+    private GameObject warningIndicator;
     [SerializeField] private AsteroidSpawner asteroidSpawner;
 
     public void Construct(LevelManager manager)
@@ -33,6 +36,8 @@ public class ObstacleManager : MonoBehaviour
 
     private void Start()
     {
+        flashWarning = false;
+        warningIndicator = this.transform.Find("PlayUICanvas").transform.Find("Warning Indicator").gameObject;
         StartCoroutine(WindLoop(windCooldown));
         StartCoroutine(AsteroidLoop(asteroidCooldown));
     }
@@ -41,7 +46,10 @@ public class ObstacleManager : MonoBehaviour
     {
         while (windEnabled)
         {
-            yield return new WaitForSeconds(cooldown);
+            yield return new WaitForSeconds(cooldown - 1f);
+            StartCoroutine(Blink(warningIndicatorInterval));
+            flashWarning = true;
+            yield return new WaitForSeconds(1f);
             float randomDuration = Random.Range(minWindDuration, maxWindDuration);
             yield return StartCoroutine(WindDuration(randomDuration));
         }
@@ -49,19 +57,35 @@ public class ObstacleManager : MonoBehaviour
 
     private IEnumerator WindDuration(float duration)
     {
+        
         int index = Random.Range(0, windDirections.Length);
         windDirection = windDirections[index];
         windIsActive = true;
         yield return new WaitForSeconds(duration);
         windIsActive = false;
+        flashWarning = false;
     }
 
     private IEnumerator AsteroidLoop(float cooldown)
     {
         while (asteroidEnabled)
         {
-            yield return new WaitForSeconds(cooldown);
+            yield return new WaitForSeconds(cooldown - 3f);
+            StartCoroutine(Blink(warningIndicatorInterval));
+            flashWarning = true;
+            yield return new WaitForSeconds(3f);
             OnAsteroidSpawn.Invoke();
+            flashWarning = false;
         }
+    }
+
+    private IEnumerator Blink(float interval)
+    {
+            warningIndicator.SetActive(!warningIndicator.activeSelf);
+            yield return new WaitForSeconds(interval);
+            if(flashWarning)
+                yield return StartCoroutine(Blink(warningIndicatorInterval));
+            else
+                warningIndicator.SetActive(false);
     }
 }
