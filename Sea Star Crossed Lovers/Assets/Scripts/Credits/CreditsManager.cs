@@ -24,13 +24,17 @@ public class CreditsManager : MonoBehaviour
     public float textBoxMargin;
     // The beginning position of the credits (below bottom of screen)
     public Vector3 startingPosition;
+    
+    // Text canvas for the header
+    public Canvas headerCanvas;
+
     // The template for the header text box
     public Canvas textBoxTemplate;
     
     // Parses the CSV file into the Dictionary creditsMap
     void Awake()
     {
-        setTemplate();
+        setDefaultText();
 
         creditsMap = new Dictionary<string, Dictionary<string, string>>();
         parseCSV();
@@ -39,10 +43,16 @@ public class CreditsManager : MonoBehaviour
         writeCredits();
     }
 
-    // Sets the initial position the text box templates
-    private void setTemplate()
+    // Sets the initial position the text box templates and the header text
+    private void setDefaultText()
     {
+        Text[] headerText = headerCanvas.GetComponentsInChildren<Text>();
+        headerText[0].transform.position = new Vector3(startingPosition.x, startingPosition.y, startingPosition.z);
+        headerText[1].transform.position = new Vector3(startingPosition.x, startingPosition.y - headerText[0].rectTransform.rect.height, startingPosition.z);
 
+        // Sets a temporary creditsSection object to set up the initial position
+        CreditsSection defaultCredits = new CreditsSection(textBoxTemplate.GetComponentsInChildren<Text>());
+        defaultCredits.setPosition(startingPosition, textBoxMargin);
     }
 
     // Parses the CSV file into a dictionary
@@ -117,7 +127,7 @@ public class CreditsManager : MonoBehaviour
             }
             
             // Sets the 3 text boxes to their default values
-            TextBoxes[0].text = headerRolePair.Key;
+            TextBoxes[0].text = headerRolePair.Key.Split(' ')[0];
             TextBoxes[1].text = "";
             TextBoxes[2].text = "";
             // Creates a new CreditsSection object to manage the position of the 3 text boxes
@@ -128,9 +138,21 @@ public class CreditsManager : MonoBehaviour
             foreach(KeyValuePair<string, string> personRolePair in headerRolePair.Value)
             {
                 // Only credits someone if they contributed something
+                // Set to 1 as writing credits have a carriage return character
                 if(personRolePair.Value.Length > 1)
                 {
-                    section.addCredit(personRolePair.Key, personRolePair.Value);
+                    string[] roles = personRolePair.Value.Split(',');
+                    for(int i = 0; i < roles.Length; i++)
+                    {
+                        if(i == 0)
+                        {
+                            section.addCredit(personRolePair.Key, roles[i]);
+                        }
+                        else
+                        {
+                            section.addCredit("", " " + roles[i]);
+                        }
+                    }
                 }
             }
 
@@ -145,7 +167,13 @@ public class CreditsManager : MonoBehaviour
 
     void Start()
     {
-        Vector3 position = new Vector3(startingPosition.x, startingPosition.y, startingPosition.z);
+        float startingYPostion = startingPosition.y - (textBoxMargin * 1.5f);
+        foreach(Text textBox in headerCanvas.GetComponentsInChildren<Text>())
+        {
+            startingYPostion -= textBox.rectTransform.rect.height;
+        }
+
+        Vector3 position = new Vector3(startingPosition.x, startingYPostion, startingPosition.z);
         foreach(KeyValuePair<string, CreditsSection> creditsSection in credits)
         {
             //Debug.Log(creditsSection.Key);
