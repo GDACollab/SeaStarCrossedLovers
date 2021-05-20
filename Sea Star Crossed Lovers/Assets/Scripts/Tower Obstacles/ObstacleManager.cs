@@ -24,6 +24,7 @@ public class ObstacleManager : MonoBehaviour
 
     private LevelManager levelManager;
     private GameObject warningIndicator;
+    public GameObject Canvas;
     [SerializeField] private AsteroidSpawner asteroidSpawner;
 
     public void Construct(LevelManager manager)
@@ -37,7 +38,7 @@ public class ObstacleManager : MonoBehaviour
     private void Start()
     {
         flashWarning = false;
-        warningIndicator = GameObject.Find("TowerObjects").transform.Find("Warning Indicator").gameObject;
+        warningIndicator = Canvas.transform.Find("Warning Indicator").gameObject;
         warningIndicator.SetActive(false);
         StartCoroutine(WindLoop(windCooldown));
         StartCoroutine(AsteroidLoop(asteroidCooldown));
@@ -48,7 +49,7 @@ public class ObstacleManager : MonoBehaviour
         while (windEnabled)
         {
             yield return new WaitForSeconds(cooldown - 1f);
-            warningIndicator.transform.position = new Vector2(7, 18);
+            warningIndicator.transform.localPosition = new Vector2(300f, 400f);
             StartCoroutine(Blink(warningIndicatorInterval));
             flashWarning = true;
             yield return new WaitForSeconds(1f);
@@ -74,7 +75,9 @@ public class ObstacleManager : MonoBehaviour
         {
             yield return new WaitForSeconds(cooldown - 3f);
             asteroidSpawner.ChooseSpawnLocation();
-            warningIndicator.transform.position = new Vector2(-7, asteroidSpawner.transform.position.y);
+            //need to map from world coords to local coords relative to the canvas
+            float canvasY = (asteroidSpawner.transform.position.y * 45f) - 390f;
+            warningIndicator.transform.localPosition = new Vector2(-300f, canvasY);
             StartCoroutine(Blink(warningIndicatorInterval));
             flashWarning = true;
             yield return new WaitForSeconds(3f);
