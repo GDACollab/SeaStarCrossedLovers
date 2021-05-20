@@ -6,14 +6,15 @@ using UnityEngine.UI;
 // Handles the text management of 1 section of the credits
 public class CreditsSection : Object
 {
-    // The name of this credits section
-    private Text header;
+    /*
+     * The text boxes to be used
+     * 
+     * 0 = header: the name of the section
+     * 1 = roles: what the people being credited did
+     * 2 = people: the people being credited
+     */
 
-    // What the people being credited did.
-    private Text roles;
-
-    // The people being credited
-    private Text people;
+    private Text[] textBoxes;
 
     /**
      * Constructor
@@ -23,9 +24,7 @@ public class CreditsSection : Object
      */
     public CreditsSection(Text[] textBoxes)
     {
-        this.header = textBoxes[0];
-        this.roles = textBoxes[1];
-        this.people = textBoxes[2];
+        this.textBoxes = textBoxes;
     }
 
     /**
@@ -39,8 +38,8 @@ public class CreditsSection : Object
      */
     public void addCredit(string name, string role)
     {
-        people.text += name + '\n';
-        roles.text += role + '\n';
+        textBoxes[1].text += role + '\n';
+        textBoxes[2].text += name + '\n';
     }
 
     /**
@@ -52,9 +51,9 @@ public class CreditsSection : Object
      */
     public void setPosition(Vector3 position, float margins)
     {
-        setTextPosition(header, new Vector3(position.x, position.y, position.z));
-        setTextPosition(roles, new Vector3(position.x + (margins/2), position.y - header.rectTransform.rect.height - margins, position.z));
-        setTextPosition(people, new Vector3(position.x - (margins/2), position.y - header.rectTransform.rect.height - margins, position.z));
+        setTextPosition(textBoxes[0], new Vector3(position.x, position.y, position.z));
+        setTextPosition(textBoxes[1], new Vector3(position.x + (margins/2), position.y - textBoxes[0].rectTransform.rect.height - margins, position.z));
+        setTextPosition(textBoxes[2], new Vector3(position.x - (margins/2), position.y - textBoxes[0].rectTransform.rect.height - margins, position.z));
     }
 
     /**
@@ -68,10 +67,24 @@ public class CreditsSection : Object
         text.transform.position = new Vector3(position.x, position.y, position.z);
     }
 
+    /**
+     * Translates the 3 text boxes up the provided distance
+     * 
+     * @Param distance: the distance the text box translated (positive for up, negative for down)
+     */
+    public void translateVertical(float distance)
+    {
+        foreach(Text textBox in textBoxes)
+        {
+            Vector3 position = textBox.transform.position;
+            setTextPosition(textBox, new Vector3(position.x, position.y + distance, position.z));
+        }
+    }
+
     // Returns the height of the 3 text boxes by subtracting the y position of the bottom from the y position of the top
     // Note: people and roles should be the lowest and identical, so this only gets the bottom of roles
     public float getHeight()
     {
-        return header.transform.position.y - (roles.transform.position.y - roles.rectTransform.rect.height);
+        return textBoxes[0].transform.position.y - (textBoxes[2].transform.position.y - textBoxes[2].rectTransform.rect.height);
     }
 }

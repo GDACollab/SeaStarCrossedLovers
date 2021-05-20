@@ -19,6 +19,12 @@ public class CreditsManager : MonoBehaviour
     // Dictionary of all sections of the credits, indexed by header
     private Dictionary<string, CreditsSection> credits;
 
+    // Time it will take for the credits to scroll all the way through, in seconds
+    public float time;
+    
+    // Speed the credits will move at. I.e. the distance it will move up each frame
+    private float creditsSpeed = 1;
+
     [Header("UI Text")]
     // Distance set between the text boxes, both vertically and horizontally
     public float textBoxMargin;
@@ -30,6 +36,9 @@ public class CreditsManager : MonoBehaviour
 
     // The template for the header text box
     public Canvas textBoxTemplate;
+
+    int frameCount = 0;
+    int secondCount = 0;
     
     // Parses the CSV file into the Dictionary creditsMap
     void Awake()
@@ -112,7 +121,7 @@ public class CreditsManager : MonoBehaviour
         }
     }
 
-    // Iterates through the creditsMap Dictionary and initiates 
+    // Iterates through the creditsMap Dictionary and initiates the new text boxes based on the template
     private void writeCredits()
     {
         foreach(KeyValuePair<string, Dictionary<string, string>> headerRolePair in creditsMap)
@@ -165,6 +174,7 @@ public class CreditsManager : MonoBehaviour
         }
     }
 
+    // Sets the initial position of all credits text boxes and calculates the speed the credits will travel at
     void Start()
     {
         float startingYPostion = startingPosition.y - (textBoxMargin * 1.5f);
@@ -183,11 +193,50 @@ public class CreditsManager : MonoBehaviour
             //Debug.Log(change);
             position.y -= change;
         }
+
+        creditsSpeed = (getCreditsHeight() + Screen.height) / (time * 120);
+    }
+
+    // Calculates the total height of the credits
+    private float getCreditsHeight()
+    {
+        float height = 0;
+        
+        // Adds height of header
+        foreach(Text textBox in headerCanvas.GetComponentsInChildren<Text>())
+        {
+            height += textBox.rectTransform.rect.height;
+        }
+
+        // Adds height of sections
+        foreach(KeyValuePair<string, CreditsSection> section in credits)
+        {
+            height += section.Value.getHeight();
+        }
+
+        return height;
     }
 
     // Update is called once per frame
+    // Scrolls the text up by the designated amount
     void Update()
     {
-        //
+        if(headerCanvas.GetComponentsInChildren<Text>()[0].transform.position.y > getCreditsHeight() + Screen.height)
+        {
+            Debug.LogError("End");
+            return;
+        }
+        
+        // Translates the header up
+        foreach(Text headerTextBox in headerCanvas.GetComponentsInChildren<Text>())
+        {
+            headerTextBox.transform.position = new Vector3(headerTextBox.transform.position.x, headerTextBox.transform.position.y + creditsSpeed, headerTextBox.transform.position.z);
+        }
+
+        // Translates the credit sections up
+        foreach(KeyValuePair<string, CreditsSection> section in credits)
+        {
+            section.Value.translateVertical(creditsSpeed);
+        }
     }
 }

@@ -702,8 +702,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   creditsText: {fileID: 4900000, guid: 2cc048e2ce69b4f388ac5fa677f025fb, type: 3}
   minColIndex: 7
+  time: 30
   textBoxMargin: 12
-  startingPosition: {x: 458.5, y: 412, z: 0}
+  startingPosition: {x: 458.5, y: 0, z: 0}
   headerCanvas: {fileID: 160580980}
   textBoxTemplate: {fileID: 2022329011}
 --- !u!4 &1041258276
