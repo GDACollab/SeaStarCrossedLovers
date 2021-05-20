@@ -48,7 +48,7 @@ public class ObstacleManager : MonoBehaviour
         while (windEnabled)
         {
             yield return new WaitForSeconds(cooldown - 1f);
-            warningIndicator.transform.position = new Vector2(10, 18);
+            warningIndicator.transform.position = new Vector2(7, 18);
             StartCoroutine(Blink(warningIndicatorInterval));
             flashWarning = true;
             yield return new WaitForSeconds(1f);
@@ -74,7 +74,7 @@ public class ObstacleManager : MonoBehaviour
         {
             yield return new WaitForSeconds(cooldown - 3f);
             asteroidSpawner.ChooseSpawnLocation();
-            warningIndicator.transform.position = new Vector2(-10, asteroidSpawner.transform.position.y);
+            warningIndicator.transform.position = new Vector2(-7, asteroidSpawner.transform.position.y);
             StartCoroutine(Blink(warningIndicatorInterval));
             flashWarning = true;
             yield return new WaitForSeconds(3f);
