@@ -126,8 +126,11 @@ public class CreditsManager : MonoBehaviour
     {
         foreach(KeyValuePair<string, Dictionary<string, string>> headerRolePair in creditsMap)
         {
+            // Clones the template canvas, makes the clone visible, and sets it as the child of the gameobject this is attatched to
             Canvas textCanvas = Instantiate(textBoxTemplate);
             textCanvas.gameObject.SetActive(true);
+            textCanvas.transform.parent = gameObject.transform;
+
             Text[] TextBoxes = textCanvas.GetComponentsInChildren<Text>();
             // Check to make sure there are 3 text boxes in the template: header, people, and roles
             if(TextBoxes.Length != 3)
