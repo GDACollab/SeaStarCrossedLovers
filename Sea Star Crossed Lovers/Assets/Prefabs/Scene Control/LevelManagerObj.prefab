@@ -249,8 +249,8 @@ MonoBehaviour:
   objects: []
   gradual: 1
   maxDelta: 0.025
-  moveDuration: 0.25
-  moveEase: 2
+  moveDuration: 0.5
+  moveEase: 4
   chunkSize: 4
   minHeightOnScreen: 2
 --- !u!1001 &1311566852419397128
