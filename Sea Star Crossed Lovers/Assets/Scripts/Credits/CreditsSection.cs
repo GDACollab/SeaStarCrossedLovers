@@ -49,11 +49,11 @@ public class CreditsSection : Object
      * @Param position: the top center of the header text box
      * @Param margins: the distance between the text boxes, both vertical and horizontal
      */
-    public void setPosition(Vector3 position, float margins)
+    public void setPosition(Vector2 position, float margins)
     {
-        setTextPosition(textBoxes[0], new Vector3(position.x, position.y, position.z));
-        setTextPosition(textBoxes[1], new Vector3(position.x + (margins/2), position.y - textBoxes[0].rectTransform.rect.height - margins, position.z));
-        setTextPosition(textBoxes[2], new Vector3(position.x - (margins/2), position.y - textBoxes[0].rectTransform.rect.height - margins, position.z));
+        setTextPosition(textBoxes[0], new Vector2(position.x, position.y));
+        setTextPosition(textBoxes[1], new Vector2(position.x + (margins/2), position.y - textBoxes[0].rectTransform.rect.height - margins));
+        setTextPosition(textBoxes[2], new Vector2(position.x - (margins/2), position.y - textBoxes[0].rectTransform.rect.height - margins));
     }
 
     /**
@@ -62,9 +62,9 @@ public class CreditsSection : Object
      * @Param text: the text box in question
      * @Param position: the position the text box will be set to
      */
-    private void setTextPosition(Text text, Vector3 position)
+    private void setTextPosition(Text text, Vector2 position)
     {
-        text.transform.position = new Vector3(position.x, position.y, position.z);
+        text.transform.position = new Vector2(position.x, position.y);
     }
 
     /**
@@ -76,8 +76,8 @@ public class CreditsSection : Object
     {
         foreach(Text textBox in textBoxes)
         {
-            Vector3 position = textBox.transform.position;
-            setTextPosition(textBox, new Vector3(position.x, position.y + distance, position.z));
+            Vector2 position = textBox.transform.position;
+            setTextPosition(textBox, new Vector2(position.x, position.y + distance));
         }
     }
 

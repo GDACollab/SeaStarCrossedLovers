@@ -28,8 +28,11 @@ public class CreditsManager : MonoBehaviour
     [Header("UI Text")]
     // Distance set between the text boxes, both vertically and horizontally
     public float textBoxMargin;
-    // The beginning position of the credits (below bottom of screen)
-    public Vector3 startingPosition;
+    
+    public float startingY = 0;
+    
+    // The beginning position of the credits (X is constant at the center of the screen)
+    private Vector2 startingPosition;
     
     // Text canvas for the header
     public Canvas headerCanvas;
@@ -40,9 +43,11 @@ public class CreditsManager : MonoBehaviour
     int frameCount = 0;
     int secondCount = 0;
     
-    // Parses the CSV file into the Dictionary creditsMap
+    // Initializes the starting position, parses the CSV file into the Dictionary creditsMap, and writes the credits into text boxes based on the template
     void Awake()
     {
+        startingPosition = new Vector2(Screen.width/2, startingY);
+
         setDefaultText();
 
         creditsMap = new Dictionary<string, Dictionary<string, string>>();
@@ -56,8 +61,9 @@ public class CreditsManager : MonoBehaviour
     private void setDefaultText()
     {
         Text[] headerText = headerCanvas.GetComponentsInChildren<Text>();
-        headerText[0].transform.position = new Vector3(startingPosition.x, startingPosition.y, startingPosition.z);
-        headerText[1].transform.position = new Vector3(startingPosition.x, startingPosition.y - headerText[0].rectTransform.rect.height, startingPosition.z);
+        //Debug.Log(startingPosition.x);
+        headerText[0].transform.position = new Vector2(startingPosition.x, startingPosition.y);
+        headerText[1].transform.position = new Vector2(startingPosition.x, startingPosition.y - headerText[0].rectTransform.rect.height);
 
         // Sets a temporary creditsSection object to set up the initial position
         CreditsSection defaultCredits = new CreditsSection(textBoxTemplate.GetComponentsInChildren<Text>());
@@ -186,7 +192,7 @@ public class CreditsManager : MonoBehaviour
             startingYPostion -= textBox.rectTransform.rect.height;
         }
 
-        Vector3 position = new Vector3(startingPosition.x, startingYPostion, startingPosition.z);
+        Vector2 position = new Vector2(startingPosition.x, startingYPostion);
         foreach(KeyValuePair<string, CreditsSection> creditsSection in credits)
         {
             //Debug.Log(creditsSection.Key);
@@ -233,7 +239,7 @@ public class CreditsManager : MonoBehaviour
         // Translates the header up
         foreach(Text headerTextBox in headerCanvas.GetComponentsInChildren<Text>())
         {
-            headerTextBox.transform.position = new Vector3(headerTextBox.transform.position.x, headerTextBox.transform.position.y + creditsSpeed, headerTextBox.transform.position.z);
+            headerTextBox.transform.position = new Vector2(headerTextBox.transform.position.x, headerTextBox.transform.position.y + creditsSpeed);
         }
 
         // Translates the credit sections up
