@@ -67,6 +67,8 @@ public class SpawnBlock : MonoBehaviour
     {
         // Set true to ensure no additional block is spawned during the spawn delay
         waitingForBlock = true;
+        // Stop any focus particles
+        activeBlock.focusParticles.Stop();
         // Reset activeBlock to original gravity and null activeBlock
         activeBlock = null;
 
