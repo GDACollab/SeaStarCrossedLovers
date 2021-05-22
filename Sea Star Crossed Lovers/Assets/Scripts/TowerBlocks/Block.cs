@@ -115,6 +115,7 @@ public class Block : MonoBehaviour
         // Delete Block GameObject if go far below wave
         if (gameObject.transform.position.y < wave.transform.position.y - 10)
         {
+            state = BlockState.deleting;
             blockManager.RemoveBlockFromList(this);
         }
 
