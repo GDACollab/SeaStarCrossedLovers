@@ -1,8 +1,6 @@
 VAR testNumber = 1
 VAR name = "Default"
 
-VAR player_character = "bob"
-
 // >>> SetUnityVar(testInt, {testNumber});
 
 // >>> UpdateInkVar(name, testString);
@@ -11,11 +9,19 @@ VAR player_character = "bob"
 
 // >>> CharEnter(Noelani); CharEnter(Ocean); Wait(1); !CharExit(Noelani); CharExit(Ocean);
 
+// >>> FadeBlack(1);
+// >>> FadeBlack(0, 2);
+
+// >>> MoveBackground(0, 100);
+// >>> MoveBackground(0, 500, 3);
+
 >>> TextboxEnter(Default);
 
 Narrator: I am {name}. Test text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text 
 
->>> !CharEnter(Noelani);
+>>> FadeBlack(1); MoveBackground(0, -500, 0); FadeBlack(0);
+
+>>> PlayAudio(Concept_SFX_Block_Wood Impact); Wait(.5); !CharEnter(Noelani); 
 
 Noelani: Hi. I'm Noelani.
 

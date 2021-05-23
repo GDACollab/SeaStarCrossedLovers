@@ -87,9 +87,13 @@ public class VN_Manager : MonoBehaviour
 	// Idle: text is done displaying and nothing is happening
 	// Busy: VN is processing line, running commands
 	// End: Ink Story has reached an end
-	public enum VN_State { typing, idle, busy, end }
+	public enum VN_State { typing, idle, busy, end };
 	public VN_State state = VN_State.idle;
 	private UnityEvent OnTextTypeEnd = new UnityEvent();
+
+	public enum MouseState { other, contentBox };
+	public MouseState mouseState = MouseState.other;
+
 	private IEnumerator currentTypingCoroutine;
 
 	// Subordinate classes
@@ -98,7 +102,8 @@ public class VN_Manager : MonoBehaviour
 	[HideInInspector] public VN_TextboxManager textboxManager;
 	[HideInInspector] public VN_CharacterManager characterManager;
 	[HideInInspector] public VN_AudioManager audioManager;
-	[HideInInspector] public VN_SharedVariables sharedVariables; 
+	[HideInInspector] public VN_SharedVariables sharedVariables;
+	[HideInInspector] public VN_ScreenManager screenManager; 
 
 	// Get parse results from corountine
 	private string speaker;
@@ -111,10 +116,15 @@ public class VN_Manager : MonoBehaviour
 	// Adds the AddCharacter and SubtractCharacter functions to the AllCommands Dictionary
 	void Awake()
     {
+		VN_Util Helper = new VN_Util(this, DebugEnabled);
+
 		OnTextTypeEnd.AddListener(() =>
 		{
 			state = VN_State.idle;
 		});
+
+		screenManager = GetComponent<VN_ScreenManager>();
+		screenManager.Construct(this);
 
 		sharedVariables = GetComponent<VN_SharedVariables>();
 		sharedVariables.Construct(this);
@@ -122,7 +132,6 @@ public class VN_Manager : MonoBehaviour
 		audioManager = GetComponent<VN_AudioManager>();
 		audioManager.Construct(this);
 
-		VN_Util Helper = new VN_Util(this, DebugEnabled);
 		// Get CommandCall script in gameobject
 		CommandCall = GetComponent<VN_CommandCall>();
 		CommandCall.Construct(this);
@@ -191,22 +200,20 @@ public class VN_Manager : MonoBehaviour
 		// Skips the animation of text appearing if the spacebar or primary mouse button is pressed
 		// TODO replace with input system to not hard code input bindings
 
-		if (state == VN_State.idle)
+		if (mouseState == MouseState.contentBox && state == VN_State.idle)
 		{
 
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0))
             {
-				Debug.Log("idle");
                 audioManager.buttonClick.Play();
                 RefreshView();
             }
         }
 
-		if (state == VN_State.typing)
+		if (mouseState == MouseState.contentBox && state == VN_State.typing)
 		{
 			if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0))
 			{
-				Debug.Log("typing");
 				SkipSlowText();
 			}
 		}
@@ -491,6 +498,19 @@ public class VN_Manager : MonoBehaviour
 		yield return StartCoroutine(data.textboxTransition.Co_EnterScreen(this, this));
 		StartStory();
 	}
+
+	public void ToggleMouseState()
+    {
+		if(mouseState == MouseState.other)
+        {
+			mouseState = MouseState.contentBox;
+		}
+		else
+        {
+			mouseState = MouseState.other;
+		}
+		
+    }
 
 	#endregion
 
