@@ -162,13 +162,15 @@ public class CreditsManager : MonoBehaviour
                     string[] roles = personRolePair.Value.Split(',');
                     for(int i = 0; i < roles.Length; i++)
                     {
+                        // Removes spaces from the beginning and end
+                        roles[i] = roles[i].Trim();
                         if(i == 0)
                         {
                             section.addCredit(personRolePair.Key, roles[i]);
                         }
                         else
                         {
-                            section.addCredit("", " " + roles[i]);
+                            section.addCredit("", roles[i]);
                         }
                     }
                 }
@@ -191,6 +193,7 @@ public class CreditsManager : MonoBehaviour
         {
             startingYPostion -= textBox.rectTransform.rect.height;
         }
+        startingYPostion -= textBoxMargin;
 
         Vector2 position = new Vector2(startingPosition.x, startingYPostion);
         foreach(KeyValuePair<string, CreditsSection> creditsSection in credits)
@@ -200,7 +203,7 @@ public class CreditsManager : MonoBehaviour
             section.setPosition(position, textBoxMargin);
             float change = section.getHeight();
             //Debug.Log(change);
-            position.y -= change;
+            position.y -= change + textBoxMargin;
         }
 
         creditsSpeed = (getCreditsHeight() + Screen.height) / (time * 120);
@@ -220,6 +223,7 @@ public class CreditsManager : MonoBehaviour
         // Adds height of sections
         foreach(KeyValuePair<string, CreditsSection> section in credits)
         {
+            height += textBoxMargin;
             height += section.Value.getHeight();
         }
 
@@ -232,6 +236,7 @@ public class CreditsManager : MonoBehaviour
     {
         if(headerCanvas.GetComponentsInChildren<Text>()[0].transform.position.y > getCreditsHeight() + Screen.height)
         {
+            Debug.Log($"Time: {Time.fixedTime}\tFramerate: {Time.frameCount/Time.fixedTime}");
             Debug.LogError("End");
             return;
         }
