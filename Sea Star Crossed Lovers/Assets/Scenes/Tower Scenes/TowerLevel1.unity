@@ -444,6 +444,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1902160293199620929, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1902160293199620929, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1902160293199620929, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2747798204672196432, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: windCooldown
       value: 30
@@ -528,6 +540,10 @@ PrefabInstance:
       propertyPath: nextScene
       value: VNMoonAstra1
       objectReference: {fileID: 0}
+    - target: {fileID: 4119441418038067736, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: df9ad07772c6a6a42b475cfc5d2ae1fc, type: 3}
     - target: {fileID: 4399153295232709797, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
@@ -664,9 +680,33 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: SpawnBlock, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 5409916490656377696, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_Name
+      value: Wind Warning
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565983049143531044, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565983049143531044, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565983049143531044, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5799140195094974189, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8986431848275349880, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 16294d5c156ddf44b8de9b5a2caf99b4, type: 3}
+    - target: {fileID: 9222837419691785848, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_Name
+      value: Meteor Warning
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2291407302094192110, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}

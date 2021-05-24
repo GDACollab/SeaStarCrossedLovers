@@ -23,7 +23,8 @@ public class ObstacleManager : MonoBehaviour
     private int[] windDirections = new int[2] { -1, 1 };
 
     private LevelManager levelManager;
-    private GameObject warningIndicator;
+    private GameObject meteorWarning;
+    private GameObject windWarning;
     public GameObject Canvas;
     [SerializeField] private AsteroidSpawner asteroidSpawner;
 
@@ -38,8 +39,10 @@ public class ObstacleManager : MonoBehaviour
     private void Start()
     {
         flashWarning = false;
-        warningIndicator = Canvas.transform.Find("Warning Indicator").gameObject;
-        warningIndicator.SetActive(false);
+        meteorWarning = Canvas.transform.Find("Meteor Warning").gameObject;
+        windWarning = Canvas.transform.Find("Wind Warning").gameObject;
+        windWarning.SetActive(false);
+        meteorWarning.SetActive(false);
         StartCoroutine(WindLoop(windCooldown));
         StartCoroutine(AsteroidLoop(asteroidCooldown));
     }
@@ -49,8 +52,8 @@ public class ObstacleManager : MonoBehaviour
         while (windEnabled)
         {
             yield return new WaitForSeconds(cooldown - 1f);
-            warningIndicator.transform.localPosition = new Vector2(300f, 400f);
-            StartCoroutine(Blink(warningIndicatorInterval));
+            windWarning.transform.localPosition = new Vector2(300f, 400f);
+            StartCoroutine(Blink(warningIndicatorInterval, windWarning));
             flashWarning = true;
             yield return new WaitForSeconds(1f);
             float randomDuration = Random.Range(minWindDuration, maxWindDuration);
@@ -77,8 +80,8 @@ public class ObstacleManager : MonoBehaviour
             asteroidSpawner.ChooseSpawnLocation();
             //need to map from world coords to local coords relative to the canvas
             float canvasY = (asteroidSpawner.transform.position.y * 45f) - 390f;
-            warningIndicator.transform.localPosition = new Vector2(-300f, canvasY);
-            StartCoroutine(Blink(warningIndicatorInterval));
+            meteorWarning.transform.localPosition = new Vector2(-300f, canvasY);
+            StartCoroutine(Blink(warningIndicatorInterval, meteorWarning));
             flashWarning = true;
             yield return new WaitForSeconds(3f);
             OnAsteroidSpawn.Invoke();
@@ -86,12 +89,12 @@ public class ObstacleManager : MonoBehaviour
         }
     }
 
-    private IEnumerator Blink(float interval)
+    private IEnumerator Blink(float interval, GameObject warningIndicator)
     {
             warningIndicator.SetActive(!warningIndicator.activeSelf);
             yield return new WaitForSeconds(interval);
             if(flashWarning)
-                yield return StartCoroutine(Blink(warningIndicatorInterval));
+                yield return StartCoroutine(Blink(warningIndicatorInterval, warningIndicator));
             else
                 warningIndicator.SetActive(false);
     }
