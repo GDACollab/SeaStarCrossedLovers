@@ -5,11 +5,12 @@ using UnityEngine.Audio;
 
 public class VN_AudioManager : MonoBehaviour
 {
-    public AudioSource buttonClick;
+    //public AudioSource buttonClick;
 
     private VN_Manager manager;
 
     public List<AudioClip> audioList = new List<AudioClip>();
+    public List<AudioSource> standAloneSources = new List<AudioSource>();
     public AudioMixerGroup masterMixer;
 
     private Dictionary<string, AudioSource> audioDict = new Dictionary<string, AudioSource>();
@@ -26,7 +27,11 @@ public class VN_AudioManager : MonoBehaviour
             newSource.clip = sound;
 
             audioDict.Add(sound.name.ToString(), newSource);
-            print(sound.name.ToString());
+        }
+
+        foreach(AudioSource source in standAloneSources)
+        {
+            source.outputAudioMixerGroup = masterMixer;
         }
     }
 

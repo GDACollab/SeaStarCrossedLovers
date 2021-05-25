@@ -87,7 +87,7 @@ public class VN_UIFactory : MonoBehaviour
 		Button choice = CreateChoiceView("End");
 		choice.onClick.AddListener(delegate
 		{
-			audioManager.buttonClick.Play();
+			audioManager.PlayAudio("SFX_UI_ButtonClick");
 
 			if (manager.transitionSceneOnEnd)
 			{
@@ -97,7 +97,7 @@ public class VN_UIFactory : MonoBehaviour
             {
 				manager.ForceExitVN();
 			}
-			
+			manager.OnEndStory.Invoke();
 		});
 	}
 
@@ -107,7 +107,7 @@ public class VN_UIFactory : MonoBehaviour
 		Button choice = CreateChoiceView("Start story");
 		choice.onClick.AddListener(delegate
 		{
-			audioManager.buttonClick.Play();
+			audioManager.PlayAudio("SFX_UI_ButtonClick");
 			manager.StartStory();
 		});
 	}
@@ -125,7 +125,7 @@ public class VN_UIFactory : MonoBehaviour
 				// Tell the button what to do when we press it
 				button.onClick.AddListener(delegate
 				{
-					audioManager.buttonClick.Play();
+					audioManager.PlayAudio("SFX_UI_ButtonClick");
 					OnClickChoiceButton(choice);
 				});
 			}

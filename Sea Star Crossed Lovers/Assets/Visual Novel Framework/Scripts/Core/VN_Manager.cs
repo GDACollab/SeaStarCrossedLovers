@@ -75,6 +75,10 @@ public class VN_Manager : MonoBehaviour
 	// Internal References & variables
 	// Keep track of story creation event
 	public static event Action<Story> OnCreateStory;
+	// Invoked when StartStory is called
+	public UnityEvent OnStartStory = new UnityEvent();
+	// Invoked when EndStory button is pressed 
+	public UnityEvent OnEndStory = new UnityEvent();
 	// The content to be displayed
 	private string currentLine = "";
 	// The character who is currently speaking
@@ -88,11 +92,11 @@ public class VN_Manager : MonoBehaviour
 	// Busy: VN is processing line, running commands
 	// End: Ink Story has reached an end
 	public enum VN_State { typing, idle, busy, end };
-	public VN_State state = VN_State.idle;
+	[HideInInspector] public VN_State state = VN_State.idle;
 	private UnityEvent OnTextTypeEnd = new UnityEvent();
 
 	public enum MouseState { other, contentBox };
-	public MouseState mouseState = MouseState.other;
+	[HideInInspector] public MouseState mouseState = MouseState.other;
 
 	private IEnumerator currentTypingCoroutine;
 
@@ -205,7 +209,7 @@ public class VN_Manager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0))
             {
-                audioManager.buttonClick.Play();
+				audioManager.PlayAudio("SFX_UI_ButtonClick");
                 RefreshView();
             }
         }
@@ -241,6 +245,7 @@ public class VN_Manager : MonoBehaviour
 			VN_Util.startUpTime = Time.realtimeSinceStartup;
 			VN_Util.VNDebugPrint("Start story: \"" + inkJSONAsset.name + "\"", this);
 		}
+		OnStartStory.Invoke();
 	}
 
 	// Remove all VN text & buttons, then starts displaying the text
