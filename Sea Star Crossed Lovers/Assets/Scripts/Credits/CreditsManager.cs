@@ -12,7 +12,7 @@ public class CreditsManager : MonoBehaviour
     public TextAsset creditsText;
 
     // Index of the column of the CSV file that distinguishes the the credits of Gremlin Gardens and Sea Star Crossed Lovers
-    public int minColIndex = 7;
+    public int seperatorIndex = 7;
 
     // Dictionary containing the map of the credits. Called using column (credits section), row (name/role)
     private Dictionary<string, Dictionary<string, string>> creditsMap;
@@ -75,7 +75,7 @@ public class CreditsManager : MonoBehaviour
         string[] rows = creditsText.text.Split('\n');
         string[] colHeaders = rows[0].Split(',');
         // Initializes the columns of the dictionary
-        for(int colIndex = minColIndex; colIndex < colHeaders.Length; colIndex++)
+        for(int colIndex = seperatorIndex; colIndex < colHeaders.Length; colIndex++)
         {
             creditsMap.Add(colHeaders[colIndex], new Dictionary<string, string>());
         }
@@ -100,7 +100,7 @@ public class CreditsManager : MonoBehaviour
                         name = currentValue;
                         //Debug.Log(name);
                     }
-                    else if(colIndex >= minColIndex) // Check to only store information from the Sea Star Crossed Lovers credits
+                    else if(colIndex >= seperatorIndex) // Check to only store information from the Sea Star Crossed Lovers credits
                     {
                         //Debug.Log($"Name: {name}, Header: {colHeaders[colIndex]}, Value: {currentValue}");
                         creditsMap[colHeaders[colIndex]].Add(name, currentValue);
