@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 // Manages the content and movement of the credits based on the input CSV file
 public class CreditsManager : MonoBehaviour
@@ -47,6 +48,7 @@ public class CreditsManager : MonoBehaviour
     void Awake()
     {
         startingPosition = new Vector2(Screen.width/2, startingY);
+        //startingPosition = new Vector2(Screen.width/2, Screen.height);
 
         setDefaultText();
 
@@ -60,13 +62,13 @@ public class CreditsManager : MonoBehaviour
     // Sets the initial position the text box templates and the header text
     private void setDefaultText()
     {
-        Text[] headerText = headerCanvas.GetComponentsInChildren<Text>();
+        TextMeshProUGUI[] headerText = headerCanvas.GetComponentsInChildren<TextMeshProUGUI>();
         //Debug.Log(startingPosition.x);
         headerText[0].transform.position = new Vector2(startingPosition.x, startingPosition.y);
         headerText[1].transform.position = new Vector2(startingPosition.x, startingPosition.y - headerText[0].rectTransform.rect.height);
 
         // Sets a temporary creditsSection object to set up the initial position
-        CreditsSection defaultCredits = new CreditsSection(textBoxTemplate.GetComponentsInChildren<Text>());
+        CreditsSection defaultCredits = new CreditsSection(textBoxTemplate.GetComponentsInChildren<TextMeshProUGUI>());
         defaultCredits.setPosition(startingPosition, textBoxMargin);
     }
 
@@ -137,7 +139,7 @@ public class CreditsManager : MonoBehaviour
             textCanvas.gameObject.SetActive(true);
             textCanvas.transform.parent = gameObject.transform;
 
-            Text[] TextBoxes = textCanvas.GetComponentsInChildren<Text>();
+            TextMeshProUGUI[] TextBoxes = textCanvas.GetComponentsInChildren<TextMeshProUGUI>();
             // Check to make sure there are 3 text boxes in the template: header, people, and roles
             if(TextBoxes.Length != 3)
             {
@@ -177,7 +179,7 @@ public class CreditsManager : MonoBehaviour
             }
 
             // Disables the content size fitter for each text box after text is added
-            foreach(Text textBox in TextBoxes)
+            foreach(TextMeshProUGUI textBox in TextBoxes)
             {
                 LayoutRebuilder.ForceRebuildLayoutImmediate(textBox.rectTransform);
                 textBox.GetComponent<ContentSizeFitter>().enabled = false;
@@ -189,7 +191,7 @@ public class CreditsManager : MonoBehaviour
     void Start()
     {
         float startingYPostion = startingPosition.y - (textBoxMargin * 1.5f);
-        foreach(Text textBox in headerCanvas.GetComponentsInChildren<Text>())
+        foreach(TextMeshProUGUI textBox in headerCanvas.GetComponentsInChildren<TextMeshProUGUI>())
         {
             startingYPostion -= textBox.rectTransform.rect.height;
         }
@@ -215,7 +217,7 @@ public class CreditsManager : MonoBehaviour
         float height = 0;
         
         // Adds height of header
-        foreach(Text textBox in headerCanvas.GetComponentsInChildren<Text>())
+        foreach(TextMeshProUGUI textBox in headerCanvas.GetComponentsInChildren<TextMeshProUGUI>())
         {
             height += textBox.rectTransform.rect.height;
         }
@@ -234,7 +236,7 @@ public class CreditsManager : MonoBehaviour
     // Scrolls the text up by the designated amount
     void Update()
     {
-        if(headerCanvas.GetComponentsInChildren<Text>()[0].transform.position.y > getCreditsHeight() + Screen.height)
+        if(headerCanvas.GetComponentsInChildren<TextMeshProUGUI>()[0].transform.position.y > getCreditsHeight() + Screen.height)
         {
             Debug.Log($"Time: {Time.fixedTime}\tFramerate: {Time.frameCount/Time.fixedTime}");
             Debug.LogError("End");
@@ -242,7 +244,7 @@ public class CreditsManager : MonoBehaviour
         }
         
         // Translates the header up
-        foreach(Text headerTextBox in headerCanvas.GetComponentsInChildren<Text>())
+        foreach(TextMeshProUGUI headerTextBox in headerCanvas.GetComponentsInChildren<TextMeshProUGUI>())
         {
             headerTextBox.transform.position = new Vector2(headerTextBox.transform.position.x, headerTextBox.transform.position.y + creditsSpeed);
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 // Handles the text management of 1 section of the credits
 public class CreditsSection : Object
@@ -14,7 +15,7 @@ public class CreditsSection : Object
      * 2 = people: the people being credited
      */
 
-    private Text[] textBoxes;
+    private TextMeshProUGUI[] textBoxes;
 
     /**
      * Constructor
@@ -22,7 +23,7 @@ public class CreditsSection : Object
      * @Param textBoxes: an array of the 3 text objects used: header, roles, people
      * @Param postion: the initial position the text boxes are to be set to
      */
-    public CreditsSection(Text[] textBoxes)
+    public CreditsSection(TextMeshProUGUI[] textBoxes)
     {
         this.textBoxes = textBoxes;
     }
@@ -62,7 +63,7 @@ public class CreditsSection : Object
      * @Param text: the text box in question
      * @Param position: the position the text box will be set to
      */
-    private void setTextPosition(Text text, Vector2 position)
+    private void setTextPosition(TextMeshProUGUI text, Vector2 position)
     {
         text.transform.position = new Vector2(position.x, position.y);
     }
@@ -74,7 +75,7 @@ public class CreditsSection : Object
      */
     public void translateVertical(float distance)
     {
-        foreach(Text textBox in textBoxes)
+        foreach(TextMeshProUGUI textBox in textBoxes)
         {
             Vector2 position = textBox.transform.position;
             setTextPosition(textBox, new Vector2(position.x, position.y + distance));
