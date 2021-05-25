@@ -202,7 +202,7 @@ public class CreditsManager : MonoBehaviour
             section.setPosition(position, textBoxMargin);
             float change = section.getHeight();
             //Debug.Log(change);
-            position.y -= change + textBoxMargin;
+            position.y -= change + (textBoxMargin * 2);
         }
     }
 
