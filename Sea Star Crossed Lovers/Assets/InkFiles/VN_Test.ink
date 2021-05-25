@@ -3,7 +3,7 @@ VAR name = "Default"
 
 // >>> SetUnityVar(testInt, {testNumber});
 
-// >>> UpdateInkVar(name, testString);
+>>> UpdateInkVar(name, testString);
 
 // >>> !CharEnter(Noelani); CharEnter(Ocean); Wait(1); !CharExit(Noelani); CharExit(Ocean);
 

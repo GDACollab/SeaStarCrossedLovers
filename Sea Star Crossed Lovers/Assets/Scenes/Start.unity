@@ -472,7 +472,11 @@ PrefabInstance:
     - target: {fileID: 7595199247288589635, guid: 782591c87279e43d3b3b6090a8d9bb57, type: 3}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: c8aeaea1d73004b24bfce6c18781b3bd, type: 3}
+      objectReference: {fileID: 8300000, guid: 93d0c4466a09743da9cb0909af5c7479, type: 3}
+    - target: {fileID: 7595199247288589635, guid: 782591c87279e43d3b3b6090a8d9bb57, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7595199247288589636, guid: 782591c87279e43d3b3b6090a8d9bb57, type: 3}
       propertyPath: m_Name
       value: AudioPlayer
