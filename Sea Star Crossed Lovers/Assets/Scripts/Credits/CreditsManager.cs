@@ -22,9 +22,6 @@ public class CreditsManager : MonoBehaviour
 
     // Time it will take for the credits to scroll all the way through, in seconds
     public float time;
-    
-    // Speed the credits will move at. I.e. the distance it will move up each frame
-    private float creditsSpeed = 1;
 
     [Header("UI Text")]
     // Distance set between the text boxes, both vertically and horizontally
@@ -207,29 +204,25 @@ public class CreditsManager : MonoBehaviour
             //Debug.Log(change);
             position.y -= change + textBoxMargin;
         }
-
-        creditsSpeed = (getCreditsHeight() + Screen.height) / (time * 120);
     }
 
     // Calculates the total height of the credits
     private float getCreditsHeight()
     {
-        float height = 0;
-        
-        // Adds height of header
-        foreach(TextMeshProUGUI textBox in headerCanvas.GetComponentsInChildren<TextMeshProUGUI>())
-        {
-            height += textBox.rectTransform.rect.height;
-        }
+        float top = headerCanvas.GetComponentsInChildren<TextMeshProUGUI>()[0].transform.position.y;
+        float bottom = float.MaxValue;
 
-        // Adds height of sections
         foreach(KeyValuePair<string, CreditsSection> section in credits)
         {
-            height += textBoxMargin;
-            height += section.Value.getHeight();
+            float sectionBottom = section.Value.getBottom();
+            if(bottom > sectionBottom)
+            {
+                bottom = sectionBottom;
+            }
         }
 
-        return height;
+        //Debug.Log(top - bottom);
+        return top - bottom;
     }
 
     // Update is called once per frame
@@ -238,10 +231,14 @@ public class CreditsManager : MonoBehaviour
     {
         if(headerCanvas.GetComponentsInChildren<TextMeshProUGUI>()[0].transform.position.y > getCreditsHeight() + Screen.height)
         {
+            Debug.Log($"Expected:{getCreditsHeight() + Screen.height}");
             Debug.Log($"Time: {Time.fixedTime}\tFramerate: {Time.frameCount/Time.fixedTime}");
             Debug.LogError("End");
             return;
         }
+
+        // Calculates the units the credits will move on this refresh cycle
+        float creditsSpeed = ((getCreditsHeight() + Screen.height) / time) * Time.deltaTime;
         
         // Translates the header up
         foreach(TextMeshProUGUI headerTextBox in headerCanvas.GetComponentsInChildren<TextMeshProUGUI>())

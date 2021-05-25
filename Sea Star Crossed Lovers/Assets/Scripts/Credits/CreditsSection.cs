@@ -83,9 +83,15 @@ public class CreditsSection : Object
     }
 
     // Returns the height of the 3 text boxes by subtracting the y position of the bottom from the y position of the top
-    // Note: people and roles should be the lowest and identical, so this only gets the bottom of roles
     public float getHeight()
     {
-        return textBoxes[0].transform.position.y - (textBoxes[2].transform.position.y - textBoxes[2].rectTransform.rect.height);
+        return textBoxes[0].transform.position.y - getBottom();
+    }
+
+    // Returns the y-value for the bottom of the lowest text box
+    // Note: people and roles should be the lowest and identical, so this only gets the bottom of roles
+    public float getBottom()
+    {
+        return textBoxes[2].transform.position.y - textBoxes[2].rectTransform.rect.height;
     }
 }
