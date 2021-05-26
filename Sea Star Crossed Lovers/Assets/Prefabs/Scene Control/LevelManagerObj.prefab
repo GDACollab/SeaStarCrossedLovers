@@ -129,6 +129,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SceneBlockList: []
+  spriteList:
+  - {fileID: 21300000, guid: dec8be6cdab7fbf44953a7a777d5e48f, type: 3}
+  - {fileID: 21300000, guid: c46de22de73509648a310f3e6fc8dfde, type: 3}
+  - {fileID: 21300000, guid: 012268b32c46c5344b1c43259860b023, type: 3}
+  - {fileID: 21300000, guid: 2ddcfd914cfc3fc4b9354d518f12a75b, type: 3}
+  - {fileID: 21300000, guid: 23b0c471d36d6fe418319c005c38b652, type: 3}
+  - {fileID: 21300000, guid: 430905d7b625f6d48b0fd758668b4e0c, type: 3}
   highestBlock: {fileID: 0}
   highestBlockHeight: 0
   _levelManager: {fileID: 0}

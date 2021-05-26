@@ -24,33 +24,47 @@ public class BlockQueue : MonoBehaviour
 
     private List<BlockData> SpawnBlockList;
 
-    public void Construct(LevelManager manager)
+    private Dictionary<string, Sprite> blockSprites = new Dictionary<string, Sprite>();
+
+    public void Construct(LevelManager manager, List<Sprite> blockSpriteList)
     {
         this.manager = manager;
         spawnBlock = manager.spawnBlock;
         SpawnBlockList = spawnBlock.SpawnBlockList;
-
+        // Set up the sprites for our blocklets. This is kind of a weird solution, but basically
+        // the BlockData for each block already has a set name, right? Like I_Block or J_Block.
+        // Well, if we give our sprites the same names in unity and construct a dictionary based on that,
+        // Then if we're using one type of BlockData, we can find the matching image from our dictionary by name.
+        foreach (Sprite s in blockSpriteList) {
+            blockSprites[s.name] = s;
+        }
         // Fill the queue
         for(int i = 0; i < 3; i++)
         {
             EnqueueBlock();
         }
         UpdateBlockDisplay();
+        
     }
 
     public void UpdateBlockDisplay()
     {
-        next_0Text.text = blockQueueList[0].name;
-        next_1Text.text = blockQueueList[1].name;
-        next_2Text.text = blockQueueList[2].name;
+        next_0Image.sprite = blockSprites[blockQueueList[0].name];
+        //next_0Text.text = blockQueueList[0].name;
+        next_1Image.sprite = blockSprites[blockQueueList[1].name];
+        //next_1Text.text = blockQueueList[1].name;
+        next_2Image.sprite = blockSprites[blockQueueList[2].name];
+        //next_2Text.text = blockQueueList[2].name;
 
         if (holdBlock)
         {
-            holdText.text = holdBlock.name;
+            holdImage.sprite = blockSprites[holdBlock.name];
+            //holdText.text = holdBlock.name;
         }
         else
         {
-            holdText.text = "None";
+            holdImage.sprite = blockSprites["None"];
+            //holdText.text = "None";
         }
     }
 
