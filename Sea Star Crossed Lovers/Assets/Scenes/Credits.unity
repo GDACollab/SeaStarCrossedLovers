@@ -954,7 +954,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneLoader: {fileID: 1588106825}
   nextScene: Start
-  transitionSpeed: 0.25
+  transitionSpeed: 0.5
   creditsText: {fileID: 4900000, guid: 2cc048e2ce69b4f388ac5fa677f025fb, type: 3}
   seperatorIndex: 7
   time: 30
@@ -1159,7 +1159,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ActiveUI: {fileID: 322552466}
   fadeImagePrefab: {fileID: 3389422604864246109, guid: c08a2a85e00714e4e9bf66cf80990dfc, type: 3}
-  fadeInOnAwake: 0
+  fadeInOnAwake: 1
   onFadeComplete:
     m_PersistentCalls:
       m_Calls: []
