@@ -508,6 +508,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 436740926151042262, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 817650298986304355, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2747798204672196432, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: windCooldown
       value: 30
@@ -587,6 +595,10 @@ PrefabInstance:
     - target: {fileID: 2747798204672196439, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: defualtWinMessage
       value: You win!
+      objectReference: {fileID: 0}
+    - target: {fileID: 3397231517553850207, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4399153294535300192, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: m_Color.a
