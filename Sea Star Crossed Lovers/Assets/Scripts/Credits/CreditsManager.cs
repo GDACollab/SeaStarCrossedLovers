@@ -7,6 +7,17 @@ using TMPro;
 // Manages the content and movement of the credits based on the input CSV file
 public class CreditsManager : MonoBehaviour
 {
+    [Header("Scene Transitions")]
+    // The object in charge of changing to a different scene after the credits are finished
+    public SceneLoader sceneLoader;
+    
+    // The scene to transition to after the credits finish
+    public string nextScene;
+
+    // The speed that the scene will fade out at
+    public float transitionSpeed = 0.5f;
+
+    [Header("General Parameters")]
     // The CSV file inputted as credits.
     // Format: Row = Name, Col = Credits section, Row + Col = Role
     public TextAsset creditsText;
@@ -231,9 +242,7 @@ public class CreditsManager : MonoBehaviour
     {
         if(headerCanvas.GetComponentsInChildren<TextMeshProUGUI>()[0].transform.position.y > getCreditsHeight() + Screen.height)
         {
-            Debug.Log($"Expected:{getCreditsHeight() + Screen.height}");
-            Debug.Log($"Time: {Time.fixedTime}\tFramerate: {Time.frameCount/Time.fixedTime}");
-            Debug.LogError("End");
+            sceneLoader.FadeOutLoad(nextScene, transitionSpeed);
             return;
         }
 
