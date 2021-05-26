@@ -72,7 +72,10 @@ public class SpawnBlock : MonoBehaviour
 
         yield return new WaitForSeconds(spawnDelay);
         waitingForBlock = false;
-        spawnNewBlock();
+        if (levelManager.currentGameState != LevelManager.GameState.winTimer)
+        {
+            spawnNewBlock();
+        }
     }
 
     // Spawn random block from blockList at parent gameObject position
