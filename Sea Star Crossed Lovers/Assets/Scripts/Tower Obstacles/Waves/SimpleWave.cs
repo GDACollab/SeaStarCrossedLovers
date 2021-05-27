@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SimpleWave : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class SimpleWave : MonoBehaviour
     [SerializeField] private AudioSource WaveIncomingSource;
 
     private GameObject waveTimerText;
+    private Slider waveSlider = null;
     private GameObject difficultyText;
 
     [SerializeField] private LevelManager _levelManager;
@@ -28,7 +30,15 @@ public class SimpleWave : MonoBehaviour
         dTimer = 0f;
         waveIsOver = true;
 
-        waveTimerText = GameObject.Find("WaveTimerText");
+        // waveTimerText = GameObject.Find("WaveTimerText");
+        GameObject temp = GameObject.Find("WaveSlider");
+        if (temp != null)
+        {
+            waveSlider = temp.GetComponent<Slider>();
+            waveSlider.value = 0f;
+            waveSlider.minValue = 0f;
+            waveSlider.maxValue = waveCooldown;
+        }
         difficultyText = GameObject.Find("DifficultyLevel");
     }
 
@@ -45,6 +55,7 @@ public class SimpleWave : MonoBehaviour
             {
                 MakeWave(waveHeight);
                 wTimer = 0f;
+                waveSlider.value = 0f;
             }
             if (dTimer > timeBetweenDifficulties && difficulty < maxDifficulty)
             {
@@ -54,8 +65,10 @@ public class SimpleWave : MonoBehaviour
         }
 
         // Update wave timer text
-        waveTimerText.GetComponent<UnityEngine.UI.Text>().text =
-            "Wave Timer: " + wTimer.ToString("0") + " / " + waveCooldown.ToString("0");
+        // waveTimerText.GetComponent<UnityEngine.UI.Text>().text =
+        //     "Wave Timer: " + wTimer.ToString("0") + " / " + waveCooldown.ToString("0");
+        if (waveSlider != null)
+            waveSlider.value = wTimer;
         // Update difficulty text
         //difficultyText.GetComponent<UnityEngine.UI.Text>().text =
         //    "Difficulty: " + difficulty.ToString() + " / " + maxDifficulty.ToString();

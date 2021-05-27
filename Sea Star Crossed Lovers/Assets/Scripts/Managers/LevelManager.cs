@@ -62,7 +62,7 @@ public class LevelManager : MonoBehaviour
         blockController.Construct(spawnBlock, obstacleManager);
 
         blockQueue = (BlockQueue)FindObjectOfType(typeof(BlockQueue));
-        blockQueue.Construct(this);
+        blockQueue.Construct(this, blockManager.spriteList);
 
         progressBar.Construct(blockManager, goalpoint.getGoalHeight());
 
@@ -76,6 +76,9 @@ public class LevelManager : MonoBehaviour
         if(currentGameState == GameState.playing &&
             goalpoint.CheckWin() && !WinTimerOnCooldown)
         {
+
+            // New blocks should not spawn while the win timer is active:
+            spawnBlock.toggleBlockSpawn();
             // In case the winTimer is already running
             // (theoretically not possible?) stop it so it doesn't run twice
             StopCoroutine(winTimer());
@@ -108,11 +111,14 @@ public class LevelManager : MonoBehaviour
             else
             {
                 // If ever the player loses elligibility to win during the timer,
-                // reset text, exit win timer, hide canvas and start cooldown
+                // reset text, exit win timer, hide canvas and start cooldown.
                 winCanvas.enabled = false;
                 winText.text = defualtWinTimerMessage;
                 StartCoroutine(WinTimerCooldown());
                 currentGameState = GameState.playing;
+                // Also, make sure blocks can spawn again:
+                spawnBlock.toggleBlockSpawn();
+                spawnBlock.delaySpawnBlock();
                 yield break;
             }
         }
