@@ -45,7 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   asteroidPrefab: {fileID: 5954524111691990017, guid: ff3800b1dc55e424598f599fa8715936, type: 3}
   asteroidVelocity: {x: 5, y: 0}
-  asteroidForce: {x: 10000, y: 0}
+  asteroidForce: {x: 600, y: 100}
   minSpawnYOffset: 10
   lowestSpawn: 2
 --- !u!1 &2747798204672196436
@@ -605,6 +605,14 @@ PrefabInstance:
     - target: {fileID: 525615910664163857, guid: 6494199763a3a43d1bf38d0d18c33a4c, type: 3}
       propertyPath: m_SizeDelta.y
       value: -60
+      objectReference: {fileID: 0}
+    - target: {fileID: 3539638965873045311, guid: 6494199763a3a43d1bf38d0d18c33a4c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4343774553512073354, guid: 6494199763a3a43d1bf38d0d18c33a4c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7942539326648110508, guid: 6494199763a3a43d1bf38d0d18c33a4c, type: 3}
       propertyPath: m_IsActive
