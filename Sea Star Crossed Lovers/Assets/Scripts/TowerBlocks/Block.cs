@@ -11,6 +11,8 @@ public class Block : MonoBehaviour
     [HideInInspector] public SimpleWave wave;
     [HideInInspector] public List<GameObject> blockletChildren = new List<GameObject>();
 
+    public ParticleSystem focusParticles;
+
     public AudioSource hitSource;
     public AudioSource dissolveSource;
     public AudioSource splashSource;

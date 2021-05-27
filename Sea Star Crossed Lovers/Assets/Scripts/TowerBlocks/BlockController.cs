@@ -45,6 +45,14 @@ public class BlockController : MonoBehaviour
             {
                 sidewaysVelocity = Input.GetAxis("Horizontal")
                 * Time.fixedDeltaTime * accelRate/3;
+
+                // Activate focus particles
+                spawnBlock.activeBlock.focusParticles.Play();
+            }
+            else
+            {
+                // Deactivate focus particles
+                spawnBlock.activeBlock.focusParticles.Stop();
             }
 
             // Prevent velocity going above maxSpeed

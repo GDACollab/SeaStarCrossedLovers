@@ -6,6 +6,10 @@ public class BlockManager : MonoBehaviour
 {
     public List<Block> SceneBlockList;
 
+
+    [Tooltip("The sprites of the blocks to used when showing upcoming blocks in the block queue. The main process of sprite setup is done by BlockQueue.cs.")]
+    public List<Sprite> spriteList;
+
     public Block highestBlock;
     public float highestBlockHeight = 0;
 

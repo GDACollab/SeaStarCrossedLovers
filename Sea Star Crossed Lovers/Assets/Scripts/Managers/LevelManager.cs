@@ -62,7 +62,7 @@ public class LevelManager : MonoBehaviour
         blockController.Construct(spawnBlock, obstacleManager);
 
         blockQueue = (BlockQueue)FindObjectOfType(typeof(BlockQueue));
-        blockQueue.Construct(this);
+        blockQueue.Construct(this, blockManager.spriteList);
 
         progressBar.Construct(blockManager, goalpoint.getGoalHeight());
 

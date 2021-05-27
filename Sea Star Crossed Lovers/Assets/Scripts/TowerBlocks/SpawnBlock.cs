@@ -67,6 +67,8 @@ public class SpawnBlock : MonoBehaviour
     {
         // Set true to ensure no additional block is spawned during the spawn delay
         waitingForBlock = true;
+        // Stop any focus particles
+        activeBlock.focusParticles.Stop();
         // Reset activeBlock to original gravity and null activeBlock
         activeBlock = null;
 
@@ -82,7 +84,9 @@ public class SpawnBlock : MonoBehaviour
     private void spawnNewBlock()
     {
         // Spawn on parent object position
+        float randomX = Random.Range(-2, 2);
         Vector3 spawnPosition = gameObject.transform.position;
+        spawnPosition.Set(randomX, spawnPosition.y, spawnPosition.z);
         spawnPosition.z = 0;
 
         BlockData selectedBlockData = blockQueue.DequeueBlock();
