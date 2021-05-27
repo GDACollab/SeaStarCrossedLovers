@@ -11,6 +11,8 @@ public class Block : MonoBehaviour
     [HideInInspector] public SimpleWave wave;
     [HideInInspector] public List<GameObject> blockletChildren = new List<GameObject>();
 
+    public ParticleSystem focusParticles;
+
     public AudioSource hitSource;
     public AudioSource dissolveSource;
     public AudioSource splashSource;
@@ -115,6 +117,7 @@ public class Block : MonoBehaviour
         // Delete Block GameObject if go far below wave
         if (gameObject.transform.position.y < wave.transform.position.y - 10)
         {
+            state = BlockState.deleting;
             blockManager.RemoveBlockFromList(this);
         }
 

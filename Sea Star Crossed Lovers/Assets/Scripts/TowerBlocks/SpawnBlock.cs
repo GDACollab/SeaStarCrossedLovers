@@ -67,12 +67,17 @@ public class SpawnBlock : MonoBehaviour
     {
         // Set true to ensure no additional block is spawned during the spawn delay
         waitingForBlock = true;
+        // Stop any focus particles
+        activeBlock.focusParticles.Stop();
         // Reset activeBlock to original gravity and null activeBlock
         activeBlock = null;
 
         yield return new WaitForSeconds(spawnDelay);
         waitingForBlock = false;
-        spawnNewBlock();
+        if (levelManager.currentGameState != LevelManager.GameState.winTimer)
+        {
+            spawnNewBlock();
+        }
     }
 
     // Spawn random block from blockList at parent gameObject position
