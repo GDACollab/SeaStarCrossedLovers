@@ -2593,6 +2593,12 @@ MonoBehaviour:
   nameTextObj: {fileID: 275194841944244039}
   Decor_RTCanvas: {fileID: 644720646076591296}
   Decor_LBCanvas: {fileID: 375233531112725551}
+  OnStartStory:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEndStory:
+    m_PersistentCalls:
+      m_Calls: []
   state: 1
   mouseState: 0
   UIFactory: {fileID: 0}
@@ -2685,9 +2691,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2399904a285734f189d95448344dbf7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonClick: {fileID: 8300000, guid: 6c48c49627e324a34a8d01be721500f3, type: 3}
   audioList:
   - {fileID: 8300000, guid: e44c606d1ca3d4ae4b4be1951753f541, type: 3}
-  - {fileID: 8300000, guid: 6c48c49627e324a34a8d01be721500f3, type: 3}
   standAloneSources:
   - {fileID: 4445238323692261286}
   - {fileID: 7729912696131009001}

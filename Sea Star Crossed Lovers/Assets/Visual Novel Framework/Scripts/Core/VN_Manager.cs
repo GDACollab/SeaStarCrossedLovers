@@ -209,7 +209,7 @@ public class VN_Manager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0))
             {
-				audioManager.PlayAudio("SFX_UI_ButtonClick");
+				audioManager.PlayAudio(audioManager.buttonClick);
                 RefreshView();
             }
         }
