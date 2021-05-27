@@ -2694,6 +2694,7 @@ MonoBehaviour:
   buttonClick: {fileID: 8300000, guid: 6c48c49627e324a34a8d01be721500f3, type: 3}
   audioList:
   - {fileID: 8300000, guid: e44c606d1ca3d4ae4b4be1951753f541, type: 3}
+  - {fileID: 8300000, guid: 6c48c49627e324a34a8d01be721500f3, type: 3}
   standAloneSources:
   - {fileID: 4445238323692261286}
   - {fileID: 7729912696131009001}
