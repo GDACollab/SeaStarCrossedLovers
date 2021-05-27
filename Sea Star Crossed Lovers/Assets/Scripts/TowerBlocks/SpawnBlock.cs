@@ -79,7 +79,9 @@ public class SpawnBlock : MonoBehaviour
     private void spawnNewBlock()
     {
         // Spawn on parent object position
+        float randomX = Random.Range(-2, 2);
         Vector3 spawnPosition = gameObject.transform.position;
+        spawnPosition.Set(randomX, spawnPosition.y, spawnPosition.z);
         spawnPosition.z = 0;
 
         BlockData selectedBlockData = blockQueue.DequeueBlock();
