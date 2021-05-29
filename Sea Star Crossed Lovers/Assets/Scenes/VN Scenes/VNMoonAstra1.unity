@@ -414,7 +414,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300002, guid: e0cb200f8641c4304b428a5f77596cbb, type: 2}
-  m_audioClip: {fileID: 8300000, guid: a534f05fa8e2c4f4f9b11182c50e7097, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 9a325174e994adf40952a4aea52d28d1, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.5
   m_Pitch: 1
@@ -522,9 +522,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 442092617823953456, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
+      propertyPath: AllCharacterData.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 442092617823953456, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: AllCharacterData.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: 8a3f129e519fb4857ad81f72c825b0eb, type: 2}
+      objectReference: {fileID: 11400000, guid: 7450937ce795d42a68a2c022cc1a30ab, type: 2}
     - target: {fileID: 442092617823953456, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: AllCharacterData.Array.data[1]
       value: 
@@ -533,6 +537,14 @@ PrefabInstance:
       propertyPath: PlayerCharacterData
       value: 
       objectReference: {fileID: 11400000, guid: b2380f1ca4b8e454b8d82bfbba8f9058, type: 2}
+    - target: {fileID: 442092617823953456, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
+      propertyPath: AllCharacterData.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8a3f129e519fb4857ad81f72c825b0eb, type: 2}
+    - target: {fileID: 442092617823953456, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
+      propertyPath: AllCharacterData.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 2e86dbdae85564950aa3c7bca5bdc143, type: 2}
     - target: {fileID: 2041738908857624943, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
@@ -672,7 +684,7 @@ PrefabInstance:
     - target: {fileID: 7788690952332685026, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: inkJSONAsset
       value: 
-      objectReference: {fileID: 4900000, guid: 08c87da132ececc4eb28aa1a25729b04, type: 3}
+      objectReference: {fileID: 4900000, guid: 6a58436886186465ba0919747c4441b4, type: 3}
     - target: {fileID: 7788690952332685026, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: DebugEnabled
       value: 1
@@ -747,7 +759,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7788690952886119466, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 325
+      value: 326
       objectReference: {fileID: 0}
     - target: {fileID: 7788690952886119466, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: m_AnchorMin.y
@@ -843,7 +855,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7788690953542150142, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 675
+      value: 674
       objectReference: {fileID: 0}
     - target: {fileID: 7788690953542150142, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: m_AnchorMin.y
@@ -867,7 +879,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8594964070715325073, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -500
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}

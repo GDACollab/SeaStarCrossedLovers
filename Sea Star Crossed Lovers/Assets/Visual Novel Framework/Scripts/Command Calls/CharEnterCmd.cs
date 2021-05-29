@@ -6,15 +6,27 @@ public class CharEnterCmd : MonoBehaviour, ICommandCall
 {
 	public IEnumerator Command(List<string> args)
 	{
-        foreach(string arg in args)
+        CharacterData data = VN_Util.FindCharacterData(args[0]);
+
+        string screenPosition = args[1];
+        if(screenPosition == "left")
         {
-            CharacterData data = VN_Util.FindCharacterData(arg);
-            VN_Character charObj = VN_Util.FindEmptyCharObj(data);
-
-            charObj.SetData(data);
-            charObj.ChangeSprite(data.defaultSprite);
-
-            yield return StartCoroutine(charObj.data.transition.Co_EnterScreen(charObj, charObj));
+            data.scenePosition = CharacterData.ScenePosition.left;
         }
+        else if (screenPosition == "right")
+        {
+            data.scenePosition = CharacterData.ScenePosition.right;
+        }
+        else
+        {
+            Debug.LogError("screenPosition error: " + screenPosition);
+        }
+
+        VN_Character charObj = VN_Util.FindEmptyCharObj(data);
+
+        charObj.SetData(data);
+        charObj.ChangeSprite(data.defaultSprite);
+
+        yield return StartCoroutine(charObj.data.transition.Co_EnterScreen(charObj, charObj));
     }
 }

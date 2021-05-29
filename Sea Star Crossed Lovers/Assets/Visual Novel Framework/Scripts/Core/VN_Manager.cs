@@ -289,7 +289,6 @@ public class VN_Manager : MonoBehaviour
 				VN_Util.FindCharacterData(speaker));
 		}
 		yield return StartCoroutine(ProcessTags());
-		print("post process italicsOn: " + italicsOn);
 
 		// Set currentLine to content
 		currentLine = content;
@@ -337,8 +336,6 @@ public class VN_Manager : MonoBehaviour
 		float TextSpeed;
 
 		yield return StartCoroutine(characterManager.UpdateSpeakerLight(currentSpeaker));
-
-		print("during italicsOn: " + italicsOn);
 
 		if(italicsOn)
         {
@@ -417,10 +414,8 @@ public class VN_Manager : MonoBehaviour
 			// Get first tag in currentTags
 			foreach(string tag in currentTags)
             {
-				print("tag: " + tag);
 				if (tag == "text_italics")
                 {
-					print("italics on");
 					italicsOn = true;
 					italicsTag = true;
 				}

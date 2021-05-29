@@ -51,7 +51,7 @@ public class VN_UIFactory : MonoBehaviour
 		// Update NameText
 		if (name == "Narrator")
 		{
-			nameText.text = "";
+			nameText.text = "Noelani";
 			manager.contentTextObj.fontStyle = FontStyle.Italic;
 		}
 		else

@@ -277,11 +277,11 @@ PrefabInstance:
     - target: {fileID: 7788690952332685026, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: textSpeedSlider
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 430794534}
     - target: {fileID: 7788690952332685026, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: inkJSONAsset
       value: 
-      objectReference: {fileID: 4900000, guid: b61a3bcd4b9cc104c8d587ff1d430015, type: 3}
+      objectReference: {fileID: 4900000, guid: 609d9f0ac9a574a7eae4b7f5b5d10e18, type: 3}
     - target: {fileID: 7788690952332685026, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: nextScene
       value: Credits
@@ -472,10 +472,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8594964070715325073, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -500
+      value: -350
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
+--- !u!114 &430794534 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3867593662283808408, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
+  m_PrefabInstance: {fileID: 430794533}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &430794535 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7788690952204704535, guid: c28b88fb2c8fc41528eddda7d39cc2ac, type: 3}
