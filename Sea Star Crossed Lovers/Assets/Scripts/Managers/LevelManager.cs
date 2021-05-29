@@ -64,9 +64,11 @@ public class LevelManager : MonoBehaviour
         blockQueue = (BlockQueue)FindObjectOfType(typeof(BlockQueue));
         blockQueue.Construct(this, blockManager.spriteList);
 
-        progressBar.Construct(blockManager, goalpoint.getGoalHeight());
-
         winText.text = defualtWinTimerMessage;
+    }
+
+    private void Start() {
+        progressBar.Construct(blockManager, goalpoint.getGoalHeight());
     }
 
     private void Update()

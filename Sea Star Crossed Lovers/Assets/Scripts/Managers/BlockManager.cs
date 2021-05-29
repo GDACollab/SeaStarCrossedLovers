@@ -45,7 +45,6 @@ public class BlockManager : MonoBehaviour
     public Block GetHighestTowerBlock()
     {
         Block resultBlock = highestBlock;
-
         SceneBlockList.ForEach(block =>
         {
             if (block != activeBlock &&

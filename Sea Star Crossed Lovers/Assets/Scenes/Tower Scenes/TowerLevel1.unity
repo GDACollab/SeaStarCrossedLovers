@@ -445,6 +445,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 312331582553676186, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 312331582553676186, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 312331582553676186, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 436740926151042262, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -533,6 +545,18 @@ PrefabInstance:
       propertyPath: nextScene
       value: VNMoonAstra1
       objectReference: {fileID: 0}
+    - target: {fileID: 4269970215475079808, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4269970215475079808, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4269970215475079808, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4399153294118777884, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: m_AnchorMin.x
       value: 0
@@ -589,6 +613,10 @@ PrefabInstance:
       propertyPath: m_FontData.m_Font
       value: 
       objectReference: {fileID: 12800000, guid: c5ded5460c24b45d38f39401b7d4a7d0, type: 3}
+    - target: {fileID: 4399153295419016348, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4399153295469509711, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -737,6 +765,34 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: SpawnBlock, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 5234091686713773094, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_Value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6376534818099215276, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6376534818099215276, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6376534818099215276, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6834287956649015211, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6834287956649015211, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6834287956649015211, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8356424586729631537, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: objects.Array.size
       value: 2
@@ -749,6 +805,10 @@ PrefabInstance:
       propertyPath: objects.Array.data[1]
       value: 
       objectReference: {fileID: 1428607191}
+    - target: {fileID: 9079492018524381495, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2291407302094192110, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}

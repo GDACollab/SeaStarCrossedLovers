@@ -54,7 +54,7 @@ public class ProgressBar : MonoBehaviour
     {
         float progressValue = towerHeight;
         // The reflected progress will be the height of the tower unless the distance between the current and new height is larger than maxChange
-        if(maxChange != 0 && Mathf.Abs(towerHeight - slider.value) > maxChange)
+        if (maxChange != 0 && Mathf.Abs(towerHeight - slider.value) > maxChange)
         {
             // If the target height is larger than the current value, add maxChange, otherwise subtract maxChange
             if(towerHeight > slider.value)
