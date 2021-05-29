@@ -75,14 +75,9 @@ public class CreditsManager : MonoBehaviour
         writeCredits();
     }
 
-    // Sets the initial position the text box templates and the header text
+    // Sets the initial position the text box templates
     private void setDefaultText()
     {
-        TextMeshProUGUI[] headerText = headerCanvas.GetComponentsInChildren<TextMeshProUGUI>();
-        //Debug.Log(startingPosition.x);
-        headerText[0].transform.position = new Vector2(startingPosition.x, startingPosition.y);
-        headerText[1].transform.position = new Vector2(startingPosition.x, startingPosition.y - headerText[0].rectTransform.rect.height);
-
         // Sets a temporary creditsSection object to set up the initial position
         CreditsSection defaultCredits = new CreditsSection(textBoxTemplate.GetComponentsInChildren<TextMeshProUGUI>());
         defaultCredits.setPosition(startingPosition, textBoxMargin);
@@ -208,13 +203,14 @@ public class CreditsManager : MonoBehaviour
     void Start()
     {
         float startingYPostion = startingPosition.y - (textBoxMargin * 1.5f);
+        Vector2 position = new Vector2(startingPosition.x, startingYPostion);
         foreach(TextMeshProUGUI textBox in headerCanvas.GetComponentsInChildren<TextMeshProUGUI>())
         {
-            startingYPostion -= textBox.rectTransform.rect.height;
+            textBox.transform.position = new Vector2(position.x, position.y);
+            position.y -= textBox.rectTransform.rect.height;
         }
-        startingYPostion -= textBoxMargin;
+        position.y -= textBoxMargin;
 
-        Vector2 position = new Vector2(startingPosition.x, startingYPostion);
         foreach(KeyValuePair<string, CreditsSection> creditsSection in credits)
         {
             //Debug.Log(creditsSection.Key);
@@ -265,6 +261,7 @@ public class CreditsManager : MonoBehaviour
         {
             headerTextBox.transform.position = new Vector2(headerTextBox.transform.position.x, headerTextBox.transform.position.y + creditsSpeed);
         }
+        Debug.Log(headerCanvas.GetComponentsInChildren<TextMeshProUGUI>()[0].transform.position.y - headerCanvas.GetComponentsInChildren<TextMeshProUGUI>()[1].transform.position.y);
 
         // Translates the credit sections up
         foreach(KeyValuePair<string, CreditsSection> section in credits)
