@@ -17,13 +17,16 @@ VAR name = "Default"
 
 >>> TextboxEnter(Default);
 
-Narrator: I am {name}. Test text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text 
+Narrator: I am {name}. Test text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text #text_italics
+// >>> FadeBlack(1); MoveBackground(0, -500, 0); FadeBlack(0);
 
->>> FadeBlack(1); MoveBackground(0, -500, 0); FadeBlack(0);
+// >>> PlayAudio(Concept_SFX_Block_Wood Impact); Wait(.5); !CharEnter(Noelani); 
 
->>> PlayAudio(Concept_SFX_Block_Wood Impact); Wait(.5); !CharEnter(Noelani); 
+>>> CharEnter(Noelani);
 
 Noelani: Hi. I'm Noelani.
+
+Noelani: Test text. #Noelani_happy #text_italics
 
 >>> TextboxExit(); CharEnter(Ocean);
 

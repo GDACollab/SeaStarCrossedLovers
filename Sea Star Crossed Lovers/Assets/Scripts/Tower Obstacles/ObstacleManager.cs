@@ -28,6 +28,8 @@ public class ObstacleManager : MonoBehaviour
     public GameObject Canvas;
     [SerializeField] private AsteroidSpawner asteroidSpawner;
 
+    [SerializeField] private AudioSource windAudio;
+
     public void Construct(LevelManager manager)
     {
         levelManager = manager;
@@ -66,9 +68,11 @@ public class ObstacleManager : MonoBehaviour
         
         int index = Random.Range(0, windDirections.Length);
         windDirection = windDirections[index];
+        windAudio.Play();
         windIsActive = true;
         yield return new WaitForSeconds(duration);
         windIsActive = false;
+        windAudio.Stop();
         flashWarning = false;
     }
 

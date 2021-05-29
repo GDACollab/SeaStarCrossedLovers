@@ -85,6 +85,8 @@ public class VN_Manager : MonoBehaviour
 	private VN_Character currentSpeaker = null;
 	// The tags in effect on the current text
 	private List<string> currentTags;
+	// Flag if italics on
+	private bool italicsOn = false;
 
 	// State of text displaying
 	// Typing: content text is typing out char by char
@@ -164,9 +166,12 @@ public class VN_Manager : MonoBehaviour
 		};
 
 		// Setup for the slider
-		textSpeedSlider.value = TextSpeeds["Normal"];
-		textSpeedSlider.minValue = this.minValue;
-		textSpeedSlider.maxValue = this.maxValue;
+		if(textSpeedSlider != null)
+        {
+			textSpeedSlider.value = TextSpeeds["Normal"];
+			textSpeedSlider.minValue = this.minValue;
+			textSpeedSlider.maxValue = this.maxValue;
+		}
 
 		//Check to make sure all assigned text speeds are valid (i.e. speed > 0)
 		foreach(float value in TextSpeeds.Values)
@@ -282,9 +287,10 @@ public class VN_Manager : MonoBehaviour
         {
 			currentSpeaker = VN_Util.FindCharacterObj(
 				VN_Util.FindCharacterData(speaker));
-			// If valid speaker found, try changing emotion by tag
-			if (currentSpeaker) tagChangeEmotion();
 		}
+		yield return StartCoroutine(ProcessTags());
+		print("post process italicsOn: " + italicsOn);
+
 		// Set currentLine to content
 		currentLine = content;
 
@@ -331,6 +337,17 @@ public class VN_Manager : MonoBehaviour
 		float TextSpeed;
 
 		yield return StartCoroutine(characterManager.UpdateSpeakerLight(currentSpeaker));
+
+		print("during italicsOn: " + italicsOn);
+
+		if(italicsOn)
+        {
+			storyText.fontStyle = FontStyle.Italic;
+		}
+		else
+        {
+			storyText.fontStyle = FontStyle.Normal;
+		}
 
 		foreach (char character in currentLine.ToCharArray())
 		{
@@ -390,21 +407,40 @@ public class VN_Manager : MonoBehaviour
     // Methods to extract and/or edit data from lines of the story
 	#region Line Reading
     
-	// Changes the current emotion portrayed by the text
-	void tagChangeEmotion()
+	// Processes tags to either change emotion or display italic text
+	private IEnumerator ProcessTags()
     {
+		bool italicsTag = false;
 		// Check that there are any tags
 		if (currentTags.Count > 0)
 		{
 			// Get first tag in currentTags
-			string emotionTag = currentTags[0];
-			currentSpeaker.ChangeSprite(emotionTag);
+			foreach(string tag in currentTags)
+            {
+				print("tag: " + tag);
+				if (tag == "text_italics")
+                {
+					print("italics on");
+					italicsOn = true;
+					italicsTag = true;
+				}
+				else if(currentSpeaker != null)
+                {
+					currentSpeaker.ChangeSprite(tag);
 
-			if (VN_Util.VN_Debug)
-			{
-				VN_Util.VNDebugPrint("Tag change emotion: \"" + emotionTag + "\"", this);
+					if (VN_Util.VN_Debug)
+					{
+						VN_Util.VNDebugPrint("Tag change emotion: \"" + tag + "\"", this);
+					}
+				}
 			}
+        }
+
+		if (!italicsTag)
+		{
+			italicsOn = false;
 		}
+		yield return null;
 	}
 
 	/**

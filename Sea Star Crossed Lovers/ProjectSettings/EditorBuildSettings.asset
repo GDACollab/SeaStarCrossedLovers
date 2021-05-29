@@ -15,25 +15,25 @@ EditorBuildSettings:
     path: Assets/Scenes/Tower Scenes/TowerLevel1.unity
     guid: a4bce561fa472451496ae434fbed58d4
   - enabled: 1
-    path: Assets/Scenes/VNScene1.unity
+    path: Assets/Scenes/VN Scenes/VNScene1.unity
     guid: 462e44757a9f24e9cacbdfe483287382
   - enabled: 1
     path: Assets/Scenes/Tower Scenes/TowerLevel1.unity
     guid: a4bce561fa472451496ae434fbed58d4
   - enabled: 1
-    path: Assets/Scenes/VNMoonAstra1.unity
+    path: Assets/Scenes/VN Scenes/VNMoonAstra1.unity
     guid: 3476b4c88c490454caadcbf7481c9ac1
   - enabled: 1
     path: Assets/Scenes/Tower Scenes/TowerLevel2.unity
     guid: d0658dfa9444d4f82bcc3812d4bfd5f4
   - enabled: 1
-    path: Assets/Scenes/VNMoonAstra2.unity
+    path: Assets/Scenes/VN Scenes/VNMoonAstra2.unity
     guid: ddb44694e176c2b46976f3b9a7680b71
   - enabled: 1
     path: Assets/Scenes/Tower Scenes/TowerLevel3.unity
     guid: cd4da421807d24a23a051ebc9818ffc0
   - enabled: 1
-    path: Assets/Scenes/VNEnd.unity
+    path: Assets/Scenes/VN Scenes/VNEnd.unity
     guid: 6850443c81d553448ac0b25912585202
   - enabled: 1
     path: Assets/Scenes/Credits.unity
