@@ -38,14 +38,16 @@ public class Asteroid : MonoBehaviour
             Block hitBlock = other.gameObject.GetComponent<Block>();
             if (hitBlock)
             {
-                hitBlock.rigidBody.AddForce(asteroidForce, ForceMode2D.Force);
+                print("hit");
+                hitBlock.rigidBody.WakeUp();
+                hitBlock.rigidBody.AddForce(asteroidForce, ForceMode2D.Impulse);
                 // Destroy non active block
                 //if (blockManager.activeBlock != hitBlock)
                 //{
                 //    blockManager.RemoveBlockFromList(hitBlock);
                 //}
+                Destroy(gameObject);
             }
-            Destroy(gameObject);
         }
     }
 }

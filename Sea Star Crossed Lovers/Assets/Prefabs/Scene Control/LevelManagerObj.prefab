@@ -45,7 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   asteroidPrefab: {fileID: 5954524111691990017, guid: ff3800b1dc55e424598f599fa8715936, type: 3}
   asteroidVelocity: {x: 5, y: 0}
-  asteroidForce: {x: 10000, y: 0}
+  asteroidForce: {x: 600, y: 100}
   minSpawnYOffset: 10
   lowestSpawn: 2
 --- !u!1 &2747798204672196436
@@ -158,11 +158,14 @@ MonoBehaviour:
   windEnabled: 1
   windIsActive: 0
   windDirection: 0
+  warningIndicatorInterval: 0.33
+  flashWarning: 0
   asteroidCooldown: 45
   asteroidEnabled: 1
   OnAsteroidSpawn:
     m_PersistentCalls:
       m_Calls: []
+  Canvas: {fileID: 4399153295414506098}
   asteroidSpawner: {fileID: 2747798204523688656}
 --- !u!114 &3868004692254175851
 MonoBehaviour:
@@ -603,12 +606,25 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: -60
       objectReference: {fileID: 0}
+    - target: {fileID: 3539638965873045311, guid: 6494199763a3a43d1bf38d0d18c33a4c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4343774553512073354, guid: 6494199763a3a43d1bf38d0d18c33a4c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7942539326648110508, guid: 6494199763a3a43d1bf38d0d18c33a4c, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6494199763a3a43d1bf38d0d18c33a4c, type: 3}
+--- !u!1 &4399153295414506098 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 525615909696949806, guid: 6494199763a3a43d1bf38d0d18c33a4c, type: 3}
+  m_PrefabInstance: {fileID: 4199521439774964828}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &4399153295414506094 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 525615909696949810, guid: 6494199763a3a43d1bf38d0d18c33a4c, type: 3}

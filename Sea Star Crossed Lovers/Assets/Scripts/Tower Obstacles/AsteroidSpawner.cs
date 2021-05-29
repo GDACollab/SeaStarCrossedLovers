@@ -31,13 +31,13 @@ public class AsteroidSpawner : MonoBehaviour
 
     private void SpawnAsteroid()
     {
-        ChooseSpawnLocation();
+        //ChooseSpawnLocation();
         Vector2 spawnPosition = gameObject.transform.position;
         Asteroid asteriod = Instantiate(asteroidPrefab, spawnPosition, Quaternion.identity);
         asteriod.Construct(blockManager, asteroidVelocity, asteroidForce);
     }
 
-    private void ChooseSpawnLocation()
+    public void ChooseSpawnLocation()
     {
         float maxSpawnY = blockManager.highestBlockHeight;
         float minSpawnY = blockManager.highestBlockHeight - minSpawnYOffset;

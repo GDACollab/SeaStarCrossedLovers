@@ -16,9 +16,12 @@ MonoBehaviour:
   screenEdgeDistance: 50
   transition: {fileID: 11400000, guid: 3b8c7edcf2ae945a48152c552d124440, type: 2}
   transitionDuration: 0.5
-  characterSpriteScale: 1
+  characterSpriteScale: 0.8
   characterBoxScale: 1
-  defaultSprite: {fileID: 21300000, guid: ce5bb71c519f3454f990cc5d9cc454d2, type: 3}
+  defaultSprite: {fileID: 21300000, guid: 772a845bd2160459793fbf88e24a9831, type: 3}
   characterBox: {fileID: 21300000, guid: 4b0d14e83902a40ebb71e5d54c298824, type: 3}
   characterSprites:
-  - {fileID: 21300000, guid: ce5bb71c519f3454f990cc5d9cc454d2, type: 3}
+  - {fileID: 21300000, guid: 772a845bd2160459793fbf88e24a9831, type: 3}
+  - {fileID: 21300000, guid: 0a7d63d0d4678471dbb350be223d71e5, type: 3}
+  - {fileID: 21300000, guid: 5cd981982236d4076b4ec3e470473215, type: 3}
+  - {fileID: 21300000, guid: 286d8cb3b8e824c04aad99e5180d3fa5, type: 3}
