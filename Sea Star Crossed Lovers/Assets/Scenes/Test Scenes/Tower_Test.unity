@@ -644,6 +644,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4399153295163393276, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: c5ded5460c24b45d38f39401b7d4a7d0, type: 3}
     - target: {fileID: 4399153295232709797, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
@@ -692,6 +696,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4399153295583484481, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: c5ded5460c24b45d38f39401b7d4a7d0, type: 3}
     - target: {fileID: 4399153295785376572, guid: bdf3d67b0d22c47a0ada08108e19093b, type: 3}
       propertyPath: waves
       value: 

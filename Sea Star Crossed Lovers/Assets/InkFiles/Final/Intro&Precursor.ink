@@ -38,8 +38,6 @@ Astra: Urrrgh… #AstraSad_GriffinConway
 
 Astra: AAAAHHH!!! What?! Where-- Where am I?! What Happened?! #AstraSurprised_GriffinConway
 
->>> CharEnter(Ocean, right);
-
 Ocean: Hey, hey, easy there! You’re on an island down on earth. You seemed to have burnt out, fallen down to earth, and splashed down onto the beach. Noelani here saw you splash down, and brought you here to rest.#ocean_shocked_MeganChau
 
 >>> !CharExit(Ocean); CharExit(Astra)
@@ -94,8 +92,19 @@ Noelani: During those days of finding flowers and chasing seagulls, my feelings 
 
 Noelani: And suddenly the month was up, and Moon came to take Astra back to space.  #Noelani_sad
 
-// >>> MoveBackground(0, 100, 0);
+>>> !CharExit(Noleani); !CharExit(Astra);
 >>> FadeBlack(0);
+
+>>> !CharEnter(Moon, left); CharEnter(Astra, right);
+
+Moon: Are you ready to go Astra?
+
+Astra: Yes, I just want to say goodbye to Noelani before I go… #AstraSurprised_GriffinConway
+
+Astra: Oh there she is!#AstraHappy_GriffinConway
+
+>>> CharExit(Moon);
+>>> CharEnter(Noelani, left);
 
 Noelani: I want Astra to know my feelings before she leaves, so now’s the time to say it! Just take a deep breath and… #Noelani_determined #text_italics
 
@@ -233,7 +242,7 @@ Ocean: I can't void the flow of water either. So the most I could do is calm the
 Noelani: Simple! 
  
 Noelani: I’ll just have to keep building faster than the waves can break it down! #Noelani_determined
- 
+
 Ocean: Noelani, building such a tower would push the limits of your powers.
  
 Noelani: But if I try I have the chance to see her again. 
