@@ -166,9 +166,12 @@ public class VN_Manager : MonoBehaviour
 		};
 
 		// Setup for the slider
-		textSpeedSlider.value = TextSpeeds["Normal"];
-		textSpeedSlider.minValue = this.minValue;
-		textSpeedSlider.maxValue = this.maxValue;
+		if(textSpeedSlider != null)
+        {
+			textSpeedSlider.value = TextSpeeds["Normal"];
+			textSpeedSlider.minValue = this.minValue;
+			textSpeedSlider.maxValue = this.maxValue;
+		}
 
 		//Check to make sure all assigned text speeds are valid (i.e. speed > 0)
 		foreach(float value in TextSpeeds.Values)
