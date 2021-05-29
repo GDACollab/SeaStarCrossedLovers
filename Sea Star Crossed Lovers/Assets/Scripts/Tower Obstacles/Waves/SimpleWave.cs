@@ -55,7 +55,8 @@ public class SimpleWave : MonoBehaviour
             {
                 MakeWave(waveHeight);
                 wTimer = 0f;
-                waveSlider.value = 0f;
+                if (waveSlider != null)
+                    waveSlider.value = 0f;
             }
             if (dTimer > timeBetweenDifficulties && difficulty < maxDifficulty)
             {
