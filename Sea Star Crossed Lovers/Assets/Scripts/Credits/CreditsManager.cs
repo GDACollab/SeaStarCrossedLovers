@@ -86,11 +86,13 @@ public class CreditsManager : MonoBehaviour
     // Parses the CSV file into a dictionary
     private void parseCSV()
     {
+        Debug.Log("Parsing CSV...");
         string[] rows = creditsText.text.Split('\n');
         string[] colHeaders = rows[0].Split(',');
         // Initializes the columns of the dictionary
         for(int colIndex = seperatorIndex; colIndex < colHeaders.Length; colIndex++)
         {
+            Debug.Log($"Adding {colHeaders[colIndex]}");
             creditsMap.Add(colHeaders[colIndex], new Dictionary<string, string>());
         }
 
@@ -135,7 +137,7 @@ public class CreditsManager : MonoBehaviour
                 }
             }
             // Stores last value in dictionary
-            // Debug.Log($"Name: {name}, Header: {colHeaders[colIndex]}, Value: {currentValue}");
+            Debug.Log($"Name: {name}, Header: {colHeaders[colIndex]}, Value: {currentValue}");
             creditsMap[colHeaders[colIndex]].Add(name, currentValue);
         }
     }
@@ -143,6 +145,7 @@ public class CreditsManager : MonoBehaviour
     // Iterates through the creditsMap Dictionary and initiates the new text boxes based on the template
     private void writeCredits()
     {
+        Debug.Log("Writing Credits...");
         foreach(KeyValuePair<string, Dictionary<string, string>> headerRolePair in creditsMap)
         {
             // Clones the template canvas, makes the clone visible, and sets it as the child of the gameobject this is attatched to
